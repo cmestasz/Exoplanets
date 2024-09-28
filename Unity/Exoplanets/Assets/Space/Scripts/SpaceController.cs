@@ -5,18 +5,12 @@ public class SpaceController : MonoBehaviour
     public static SpaceController instance;
     [SerializeField] GameObject[] starPrefabs;
     StarBuilder starBuilder;
+    ConstellationBuilder constellationBuilder;
     Transform starsParent;
 
     void Awake()
     {
-        if (instance == null)
-        {
-            instance = this;
-        }
-        else
-        {
-            Destroy(gameObject);
-        }
+        instance = this;
     }
 
     void Start()
@@ -27,7 +21,8 @@ public class SpaceController : MonoBehaviour
 
     void InitVariables()
     {
-        starBuilder = new StarBuilder(starPrefabs);
+        starBuilder = new(starPrefabs);
+        constellationBuilder = new(transform.Find("ConstellationLine").GetComponent<LineRenderer>());
         starsParent = transform.Find("Stars");
     }
 
@@ -48,6 +43,16 @@ public class SpaceController : MonoBehaviour
             Destroy(child.gameObject);
         }
         BuildRandomStars();
+    }
+
+    public void AddStarToConstellation(StarController star)
+    {
+        constellationBuilder.AddStar(star);
+    }
+
+    public void SaveConstellation(string name)
+    {
+        constellationBuilder.SaveConstellation(name);
     }
     
 }

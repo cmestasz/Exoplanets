@@ -7,6 +7,7 @@ public class PlayerController : MonoBehaviour
 {
     [SerializeField] float moveSpeed;
     [SerializeField] float rotateSpeed;
+    StarController currentStar;
 
     // Start is called before the first frame update
     void Start()
@@ -57,6 +58,20 @@ public class PlayerController : MonoBehaviour
         if (Input.GetKeyDown(REGENERATE_STARS))
         {
             SpaceController.instance.RegenerateStars();
+        }
+        if (Input.GetKeyDown(ADD_TO_CONSTELLATION))
+        {
+            if (Physics.Raycast(transform.position, transform.forward, out RaycastHit hit))
+            {
+                if (hit.collider.TryGetComponent<StarController>(out var star))
+                {
+                    if ()
+                }
+            }
+        }
+        if (Input.GetKeyDown(SAVE_CONSTELLATION))
+        {
+            SpaceController.instance.SaveConstellation("Constellation");
         }
     }
 
