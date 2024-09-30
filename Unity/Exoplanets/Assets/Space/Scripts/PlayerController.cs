@@ -7,6 +7,7 @@ public class PlayerController : MonoBehaviour
 {
     [SerializeField] float moveSpeed;
     [SerializeField] float rotateSpeed;
+    LineRenderer connectionLine;
     StarController currentStar;
 
     // Start is called before the first frame update
@@ -21,10 +22,12 @@ public class PlayerController : MonoBehaviour
     {
         CheckMovement();
         CheckRotation();
+        UpdateConnection();
     }
 
     void InitVariables()
     {
+        connectionLine = transform.Find("ConnectionLine").GetComponent<LineRenderer>();
     }
 
     void InitConfig()
@@ -65,13 +68,48 @@ public class PlayerController : MonoBehaviour
             {
                 if (hit.collider.TryGetComponent<StarController>(out var star))
                 {
-                    if ()
+                    StartConnection(star);
+                }
+            }
+        }
+        if (Input.GetKeyUp(ADD_TO_CONSTELLATION))
+        {
+            if (Physics.Raycast(transform.position, transform.forward, out RaycastHit hit))
+            {
+                if (hit.collider.TryGetComponent<StarController>(out var star))
+                {
+                    EndConnection(star);
                 }
             }
         }
         if (Input.GetKeyDown(SAVE_CONSTELLATION))
         {
             SpaceController.instance.SaveConstellation("Constellation");
+        }
+    }
+
+    void StartConnection(StarController star)
+    {
+        currentStar = star;
+        connectionLine.positionCount = 2;
+    }
+
+    void UpdateConnection()
+    {
+        if (currentStar != null)
+        {
+            connectionLine.SetPosition(0, currentStar.transform.position);
+            connectionLine.SetPosition(1, Camera.main.transform.position + Camera.main.transform.forward * 10);
+        }
+    }
+
+    void EndConnection(StarController star)
+    {
+        if (currentStar != null)
+        {
+            SpaceController.instance.AddConstellationConnection(currentStar, star);
+            connectionLine.positionCount = 0;
+            currentStar = null;
         }
     }
 

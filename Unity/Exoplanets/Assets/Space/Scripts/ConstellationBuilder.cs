@@ -3,40 +3,33 @@ using UnityEngine;
 
 public class ConstellationBuilder
 {
-    public LineRenderer constellationLine;
-    readonly List<StarController> activeConstellation = new();
+    Transform connectionsParent;
+    GameObject constellationConnectionPrefab;
+    List<LineRenderer> constellationLines = new();
 
-    public ConstellationBuilder(LineRenderer lineRenderer)
+    public ConstellationBuilder(GameObject constellationConnectionPrefab, Transform connectionsParent)
     {
-        constellationLine = lineRenderer;
+        this.connectionsParent = connectionsParent;
+        this.constellationConnectionPrefab = constellationConnectionPrefab;
     }
 
-    public void AddStar(StarController star)
+    public void AddConnection(StarController star1, StarController star2)
     {
-        activeConstellation.Add(star);
-        DrawConstellation();
+        GameObject connection = Object.Instantiate(constellationConnectionPrefab, connectionsParent);
+        LineRenderer lineRenderer = connection.GetComponent<LineRenderer>();
+        lineRenderer.positionCount = 2;
+        lineRenderer.SetPosition(0, star1.transform.position);
+        lineRenderer.SetPosition(1, star2.transform.position);
+        constellationLines.Add(lineRenderer);
     }
 
     public void SaveConstellation(string name)
     {
-        activeConstellation.Clear();
-        DrawConstellation();
-    }
-
-    void DrawConstellation()
-    {
-        if (activeConstellation.Count == 0)
+        foreach (LineRenderer line in constellationLines)
         {
-            constellationLine.positionCount = 0;
-            return;
+            Debug.Log($"Saving {line.gameObject.name} with {line.GetPosition(0)} and {line.GetPosition(1)}");
+            Object.Destroy(line.gameObject);
         }
-
-        constellationLine.positionCount = activeConstellation.Count + 1;
-        for (int i = 0; i < activeConstellation.Count; i++)
-        {
-            constellationLine.SetPosition(i, activeConstellation[i].transform.position);
-        }
-        constellationLine.SetPosition(activeConstellation.Count, activeConstellation[0].transform.position);
+        constellationLines.Clear();
     }
-
 }

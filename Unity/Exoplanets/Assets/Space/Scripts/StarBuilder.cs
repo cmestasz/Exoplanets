@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class StarBuilder
 {
-    GameObject[] starPrefabs;
+    readonly GameObject[] starPrefabs;
 
     public StarBuilder(GameObject[] starPrefabs)
     {

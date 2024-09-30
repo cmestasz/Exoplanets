@@ -4,6 +4,7 @@ public class SpaceController : MonoBehaviour
 {
     public static SpaceController instance;
     [SerializeField] GameObject[] starPrefabs;
+    [SerializeField] GameObject constellationConnectionPrefab;
     StarBuilder starBuilder;
     ConstellationBuilder constellationBuilder;
     Transform starsParent;
@@ -22,7 +23,7 @@ public class SpaceController : MonoBehaviour
     void InitVariables()
     {
         starBuilder = new(starPrefabs);
-        constellationBuilder = new(transform.Find("ConstellationLine").GetComponent<LineRenderer>());
+        constellationBuilder = new(constellationConnectionPrefab, transform.Find("ConstellationConnections"));
         starsParent = transform.Find("Stars");
     }
 
@@ -45,9 +46,9 @@ public class SpaceController : MonoBehaviour
         BuildRandomStars();
     }
 
-    public void AddStarToConstellation(StarController star)
+    public void AddConstellationConnection(StarController star1, StarController star2)
     {
-        constellationBuilder.AddStar(star);
+        constellationBuilder.AddConnection(star1, star2);
     }
 
     public void SaveConstellation(string name)
