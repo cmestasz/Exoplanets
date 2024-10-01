@@ -102,6 +102,10 @@ public class PlayerController : MonoBehaviour
                     EndConnection(star);
                 }
             }
+            else
+            {
+                EndConnection();
+            }
         }
         if (Input.GetKeyDown(SAVE_CONSTELLATION))
         {
@@ -141,6 +145,15 @@ public class PlayerController : MonoBehaviour
         if (CurrentStar != null)
         {
             SpaceController.Instance.AddConstellationConnection(CurrentStar, star);
+            ConnectionLine.positionCount = 0;
+            CurrentStar = null;
+        }
+    }
+
+    void EndConnection()
+    {
+        if (CurrentStar != null)
+        {
             ConnectionLine.positionCount = 0;
             CurrentStar = null;
         }
