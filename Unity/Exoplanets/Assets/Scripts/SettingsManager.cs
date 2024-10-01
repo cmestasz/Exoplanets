@@ -20,7 +20,6 @@ public class SettingsManager : MonoBehaviour
 
     public void InitialConfig()
     {
-        Cursor.lockState = CursorLockMode.Locked;
     }
 
     public void ReloadConfig()
