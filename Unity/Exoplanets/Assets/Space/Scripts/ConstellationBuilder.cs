@@ -3,33 +3,41 @@ using UnityEngine;
 
 public class ConstellationBuilder
 {
-    Transform connectionsParent;
-    GameObject constellationConnectionPrefab;
-    List<LineRenderer> constellationLines = new();
+    public Transform ConnectionsParent { get; private set; }
+    public GameObject ConstellationConnectionPrefab { get; private set; }
+    public List<LineRenderer> ConstellationLines { get; private set; } = new();
+    public Constellation CurrentConstellation { get; private set; }
 
     public ConstellationBuilder(GameObject constellationConnectionPrefab, Transform connectionsParent)
     {
-        this.connectionsParent = connectionsParent;
-        this.constellationConnectionPrefab = constellationConnectionPrefab;
+        ConnectionsParent = connectionsParent;
+        ConstellationConnectionPrefab = constellationConnectionPrefab;
     }
 
     public void AddConnection(StarController star1, StarController star2)
     {
-        GameObject connection = Object.Instantiate(constellationConnectionPrefab, connectionsParent);
+        GameObject connection = Object.Instantiate(ConstellationConnectionPrefab, ConnectionsParent);
         LineRenderer lineRenderer = connection.GetComponent<LineRenderer>();
         lineRenderer.positionCount = 2;
         lineRenderer.SetPosition(0, star1.transform.position);
         lineRenderer.SetPosition(1, star2.transform.position);
-        constellationLines.Add(lineRenderer);
+        ConstellationLines.Add(lineRenderer);
+    
+        CurrentConstellation ??= Constellation.CreateConstellation();
+        CurrentConstellation.AddConnection(star1, star2);
     }
 
-    public void SaveConstellation(string name)
+    public void SaveConstellation(string id)
     {
-        foreach (LineRenderer line in constellationLines)
+        CurrentConstellation.Save(id);
+        CurrentConstellation = null;
+
+        foreach (var line in ConstellationLines)
         {
-            Debug.Log($"Saving {line.gameObject.name} with {line.GetPosition(0)} and {line.GetPosition(1)}");
-            Object.Destroy(line.gameObject);
+            line.startColor = Color.green;
+            line.endColor = Color.green;
         }
-        constellationLines.Clear();
+
+        ConstellationLines.Clear();
     }
 }

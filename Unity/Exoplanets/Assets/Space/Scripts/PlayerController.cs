@@ -5,10 +5,11 @@ using static KeyboardBindings;
 
 public class PlayerController : MonoBehaviour
 {
-    [SerializeField] float moveSpeed;
-    [SerializeField] float rotateSpeed;
-    LineRenderer connectionLine;
-    StarController currentStar;
+    [SerializeField] private float moveSpeed;
+    [SerializeField] private float rotateSpeed;
+    public LineRenderer ConnectionLine { get; private set; }
+    public StarController CurrentStar { get; private set; }
+    private bool InputActive { get; set; }
 
     // Start is called before the first frame update
     void Start()
@@ -22,17 +23,19 @@ public class PlayerController : MonoBehaviour
     {
         CheckMovement();
         CheckRotation();
+        CheckInteractions();
+        CheckAlwaysActive();
         UpdateConnection();
     }
 
     void InitVariables()
     {
-        connectionLine = transform.Find("ConnectionLine").GetComponent<LineRenderer>();
+        ConnectionLine = transform.Find("ConnectionLine").GetComponent<LineRenderer>();
     }
 
     void InitConfig()
     {
-        Cursor.lockState = CursorLockMode.Locked;
+        // Cursor.lockState = CursorLockMode.Locked;
     }
 
     void MovePlayer(Vector3 dir)
@@ -42,25 +45,43 @@ public class PlayerController : MonoBehaviour
 
     void CheckMovement()
     {
+        if (!InputActive) return;
+
+        Vector3 dir = Vector3.zero;
+
         if (Input.GetKey(FORWARD))
         {
-            MovePlayer(Vector3.forward);
+            dir += Vector3.forward;
         }
         if (Input.GetKey(BACKWARD))
         {
-            MovePlayer(Vector3.back);
+            dir += Vector3.back;
         }
         if (Input.GetKey(LEFT))
         {
-            MovePlayer(Vector3.left);
+            dir += Vector3.left;
         }
         if (Input.GetKey(RIGHT))
         {
-            MovePlayer(Vector3.right);
+            dir += Vector3.right;
         }
+
+        dir = dir.normalized;
+        if (Input.GetKey(SPEED_UP))
+        {
+            dir *= 2;
+        }
+
+        MovePlayer(dir);
+    }
+
+    void CheckInteractions()
+    {
+        if (!InputActive) return;
+
         if (Input.GetKeyDown(REGENERATE_STARS))
         {
-            SpaceController.instance.RegenerateStars();
+            SpaceController.Instance.RegenerateStars();
         }
         if (Input.GetKeyDown(ADD_TO_CONSTELLATION))
         {
@@ -84,41 +105,61 @@ public class PlayerController : MonoBehaviour
         }
         if (Input.GetKeyDown(SAVE_CONSTELLATION))
         {
-            SpaceController.instance.SaveConstellation("Constellation");
+            SpaceController.Instance.SaveConstellation(UIInteractor.Instance.GetConstellationName());
+        }
+    }
+
+    void CheckAlwaysActive()
+    {
+        if (Input.GetKeyDown(TOGGLE_INPUT))
+        {
+            ToggleInput();
+        }
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            Application.Quit();
         }
     }
 
     void StartConnection(StarController star)
     {
-        currentStar = star;
-        connectionLine.positionCount = 2;
+        CurrentStar = star;
+        ConnectionLine.positionCount = 2;
     }
 
     void UpdateConnection()
     {
-        if (currentStar != null)
+        if (CurrentStar != null)
         {
-            connectionLine.SetPosition(0, currentStar.transform.position);
-            connectionLine.SetPosition(1, Camera.main.transform.position + Camera.main.transform.forward * 10);
+            ConnectionLine.SetPosition(0, CurrentStar.transform.position);
+            ConnectionLine.SetPosition(1, Camera.main.transform.position + Camera.main.transform.forward * 10);
         }
     }
 
     void EndConnection(StarController star)
     {
-        if (currentStar != null)
+        if (CurrentStar != null)
         {
-            SpaceController.instance.AddConstellationConnection(currentStar, star);
-            connectionLine.positionCount = 0;
-            currentStar = null;
+            SpaceController.Instance.AddConstellationConnection(CurrentStar, star);
+            ConnectionLine.positionCount = 0;
+            CurrentStar = null;
         }
     }
 
     void CheckRotation()
     {
+        if (!InputActive) return;
+
         float mouseX = Input.GetAxis("Mouse X");
         float mouseY = Input.GetAxis("Mouse Y");
 
         transform.Rotate(Vector3.up, mouseX * rotateSpeed);
         transform.Rotate(Vector3.left, mouseY * rotateSpeed);
+    }
+
+    void ToggleInput()
+    {
+        InputActive = !InputActive;
+        Cursor.lockState = InputActive ? CursorLockMode.Locked : CursorLockMode.None;
     }
 }

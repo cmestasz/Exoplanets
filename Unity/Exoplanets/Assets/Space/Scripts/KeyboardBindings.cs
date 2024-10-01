@@ -9,4 +9,6 @@ public static class KeyboardBindings
     public static KeyCode REGENERATE_STARS = KeyCode.R;
     public static KeyCode SAVE_CONSTELLATION = KeyCode.C;
     public static KeyCode ADD_TO_CONSTELLATION = KeyCode.Space;
+    public static KeyCode TOGGLE_INPUT = KeyCode.E;
+    public static KeyCode SPEED_UP = KeyCode.LeftShift;
 }

@@ -2,16 +2,15 @@ using UnityEngine;
 
 public class SpaceController : MonoBehaviour
 {
-    public static SpaceController instance;
-    [SerializeField] GameObject[] starPrefabs;
-    [SerializeField] GameObject constellationConnectionPrefab;
-    StarBuilder starBuilder;
-    ConstellationBuilder constellationBuilder;
-    Transform starsParent;
+    public static SpaceController Instance { get; private set; }
+    [SerializeField] private GameObject[] starPrefabs;
+    [SerializeField] private GameObject constellationConnectionPrefab;
+    public ConstellationBuilder ConstellationBuilder { get; private set; }
+    public Transform starsParent { get; private set; }
 
     void Awake()
     {
-        instance = this;
+        Instance = this;
     }
 
     void Start()
@@ -22,8 +21,7 @@ public class SpaceController : MonoBehaviour
 
     void InitVariables()
     {
-        starBuilder = new(starPrefabs);
-        constellationBuilder = new(constellationConnectionPrefab, transform.Find("ConstellationConnections"));
+        ConstellationBuilder = new(constellationConnectionPrefab, transform.Find("ConstellationConnections"));
         starsParent = transform.Find("Stars");
     }
 
@@ -33,7 +31,8 @@ public class SpaceController : MonoBehaviour
         {
             Vector3 position = new(Random.Range(-100, 100), Random.Range(-100, 100), Random.Range(-100, 100));
             int scale = Random.Range(1, 5);
-            starBuilder.BuildStar(position, scale, starsParent);
+            int prefabIdx = Random.Range(0, starPrefabs.Length);
+            StarController.CreateStar(i.ToString(), starPrefabs[prefabIdx], position, scale, starsParent);
         }
     }
 
@@ -48,12 +47,12 @@ public class SpaceController : MonoBehaviour
 
     public void AddConstellationConnection(StarController star1, StarController star2)
     {
-        constellationBuilder.AddConnection(star1, star2);
+        ConstellationBuilder.AddConnection(star1, star2);
     }
 
     public void SaveConstellation(string name)
     {
-        constellationBuilder.SaveConstellation(name);
+        ConstellationBuilder.SaveConstellation(name);
     }
     
 }
