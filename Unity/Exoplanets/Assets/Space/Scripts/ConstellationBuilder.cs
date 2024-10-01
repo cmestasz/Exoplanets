@@ -22,9 +22,20 @@ public class ConstellationBuilder
         lineRenderer.SetPosition(0, star1.transform.position);
         lineRenderer.SetPosition(1, star2.transform.position);
         ConstellationLines.Add(lineRenderer);
-    
+
         CurrentConstellation ??= Constellation.CreateConstellation();
         CurrentConstellation.AddConnection(star1, star2);
+    }
+
+    public void ClearConnections()
+    {
+        for (int i = 0; i < ConnectionsParent.childCount; i++)
+        {
+            Object.Destroy(ConnectionsParent.GetChild(i).gameObject);
+        }
+
+        CurrentConstellation = null;
+        ConstellationLines.Clear();
     }
 
     public void SaveConstellation(string id)

@@ -111,6 +111,17 @@ public class PlayerController : MonoBehaviour
         {
             SpaceController.Instance.SaveConstellation(UIInteractor.Instance.GetConstellationName());
         }
+        if (Input.GetKeyDown(WARP))
+        {
+            SpaceController.Instance.WarpTo(UIInteractor.Instance.GetWarpPosition());
+        }
+
+        if (Physics.Raycast(transform.position, transform.forward, out RaycastHit hit2)
+            && hit2.collider.TryGetComponent<IHasInfo>(out var hasInfo)
+            && Input.GetKeyDown(GET_INFO))
+        {
+            UIInteractor.Instance.SetInfoText(hasInfo.Info);
+        }
     }
 
     void CheckAlwaysActive()
@@ -136,7 +147,7 @@ public class PlayerController : MonoBehaviour
         if (CurrentStar != null)
         {
             ConnectionLine.SetPosition(0, CurrentStar.transform.position);
-            ConnectionLine.SetPosition(1, Camera.main.transform.position + Camera.main.transform.forward * 10);
+            ConnectionLine.SetPosition(1, Camera.main.transform.position + Camera.main.transform.forward * 100);
         }
     }
 
