@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using static KeyboardBindings;
+using static Constants;
 
 public class PlayerController : MonoBehaviour
 {
@@ -9,6 +10,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float rotateSpeed;
     public LineRenderer ConnectionLine { get; private set; }
     public StarController CurrentStar { get; private set; }
+    public Vector3Int CurrentSector { get; private set; }
     private bool InputActive { get; set; }
 
     // Start is called before the first frame update
@@ -25,7 +27,7 @@ public class PlayerController : MonoBehaviour
         CheckRotation();
         CheckInteractions();
         CheckAlwaysActive();
-        UpdateConnection();
+        UpdateConstellationConnection();
     }
 
     void InitVariables()
@@ -47,6 +49,11 @@ public class PlayerController : MonoBehaviour
     {
         if (!InputActive) return;
 
+        CurrentSector = new Vector3Int(
+            Mathf.FloorToInt(transform.position.x / SECTOR_SIZE),
+            Mathf.FloorToInt(transform.position.y / SECTOR_SIZE),
+            Mathf.FloorToInt(transform.position.z / SECTOR_SIZE)
+        );
         Vector3 dir = Vector3.zero;
 
         if (Input.GetKey(FORWARD))
@@ -142,7 +149,7 @@ public class PlayerController : MonoBehaviour
         ConnectionLine.positionCount = 2;
     }
 
-    void UpdateConnection()
+    void UpdateConstellationConnection()
     {
         if (CurrentStar != null)
         {

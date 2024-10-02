@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public class SpaceController : MonoBehaviour
@@ -9,28 +10,48 @@ public class SpaceController : MonoBehaviour
     public static SpaceController Instance { get; private set; }
     public ConstellationBuilder ConstellationBuilder { get; private set; }
     public Transform StarsParent { get; private set; }
+    public Transform PlanetsParent { get; private set; }
     public Vector3 CurrentRelativePosition { get; private set; }
     private int StarId { get; set; } = 0;
 
-    void Awake()
+    private void Awake()
     {
         Instance = this;
     }
 
-    void Start()
+    private void Start()
     {
         InitVariables();
         BuildRandomStars();
+        SpawnEarth();
+        TestOnStart();
     }
 
-    void InitVariables()
+    private void InitVariables()
     {
         ConstellationBuilder = new(constellationConnectionPrefab, transform.Find("ConstellationConnections"));
         StarsParent = transform.Find("Stars");
+        PlanetsParent = transform.Find("Planets");
         CurrentRelativePosition = Vector3.zero;
     }
 
-    void BuildRandomStars()
+
+    private void TestOnStart()
+    {
+        StartCoroutine(
+            APIConnector.Post<TestRequest, TestResponse>("load_sector", new TestRequest { sector_id = "0_0_0" }, (response) =>
+            {
+                Debug.Log(response.space_things);
+                Debug.Log(response.space_things.Length);
+                foreach (SpaceThing thing in response.space_things)
+                {
+                    Debug.Log(thing);
+                }
+            })
+        );
+    }
+
+    private void BuildRandomStars()
     {
         for (int i = 0; i < amountOfStars; i++)
         {
@@ -46,9 +67,9 @@ public class SpaceController : MonoBehaviour
         }
     }
 
-    void SpawnEarth()
+    private void SpawnEarth()
     {
-
+        PlanetController.CreatePlanet("Earth", earthPrefab, Vector3.zero, 100, PlanetsParent, CurrentRelativePosition);
     }
 
     public void WarpTo(Vector3 pos)
@@ -91,5 +112,5 @@ public class SpaceController : MonoBehaviour
     {
         ConstellationBuilder.SaveConstellation(name);
     }
-    
+
 }

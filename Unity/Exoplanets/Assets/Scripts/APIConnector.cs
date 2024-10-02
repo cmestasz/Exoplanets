@@ -4,7 +4,7 @@ using UnityEngine.Networking;
 
 public class APIConnector
 {
-    const string API_URL = "https://tttttttt";
+    const string API_URL = "http://127.0.0.1:8000/";
 
     public static IEnumerator Get<Response>(string endpoint, System.Action<Response> callback)
     {
@@ -23,7 +23,7 @@ public class APIConnector
 
     public static IEnumerator Post<Request, Response>(string endpoint, Request data, System.Action<Response> callback)
     {
-        using UnityWebRequest request = UnityWebRequest.PostWwwForm(API_URL + endpoint, JsonUtility.ToJson(data));
+        using UnityWebRequest request = UnityWebRequest.Post(API_URL + endpoint, JsonUtility.ToJson(data), "application/json");
         yield return request.SendWebRequest();
 
         if (request.result != UnityWebRequest.Result.Success)
@@ -32,7 +32,8 @@ public class APIConnector
         }
         else
         {
-            callback(JsonUtility.FromJson<Response>(request.downloadHandler.text));
+            Response response = JsonUtility.FromJson<Response>(request.downloadHandler.text);
+            callback(response);
         }
     }
 }
