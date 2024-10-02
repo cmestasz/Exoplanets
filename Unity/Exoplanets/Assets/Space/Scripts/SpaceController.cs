@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using static Constants;
 
 public class SpaceController : MonoBehaviour
 {
@@ -25,6 +26,7 @@ public class SpaceController : MonoBehaviour
         BuildRandomStars();
         SpawnEarth();
         TestOnStart();
+        LoadAllSectors(Vector3Int.zero);
     }
 
     private void InitVariables()
@@ -38,7 +40,7 @@ public class SpaceController : MonoBehaviour
 
     private void TestOnStart()
     {
-        StartCoroutine(
+        /*StartCoroutine(
             APIConnector.Post<TestRequest, TestResponse>("load_sector", new TestRequest { sector_id = "0_0_0" }, (response) =>
             {
                 Debug.Log(response.space_things);
@@ -48,8 +50,41 @@ public class SpaceController : MonoBehaviour
                     Debug.Log(thing);
                 }
             })
+        );*/
+    }
+
+    private void LoadSector(Vector3Int sector)
+    {
+        StartCoroutine(
+            APIConnector.Post<TestRequest, TestResponse>("load_sector", new TestRequest { sector_x = sector.x, sector_y = sector.y, sector_z = sector.z }, (response) =>
+            {
+                Debug.Log($"Loaded sector {sector}");
+            })
         );
     }
+
+    private void UnloadSector(Vector3Int sector)
+    {
+        Debug.Log($"Unloading sector {sector}");
+    }
+
+    private void LoadAllSectors(Vector3Int currentSector)
+    {
+        Utils.ForEveryRenderableSector(currentSector, (sector) =>
+        {
+            LoadSector(sector);
+        });
+    }
+
+    private void LoadNewSectors(Vector3Int currentSector, int xDiff, int yDiff, int zDiff)
+    {
+        if (xDiff != 0)
+        {
+            
+        }
+    }
+        
+    
 
     private void BuildRandomStars()
     {

@@ -33,6 +33,7 @@ public class PlayerController : MonoBehaviour
     void InitVariables()
     {
         ConnectionLine = transform.Find("ConnectionLine").GetComponent<LineRenderer>();
+        CurrentSector = Vector3Int.zero;
     }
 
     void InitConfig()
@@ -49,11 +50,20 @@ public class PlayerController : MonoBehaviour
     {
         if (!InputActive) return;
 
-        CurrentSector = new Vector3Int(
-            Mathf.FloorToInt(transform.position.x / SECTOR_SIZE),
-            Mathf.FloorToInt(transform.position.y / SECTOR_SIZE),
-            Mathf.FloorToInt(transform.position.z / SECTOR_SIZE)
-        );
+        int sectorX = (int)transform.position.x / SECTOR_SIZE;
+        int sectorY = (int)transform.position.y / SECTOR_SIZE;
+        int sectorZ = (int)transform.position.z / SECTOR_SIZE;
+
+        int xDiff = sectorX - CurrentSector.x;
+        int yDiff = sectorY - CurrentSector.y;
+        int zDiff = sectorZ - CurrentSector.z;
+
+        if (xDiff != 0 || yDiff != 0 || zDiff != 0)
+        {
+            CurrentSector = new Vector3Int(sectorX, sectorY, sectorZ);
+            SpaceController.Instance.LoadNewSectors(CurrentSector, xDiff, yDiff, zDiff);
+        }
+
         Vector3 dir = Vector3.zero;
 
         if (Input.GetKey(FORWARD))

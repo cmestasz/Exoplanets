@@ -1,7 +1,9 @@
 [System.Serializable]
 public class TestRequest
 {
-    public string sector_id;
+    public int sector_x;
+    public int sector_y;
+    public int sector_z;
 }
 [System.Serializable]
 public class SpaceThing
