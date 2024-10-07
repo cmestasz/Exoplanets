@@ -50,20 +50,6 @@ public class PlayerController : MonoBehaviour
     {
         if (!InputActive) return;
 
-        int sectorX = (int)transform.position.x / SECTOR_SIZE;
-        int sectorY = (int)transform.position.y / SECTOR_SIZE;
-        int sectorZ = (int)transform.position.z / SECTOR_SIZE;
-
-        int xDiff = sectorX - CurrentSector.x;
-        int yDiff = sectorY - CurrentSector.y;
-        int zDiff = sectorZ - CurrentSector.z;
-
-        if (xDiff != 0 || yDiff != 0 || zDiff != 0)
-        {
-            CurrentSector = new Vector3Int(sectorX, sectorY, sectorZ);
-            SpaceController.Instance.LoadNewSectors(CurrentSector, xDiff, yDiff, zDiff);
-        }
-
         Vector3 dir = Vector3.zero;
 
         if (Input.GetKey(FORWARD))
