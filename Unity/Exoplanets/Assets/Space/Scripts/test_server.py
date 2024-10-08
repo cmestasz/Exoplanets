@@ -13,24 +13,24 @@ class SpaceThing(BaseModel):
     name: str
 
 
-class Sector(BaseModel):
+class Surrounding(BaseModel):
     space_things: list[SpaceThing]
 
 
-class SectorRequest(BaseModel):
-    sector_x: int
-    sector_y: int
-    sector_z: int
+class SurroundingsRequest(BaseModel):
+    exoplanet_x: int
+    exoplanet_y: int
+    exoplanet_z: int
 
 
-class SectorResponse(BaseModel):
+class SurroundingsResponse(BaseModel):
     space_things: list[SpaceThing]
 
 
-sectors: dict[str, list[SpaceThing]] = {}
+surroundings: dict[str, list[SpaceThing]] = {}
 
 
-def generate_random_sector(sector_id) -> list[SpaceThing]:
+def generate_random_surroundings(exoplanet_id) -> list[SpaceThing]:
     sector = []
     for i in range(1):
         sector.append(SpaceThing(
@@ -38,7 +38,7 @@ def generate_random_sector(sector_id) -> list[SpaceThing]:
             y=random.randint(-100, 100),
             z=random.randint(-100, 100),
             type="planet",
-            name=f"P{i}_{sector_id}",
+            name=f"P{i}_{exoplanet_id}",
         ))
     for i in range(10):
         sector.append(SpaceThing(
@@ -46,17 +46,17 @@ def generate_random_sector(sector_id) -> list[SpaceThing]:
             y=random.randint(-100, 100),
             z=random.randint(-100, 100),
             type="star",
-            name=f"S{i}_{sector_id}",
+            name=f"S{i}_{exoplanet_id}",
         ))
     return sector
 
 
-def id_from_sector_coords(x, y, z) -> str:
+def id_from_exoplanet_coords(x, y, z) -> str:
     return f"{x}_{y}_{z}"
 
-@app.post("/load_sector")
-def load_sector(request: SectorRequest) -> SectorResponse:
-    sector_id = id_from_sector_coords(request.sector_x, request.sector_y, request.sector_z)
-    if sector_id not in sectors:
-        sectors[sector_id] = generate_random_sector(sector_id)
-    return SectorResponse(space_things=sectors[sector_id])
+@app.post("/load_surroundings")
+def load_surroundings(request: SurroundingsRequest) -> SurroundingsResponse:
+    surroundings_id = id_from_exoplanet_coords(request.exoplanet_x, request.exoplanet_y, request.exoplanet_z)
+    if surroundings_id not in surroundings:
+        surroundings[surroundings_id] = generate_random_surroundings(surroundings_id)
+    return SurroundingsResponse(space_things=surroundings[surroundings_id])

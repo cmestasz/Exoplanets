@@ -1,9 +1,9 @@
 [System.Serializable]
-public class TestRequest
+public class SurroundingsRequest
 {
-    public int sector_x;
-    public int sector_y;
-    public int sector_z;
+    public int exoplanet_x;
+    public int exoplanet_y;
+    public int exolanet_z;
 }
 [System.Serializable]
 public class SpaceThing
@@ -19,7 +19,7 @@ public class SpaceThing
     }
 }
 [System.Serializable]
-public class TestResponse
+public class SurroundingsResponse
 {
     public SpaceThing[] space_things;
     override public string ToString()

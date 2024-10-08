@@ -39,8 +39,11 @@ public class SpaceController : MonoBehaviour
 
     private void TestOnStart()
     {
-        /*StartCoroutine(
-            APIConnector.Post<TestRequest, TestResponse>("load_sector", new TestRequest { sector_id = "0_0_0" }, (response) =>
+        int exo_x = (int)CurrentRelativePosition.x;
+        int exo_y = (int)CurrentRelativePosition.y;
+        int exo_z = (int)CurrentRelativePosition.z;
+        StartCoroutine(
+            APIConnector.Post<SurroundingsRequest, SurroundingsResponse>("load_surroundings", new SurroundingsRequest { exoplanet_x = exo_x, exoplanet_y = exo_y, exolanet_z = exo_z }, response =>
             {
                 Debug.Log(response.space_things);
                 Debug.Log(response.space_things.Length);
@@ -49,7 +52,7 @@ public class SpaceController : MonoBehaviour
                     Debug.Log(thing);
                 }
             })
-        );*/
+        );
     }       
     
 
