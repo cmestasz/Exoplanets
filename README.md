@@ -24,12 +24,14 @@
 </div>
 <div align="center" style="margin-top: 10px;">
     <img src="/img/unsa.png" alt="UNSA" width="450px" height="150px">
-    <h1 style="font-weight:bold; font-size: 2em;">Exoplanets-VR</h1>
+    <h1 style="font-weight:bold; font-size: 2em;">Exoplanets</h1>
 </div>
 
-Exoplanets-VR es una aplicación interactiva para poder visualizar exoplanetas usando la base de datos del [Archivo de Exoplanetas de la Nasa](https://exoplanetarchive.ipac.caltech.edu/).
+Exoplanets es una aplicación interactiva para poder visualizar exoplanetas y las estrellas que los rodean usando la base de datos del [Archivo de Exoplanetas de la Nasa](https://exoplanetarchive.ipac.caltech.edu/) y la [Base de Datos de GAIA](https://www.cosmos.esa.int/web/gaia/data-release-3)
 
-El enfoque busca crear una aplicación que permita a estudiantes aprender más sobre los exoplanetas esparcidos en el universo.
+Además, permite interactuar con la aplicación mediante el uso de gestos, los que son reconocidos y procesados utilizando [OpenCV](https://opencv.org/).
+
+El enfoque busca crear una aplicación que permita a estudiantes aprender más sobre los exoplanetas esparcidos en el universo y interactuar con estos de forma dinámica.
 
 ## Estado del Proyecto
 
@@ -40,7 +42,7 @@ El proyecto se encuentra en fase de desarrollo.
 ## Características (Esperadas) Principales
 
 -   Seleccionar un exoplaneta y generar un mapa 3D de estrellas usando como referencia la posición del exoplaneta.
--   Generar una visualización interactiva usando un casco de RV para visualizar el espacio.
+-   Generar una visualización interactiva que permita usar gestos para visualizar el espacio.
 -   Exportar imágenes de alta calidad de los exoplanetas visibles desde esa posición.
 -   (Opcional) Nombrar constelaciones y poder acceder a estas por su nombre
 -   (Opcional) Añadir diferentes niveles de detalle y precisión.
@@ -49,21 +51,36 @@ El proyecto se encuentra en fase de desarrollo.
 ## Tecnologías Utilizadas
 
 -   Simulador: Unity
--   Backend: Por decidir
+-   Backend: FastAPI + OpenCV
 -   Frontend: Por decidir
--   Despliegue: Desplegado en una MV propietaria.
+-   Despliegue: Aplicación de escritorio.
+
+## Instrucciones de uso
+
+🚧 **En Desarrollo** 🚧
 
 ## Requisitos para instalación
 
 -   Unity 2022.3.37f1
+-   Python 3.12.3
 
 ## Instalación y Configuración
 
+1.  Clonar el repositorio.
+
 ### Unity
 
-1.  Clonar el repositorio (rama unity).
-2.  Abrir la carpeta Unity/ con Unity Hub y vincularlo a un proyecto de Unity 2022.3.37f1.
-3.  Abrir el proyecto.
+1.  Abrir la carpeta Unity/ con Unity Hub y vincularlo a un proyecto de Unity 2022.3.37f1.
+2.  Abrir el proyecto.
+
+### OpenCV
+
+1. Crear un entorno virtual de Python 3.12.3 en la carpeta OpenCV/ instalando los requerimientos en el archivo requirements.txt.
+2. Ejecutar el servidor con:
+
+```bash
+fastapi dev main.py
+```
 
 ## Demo en Vivo
 
