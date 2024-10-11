@@ -23,8 +23,6 @@ public class SpaceController : MonoBehaviour
     private void Start()
     {
         InitVariables();
-        BuildRandomStars();
-        SpawnEarth();
         TestOnStart();
     }
 
@@ -43,13 +41,15 @@ public class SpaceController : MonoBehaviour
         int exo_y = (int)CurrentRelativePosition.y;
         int exo_z = (int)CurrentRelativePosition.z;
         StartCoroutine(
-            APIConnector.Post<SurroundingsRequest, SurroundingsResponse>("load_surroundings", new SurroundingsRequest { exoplanet_x = exo_x, exoplanet_y = exo_y, exolanet_z = exo_z }, response =>
+            APIConnector.Post<SurroundingsRequest, SurroundingsResponse>("load_surroundings", new SurroundingsRequest { exoplanet_x = exo_x, exoplanet_y = exo_y, exoplanet_z = exo_z }, response =>
             {
-                Debug.Log(response.space_things);
-                Debug.Log(response.space_things.Length);
                 foreach (SpaceThing thing in response.space_things)
                 {
-                    Debug.Log(thing);
+                    if (thing.type == "star")
+                    {
+                        int prefabIdx = Random.Range(0, starPrefabs.Length);
+                        StarController.CreateStar(StarId++.ToString(), starPrefabs[prefabIdx], new Vector3(thing.x, thing.y, thing.z), thing.scale, StarsParent, CurrentRelativePosition);
+                    }
                 }
             })
         );
@@ -67,8 +67,7 @@ public class SpaceController : MonoBehaviour
             Vector3 position = new(x, y, z);
             float scale = Random.Range(starsScaleMin, starsScaleMax);
             int prefabIdx = Random.Range(0, starPrefabs.Length);
-            StarController.CreateStar(StarId.ToString(), starPrefabs[prefabIdx], position, scale, StarsParent, CurrentRelativePosition);
-            StarId++;
+            StarController.CreateStar(StarId++.ToString(), starPrefabs[prefabIdx], position, scale, StarsParent, CurrentRelativePosition);
         }
     }
 
