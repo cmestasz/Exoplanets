@@ -39,6 +39,10 @@ public class PlayerController : MonoBehaviour
     void InitConfig()
     {
         // Cursor.lockState = CursorLockMode.Locked;
+        WebCamTexture webcamTexture = new();
+        Renderer renderer = GameObject.Find("WebcamDisplay").GetComponent<Renderer>();
+        renderer.material.mainTexture = webcamTexture;
+        webcamTexture.Play();
     }
 
     void MovePlayer(Vector3 dir)

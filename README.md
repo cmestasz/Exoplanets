@@ -70,7 +70,7 @@ El proyecto se encuentra en fase de desarrollo.
 
 ### Unity
 
-1.  Abrir la carpeta Unity/ con Unity Hub y vincularlo a un proyecto de Unity 2022.3.37f1.
+1.  Abrir la carpeta Unity/Exoplanets/ con Unity Hub y vincularlo a un proyecto de Unity 2022.3.37f1.
 2.  Abrir el proyecto.
 
 ### OpenCV
@@ -96,4 +96,4 @@ fastapi dev main.py
 
 ## Licencia
 
-El proyecto se encuentra bajo los términos de la [Licensia MIT](/LICENSE)
+El proyecto se encuentra bajo los términos de la [Licencia MIT](/LICENSE)
