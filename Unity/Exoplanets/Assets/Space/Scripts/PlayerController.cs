@@ -1,8 +1,6 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using static KeyboardBindings;
-using static Constants;
 
 public class PlayerController : MonoBehaviour
 {
@@ -12,6 +10,7 @@ public class PlayerController : MonoBehaviour
     public StarController CurrentStar { get; private set; }
     public Vector3Int CurrentSector { get; private set; }
     private bool InputActive { get; set; }
+    private WebCamTexture webcamTexture;
 
     // Start is called before the first frame update
     void Start()
@@ -39,10 +38,27 @@ public class PlayerController : MonoBehaviour
     void InitConfig()
     {
         // Cursor.lockState = CursorLockMode.Locked;
-        WebCamTexture webcamTexture = new();
+        webcamTexture = new();
         Renderer renderer = GameObject.Find("WebcamDisplay").GetComponent<Renderer>();
         renderer.material.mainTexture = webcamTexture;
         webcamTexture.Play();
+        StartCoroutine(GetInput());
+    }
+
+    private IEnumerator GetInput()
+    {
+        while (true)
+        {
+            Texture2D texture = new(webcamTexture.width, webcamTexture.height);
+            texture.SetPixels32(webcamTexture.GetPixels32());
+            texture.Apply();
+
+            byte[] bytes = texture.EncodeToPNG();
+            yield return APIConnector.PostBytes<InputResponse>("get_action_by_image", bytes, response =>
+            {
+                Debug.Log(response.action);
+            });
+        }
     }
 
     void MovePlayer(Vector3 dir)

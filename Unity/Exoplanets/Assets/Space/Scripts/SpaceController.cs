@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using UnityEngine;
-using static Constants;
 
 public class SpaceController : MonoBehaviour
 {
@@ -37,24 +36,18 @@ public class SpaceController : MonoBehaviour
 
     private void TestOnStart()
     {
-        int exo_x = (int)CurrentRelativePosition.x;
-        int exo_y = (int)CurrentRelativePosition.y;
-        int exo_z = (int)CurrentRelativePosition.z;
         StartCoroutine(
-            APIConnector.Post<SurroundingsRequest, SurroundingsResponse>("load_surroundings", new SurroundingsRequest { exoplanet_x = exo_x, exoplanet_y = exo_y, exoplanet_z = exo_z }, response =>
+            APIConnector.Post<SurroundingsRequest, SurroundingsResponse>("load_surroundings", new SurroundingsRequest { exoplanet_id = "00" }, response =>
             {
-                foreach (SpaceThing thing in response.space_things)
+                foreach (Star thing in response.stars)
                 {
-                    if (thing.type == "star")
-                    {
-                        int prefabIdx = Random.Range(0, starPrefabs.Length);
-                        StarController.CreateStar(StarId++.ToString(), starPrefabs[prefabIdx], new Vector3(thing.x, thing.y, thing.z), thing.scale, StarsParent, CurrentRelativePosition);
-                    }
+                    int prefabIdx = Random.Range(0, starPrefabs.Length);
+                    StarController.CreateStar(StarId++.ToString(), starPrefabs[prefabIdx], new Vector3(thing.x, thing.y, thing.z), thing.scale, StarsParent, CurrentRelativePosition);
                 }
             })
         );
-    }       
-    
+    }
+
 
     private void BuildRandomStars()
     {
