@@ -4,10 +4,12 @@ from pydantic import BaseModel
 class Exoplanet(BaseModel):
     id: str
     name: str
+    ra: float
+    dec: float
 
 
 class ExoplanetsRequest(BaseModel):
-    id: str
+    name: str
 
 
 class ExoplanetsResponse(BaseModel):

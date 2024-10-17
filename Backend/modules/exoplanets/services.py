@@ -1,18 +1,38 @@
+import astropy.table
 from .models import Exoplanet
-import asyncio
+from astroquery.gaia import Gaia
+from astropy.coordinates import SkyCoord
+from astropy import units as u
+import pyvo as vo
 
-EXOPLANET_ID = 1
+client = vo.dal.TAPService("https://exoplanetarchive.ipac.caltech.edu/TAP")
+
 
 async def find_exoplanets_by_name(name: str) -> list[Exoplanet]:
-    global EXOPLANET_ID
+    global client
+    query = f"SELECT * FROM ps WHERE pl_name LIKE '%{name}%'"
+    result = client.search(query)
+
+    a_table: astropy.table = result.to_table()
+
     exoplanets = []
-    for i in range(10):
+    for row in a_table:
         exoplanets.append(Exoplanet(
-            id=EXOPLANET_ID,
-            name=f"{name}_{i}"
-        ))
-        EXOPLANET_ID += 1
+            id=row["hostname"], name=row["pl_name"], ra=row["ra"], dec=row["dec"]))
 
-    await asyncio.sleep(0.3) # peticion a la api
+    ra, dec = exoplanets[0].ra, exoplanets[0].dec
+    coord = SkyCoord(ra=ra * u.deg, dec=dec * u.deg, frame='icrs')
 
+    radius = 0.1 * u.deg
+    query = f'''
+SELECT TOP 10
+    source_id, ra, dec, parallax, pmra, pmdec
+FROM gaiadr3.gaia_source
+WHERE CONTAINS(POINT('ICRS', ra, dec), CIRCLE('ICRS', {ra}, {dec}, {radius.to(u.deg).value})) = 1
+'''
+
+    job = Gaia.launch_job_async(query)
+    results = job.get_results()
+
+    print(results)
     return exoplanets
