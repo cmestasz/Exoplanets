@@ -1245,6 +1245,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   moveSpeed: 10
   rotateSpeed: 2
+  updateTime: 1
 --- !u!1 &1221875677
 GameObject:
   m_ObjectHideFlags: 0
