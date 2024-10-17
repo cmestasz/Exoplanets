@@ -4,6 +4,7 @@ from astroquery.gaia import Gaia
 from astropy.coordinates import SkyCoord
 from astropy import units as u
 import pyvo as vo
+import matplotlib.pyplot as plt
 
 client = vo.dal.TAPService("https://exoplanetarchive.ipac.caltech.edu/TAP")
 
@@ -14,6 +15,7 @@ async def find_exoplanets_by_name(name: str) -> list[Exoplanet]:
     result = client.search(query)
 
     a_table: astropy.table = result.to_table()
+    subtable = a_table["hostname", "pl_name", "ra", "dec"]
 
     exoplanets = []
     for row in a_table:
@@ -34,5 +36,19 @@ WHERE CONTAINS(POINT('ICRS', ra, dec), CIRCLE('ICRS', {ra}, {dec}, {radius.to(u.
     job = Gaia.launch_job_async(query)
     results = job.get_results()
 
+    star_coords = SkyCoord(ra=results["ra"] * u.deg, dec=results["dec"] * u.deg, frame='icrs')
+    sep = coord.separation(star_coords)
+
+    plt.figure(figsize=(8, 8))
+    plt.scatter((results['ra'] - ra) * 3600, (results['dec'] - dec) * 3600, color='blue', label='Stars')  # Converted to arcseconds
+    plt.scatter(0, 0, color='red', label='Reference Position')
+    plt.xlabel('RA Offset (arcseconds)')
+    plt.ylabel('Dec Offset (arcseconds)')
+    plt.title('Relative Star Positions')
+    plt.legend()
+    plt.grid(True)
+    plt.show()
+
+    print(subtable)
     print(results)
     return exoplanets
