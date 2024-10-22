@@ -4,6 +4,7 @@ __pycache__/
 *.py[cod]
 *$py.class
 christiaaaaan
+image.jpg
 
 # C extensions
 *.so
@@ -170,3 +171,5 @@ poetry.toml
 
 # LSP config files
 pyrightconfig.json
+tags
+test.htpp
