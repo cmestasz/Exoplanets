@@ -6,6 +6,7 @@ public class PlayerController : MonoBehaviour
 {
     [SerializeField] private float moveSpeed;
     [SerializeField] private float rotateSpeed;
+    [SerializeField] private float updateDelay;
     public LineRenderer ConnectionLine { get; private set; }
     public StarController CurrentStar { get; private set; }
     public Vector3Int CurrentSector { get; private set; }
@@ -42,28 +43,28 @@ public class PlayerController : MonoBehaviour
         Renderer renderer = GameObject.Find("WebcamDisplay").GetComponent<Renderer>();
         renderer.material.mainTexture = webcamTexture;
         webcamTexture.Play();
+        webcamTexture.requestedFPS = 15;
         StartCoroutine(GetInput());
     }
 
     private IEnumerator GetInput()
     {
+        Texture2D texture = new(webcamTexture.width, webcamTexture.height);
         while (true)
         {
-            Texture2D texture = new(webcamTexture.width, webcamTexture.height);
             texture.SetPixels32(webcamTexture.GetPixels32());
-            texture.Apply();
-
-            byte[] bytes = texture.EncodeToPNG();
-            yield return APIConnector.PostBytes<InputResponse>("get_action_by_image", bytes, response =>
-            {
-                Debug.Log(response.action);
-            });
+            byte[] bytes = texture.EncodeToJPG(50);
+            
+            yield return
+                APIConnector.PostBytes<InputResponse>("get_action_by_image", bytes, response =>
+                {
+                });
+            yield return new WaitForSeconds(updateDelay);
         }
     }
 
-    void MovePlayer(Vector3 dir)
+    private void ProcessAction(string action)
     {
-        transform.Translate(Time.deltaTime * moveSpeed * dir);
     }
 
     void CheckMovement()
@@ -95,7 +96,7 @@ public class PlayerController : MonoBehaviour
             dir *= 2;
         }
 
-        MovePlayer(dir);
+        transform.Translate(Time.deltaTime * moveSpeed * dir);
     }
 
     void CheckInteractions()

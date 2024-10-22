@@ -17,7 +17,7 @@ async def load_surroundings(request: SurroundingsRequest) -> SurroundingsRespons
 
 @app.post("/get_exoplanets_by_name")
 async def get_exoplanets_by_name(request: ExoplanetsRequest) -> ExoplanetsResponse:
-    exoplanets = await find_exoplanets_by_name(request.id)
+    exoplanets = await find_exoplanets_by_name(request.name)
     return ExoplanetsResponse(exoplanets=exoplanets)
 
 
