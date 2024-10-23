@@ -172,4 +172,4 @@ poetry.toml
 # LSP config files
 pyrightconfig.json
 tags
-test.htpp
+*http
