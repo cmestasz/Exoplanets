@@ -57,7 +57,6 @@ def test():
     name = a_table["pl_name"][0]
     print(f"Planet name: {name}")
 
-    print(a_table.colnames)
 
     ra = a_table["ra"][0]
     dec = a_table["dec"][0]

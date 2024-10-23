@@ -83,6 +83,8 @@ async def gen_s_around_planet_name(planet_name) -> list[Star]:
     distance = exoplanet_row['sy_dist'] 
     #doubious origin
     parallax = (1000 / distance) * u.mas
+
+    print(f"Planet name: {exoplanet_row['pl_name']}")
     # perhaps:
         #pmra = 2.0  # Movimiento propio en ascensión recta (mas/año, opcional)
         #pmdec = -1.5  # Movimiento propio en declinación (mas/año, opcional)
