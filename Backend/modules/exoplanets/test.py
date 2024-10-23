@@ -1,4 +1,5 @@
 import astropy.table
+from astropy.table import Table
 from astroquery.gaia import Gaia
 from astropy.coordinates import SkyCoord
 from astropy import units as u
@@ -49,12 +50,14 @@ def celestial_to_cartesian(ra, dec, parallax, center_ra, center_dec, center_para
 def test():
     client = vo.dal.TAPService("https://exoplanetarchive.ipac.caltech.edu/TAP")
     query = f"SELECT * FROM ps WHERE pl_name LIKE '%Boo%'"
-    result = client.search(query)
+    result = client.search(query=query)
 
-    a_table: astropy.table = result.to_table()
+    a_table: Table = result.to_table()
 
     name = a_table["pl_name"][0]
     print(f"Planet name: {name}")
+
+    print(a_table.colnames)
 
     ra = a_table["ra"][0]
     dec = a_table["dec"][0]
@@ -103,28 +106,35 @@ ORDER BY radial_distance ASC
     x, y, z = celestial_to_cartesian(
         ra_list, dec_list, parallax_list, center_ra, center_dec, center_parallax)
 
+    #print(x)
+    #print("-----")
+    #print(y)
+    #print("-----")
+    #print(z)
+    #print("-----")
+
     # Set up 3D plot
-    fig = plt.figure(figsize=(8, 8))
-    ax = fig.add_subplot(111, projection='3d')
+    #fig = plt.figure(figsize=(8, 8))
+    #ax = fig.add_subplot(111, projection='3d')
 
-    # Plot the stars
-    ax.scatter(x, y, z, c='blue', marker='o', label='Stars')
+    ## Plot the stars
+    #ax.scatter(x, y, z, c='blue', marker='o', label='Stars')
 
-    # Plot the reference position at the origin (0, 0, 0)
-    ax.scatter(0, 0, 0, c='red', marker='x', s=100,
-               label='Reference Point (Origin)')
+    ## Plot the reference position at the origin (0, 0, 0)
+    #ax.scatter(0, 0, 0, c='red', marker='x', s=100,
+    #           label='Reference Point (Origin)')
 
-    # Set labels
-    ax.set_xlabel('X (pc)')
-    ax.set_ylabel('Y (pc)')
-    ax.set_zlabel('Z (pc)')
+    ## Set labels
+    #ax.set_xlabel('X (pc)')
+    #ax.set_ylabel('Y (pc)')
+    #ax.set_zlabel('Z (pc)')
 
-    # Add title and legend
-    ax.set_title('3D Plot of Star Positions Relative to Reference Point')
-    ax.legend()
+    ## Add title and legend
+    #ax.set_title('3D Plot of Star Positions Relative to Reference Point')
+    #ax.legend()
 
-    # Show plot
-    plt.show()
+    ## Show plot
+    #plt.show()
 
 
 test()
