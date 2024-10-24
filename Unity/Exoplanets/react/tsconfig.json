@@ -1,0 +1,26 @@
+  {
+    "extends": "@reactunity/scripts",
+    "compilerOptions": {
+      "baseUrl": "./",
+      "jsxImportSource": "@reactunity/renderer/ugui",
+      "types": [
+        "@reactunity/scripts/main"
+      ],
+      "paths": {
+        "@components/*": [
+          "src/components/*"
+        ],
+        "@lib/*": [
+          "src/lib/*"
+        ]
+      }
+    },
+    "files": [
+      "src/index.tsx",
+    ],
+    "include": [
+      "./src",
+      "tailwind.config.js",
+      "webpack.config.js"
+    ],
+  }

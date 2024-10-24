@@ -1,0 +1,33 @@
+{
+  "name": "my-react-unity-ui",
+  "version": "0.0.1",
+  "description": "",
+  "main": "src/index.ts",
+  "private": true,
+  "scripts": {
+    "start": "react-unity-scripts start",
+    "build": "react-unity-scripts build",
+    "lint": "react-unity-scripts lint"
+  },
+  "dependencies": {
+    "@reactunity/previewer": "^0.18.0",
+    "@reactunity/renderer": "^0.18.1",
+    "postcss": "^8.4.47",
+    "react": "^18.3.1"
+  },
+  "devDependencies": {
+    "@reactunity/scripts": "^0.18.4",
+    "@typescript-eslint/eslint-plugin": "^7",
+    "@typescript-eslint/parser": "^7",
+    "autoprefixer": "^10.4.20",
+    "eslint": "^8.57.1",
+    "eslint-config-airbnb": "^19.0.4",
+    "eslint-config-airbnb-typescript": "^18.0.0",
+    "eslint-import-resolver-typescript": "^3.6.3",
+    "eslint-plugin-import": "^2.31.0",
+    "eslint-plugin-oxlint": "^0.10.1",
+    "eslint-plugin-react": "^7.37.2",
+    "tailwindcss": "^3.4.14",
+    "typescript": "^5.5.4"
+  }
+}
