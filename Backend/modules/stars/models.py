@@ -2,9 +2,9 @@ from pydantic import BaseModel
 
 
 class Star(BaseModel):
-    x: float
-    y: float
-    z: float
+    x: str
+    y: str
+    z: str
     name: str
 
 

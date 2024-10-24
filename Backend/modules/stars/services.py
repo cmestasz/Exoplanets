@@ -1,3 +1,4 @@
+from time import sleep
 from astropy import table
 from astropy.table import Table
 from astropy.table import Row
@@ -5,6 +6,7 @@ from astropy.coordinates import SkyCoord
 from astroquery.gaia import Gaia
 from .models import Star
 
+import json
 import random
 import pyvo
 import astropy.units as u
@@ -44,11 +46,18 @@ def celestial_to_cartesian(ra, dec, parallax, center_ra, center_dec, center_para
     center_y = center_dist * np.cos(center_dec_rad) * np.sin(center_ra_rad)
     center_z = center_dist * np.sin(center_dec_rad)
 
-    # Subtract center star's coordinates to center the system
-    x -= center_x
-    y -= center_y
-    z -= center_z
+    print(f"x es: {type(x)} y el otro: {type(center_x)}")
 
+    print(x[0:4])
+    print("centro: ", center_x)
+
+    # Subtract center star's coordinates to center the system
+    x -= center_x.value
+    y -= center_y.value
+    z -= center_z.value
+
+    #sleep(20000)
+    
     return x, y, z
 
 
@@ -88,14 +97,14 @@ async def generate_around_planet_name(planet_name) -> list[Star]:
         #pmra = 2.0  # Movimiento propio en ascensión recta (mas/año, opcional)
         #pmdec = -1.5  # Movimiento propio en declinación (mas/año, opcional)
         #radial_velocity = 10.0  # Velocidad radial (km/s, opcional)
-    coord : SkyCoord = SkyCoord(ra=ra*u.deg, dec=dec*u.deg, distance=distance*u.pc, frame='icrs')
+    coord : SkyCoord = SkyCoord(ra=ra, dec=dec, distance=distance*u.pc, unit=(u.degree, u.degree, u.pc), frame='icrs')
     Gaia.ROW_LIMIT=100
-    results : Table = Gaia.query_object_async(coordinate=coord, radius=360*u.deg)
+    results : Table = Gaia.query_object_async(coordinate=coord, radius=1*u.deg)
     ra_list = results['ra']
     dec_list = results['dec']
     designation_list = results['DESIGNATION']
     parallax_list = results['parallax']
-
+    print(results[0]['DESIGNATION'])
     x, y, z = celestial_to_cartesian(
         ra_list, dec_list,
         parallax_list,
@@ -106,9 +115,9 @@ async def generate_around_planet_name(planet_name) -> list[Star]:
     sector = []
     for i in range( len(designation_list) ):
         sector.append(Star(
-            x=x[i],
-            y=y[i],
-            z=z[i],
+            x=str(x[i]),
+            y=str(y[i]),
+            z=str(z[i]),
             name=designation_list[i]
         ))
     return sector
