@@ -64,7 +64,6 @@ async def generate_random_stars(exoplanet_id) -> list[Star]:
             x=random_in_range(MIN_DIST, MAX_DIST),
             y=random_in_range(MIN_DIST, MAX_DIST),
             z=random_in_range(MIN_DIST, MAX_DIST),
-            scale=random_in_range(25, 60, False),
             name=f"S{i}_{exoplanet_id}",
         ))
 
@@ -72,7 +71,7 @@ async def generate_random_stars(exoplanet_id) -> list[Star]:
 
     return sector
 
-async def gen_s_around_planet_name(planet_name) -> list[Star]:
+async def generate_around_planet_name(planet_name) -> list[Star]:
     client = pyvo.dal.TAPService("https://exoplanetarchive.ipac.caltech.edu/TAP")
     query = f"SELECT * FROM ps WHERE pl_name LIKE '%{planet_name}%'"
     table_exoplanets : Table = client.search(query=query).to_table()
@@ -92,8 +91,9 @@ async def gen_s_around_planet_name(planet_name) -> list[Star]:
     coord : SkyCoord = SkyCoord(ra=ra*u.deg, dec=dec*u.deg, distance=distance*u.pc, frame='icrs')
     Gaia.ROW_LIMIT=100
     results : Table = Gaia.query_object_async(coordinate=coord, radius=360*u.deg)
-    ra_list = result['ra']
-    dec_list = result['dec']
+    ra_list = results['ra']
+    dec_list = results['dec']
+    designation_list = results['DESIGNATION']
     parallax_list = results['parallax']
 
     x, y, z = celestial_to_cartesian(
@@ -103,8 +103,15 @@ async def gen_s_around_planet_name(planet_name) -> list[Star]:
         dec, 
         parallax # dubious origin
     )
-
-
+    sector = []
+    for i in range( len(designation_list) ):
+        sector.append(Star(
+            x=x[i],
+            y=y[i],
+            z=z[i],
+            name=designation_list[i]
+        ))
+    return sector
 
 
 """
