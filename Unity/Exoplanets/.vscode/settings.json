@@ -51,5 +51,7 @@
         "temp/": true,
         "Temp/": true
     },
-    "dotnet.defaultSolution": "Exoplanets.sln"
+    "dotnet.defaultSolution": "Exoplanets.sln",
+    "typescript.tsdk": "react/node_modules/typescript/lib",
+
 }
