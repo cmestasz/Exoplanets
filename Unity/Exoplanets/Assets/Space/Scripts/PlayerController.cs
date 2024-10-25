@@ -38,12 +38,11 @@ public class PlayerController : MonoBehaviour
 
     void InitConfig()
     {
-        // Cursor.lockState = CursorLockMode.Locked;
-        webcamTexture = new();
-        Renderer renderer = GameObject.Find("WebcamDisplay").GetComponent<Renderer>();
-        renderer.material.mainTexture = webcamTexture;
+        webcamTexture = new()
+        {
+            requestedFPS = 15
+        };
         webcamTexture.Play();
-        webcamTexture.requestedFPS = 15;
         StartCoroutine(GetInput());
     }
 
