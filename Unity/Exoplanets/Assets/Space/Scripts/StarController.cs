@@ -11,7 +11,7 @@ public class StarController : MonoBehaviour, IHasInfo
     public string Id { get; private set; }
     public string Info => $"This is a star with id {Id}";
 
-    public static StarController CreateStar(string id, GameObject prefab, Vector3 position, Transform parent, Vector3 relativePosition)
+    public static StarController CreateStar(string id, GameObject prefab, Vector3 position, Transform parent)
     {
         GameObject star = Instantiate(prefab, position, Quaternion.identity, parent);
         StarController starController = star.GetComponent<StarController>();

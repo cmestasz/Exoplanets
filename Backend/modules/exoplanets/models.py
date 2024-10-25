@@ -2,13 +2,13 @@ from pydantic import BaseModel
 
 
 class Exoplanet(BaseModel):
-    id: str
     name: str
     ra: float
     dec: float
+    parallax: float
 
 
-class ExoplanetsRequest(BaseModel):
+class ExoplanetsByNameRequest(BaseModel):
     name: str
 
 

@@ -7,6 +7,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float moveSpeed;
     [SerializeField] private float rotateSpeed;
     [SerializeField] private float updateDelay;
+    [SerializeField] private bool webcamInputActive;
     public LineRenderer ConnectionLine { get; private set; }
     public StarController CurrentStar { get; private set; }
     public Vector3Int CurrentSector { get; private set; }
@@ -59,6 +60,7 @@ public class PlayerController : MonoBehaviour
                 {
                 });
             yield return new WaitForSeconds(updateDelay);
+            yield return new WaitUntil(() => webcamInputActive);
         }
     }
 
@@ -102,10 +104,6 @@ public class PlayerController : MonoBehaviour
     {
         if (!InputActive) return;
 
-        if (Input.GetKeyDown(REGENERATE_STARS))
-        {
-            SpaceController.Instance.RegenerateStars();
-        }
         if (Input.GetKeyDown(ADD_TO_CONSTELLATION))
         {
             if (Physics.Raycast(transform.position, transform.forward, out RaycastHit hit))
