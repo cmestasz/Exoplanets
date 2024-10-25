@@ -8,11 +8,37 @@ public class Star
 }
 
 [System.Serializable]
-public class Exoplanet 
+public class Exoplanet
 {
     public float ra;
     public float dec;
     public float dist;
     public string name;
     // some other data
+}
+
+// dont use inside other classes, for standarization purposes
+[System.Serializable]
+public class SpaceCoord
+{
+    public float ra;
+    public float dec;
+    public float parallax;
+
+    public SpaceCoord()
+    {
+        parallax = 1;
+    }
+
+    public SpaceCoord(float ra, float dec, float parallax)
+    {
+        this.ra = ra;
+        this.dec = dec;
+        this.parallax = parallax;
+    }
+
+    public override string ToString()
+    {
+        return $"ra: {ra}, dec: {dec}, parallax: {parallax}";
+    }
 }

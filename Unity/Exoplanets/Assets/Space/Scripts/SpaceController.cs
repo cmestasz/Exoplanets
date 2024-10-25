@@ -10,7 +10,7 @@ public class SpaceController : MonoBehaviour
     public ConstellationBuilder ConstellationBuilder { get; private set; }
     public Transform StarsParent { get; private set; }
     public Transform PlanetsParent { get; private set; }
-    public Vector3 CurrentRelativePosition { get; private set; }
+    public SpaceCoord CurrentRelativePosition { get; private set; }
     private int StarId { get; set; } = 0;
 
     private void Awake()
@@ -29,25 +29,31 @@ public class SpaceController : MonoBehaviour
         ConstellationBuilder = new(constellationConnectionPrefab, transform.Find("ConstellationConnections"));
         StarsParent = transform.Find("Stars");
         PlanetsParent = transform.Find("Planets");
-        CurrentRelativePosition = Vector3.zero;
+        CurrentRelativePosition = new();
     }
 
 
     private void TestOnStart()
     {
+        LoadStars(0, 0, 2);
+    }
+
+    private void LoadStars(float ra, float dec, float parallax)
+    {
         SurroundingsRequest request = new()
         {
-            ra = 0,
-            dec = 0,
-            dist = 0
+            ra = ra,
+            dec = dec,
+            parallax = parallax
         };
         StartCoroutine(
             APIConnector.Post<SurroundingsRequest, SurroundingsResponse>("load_surroundings", request, response =>
             {
-                foreach (Star thing in response.stars)
+                foreach (Star star in response.stars)
                 {
                     int prefabIdx = Random.Range(0, starPrefabs.Length);
-                    StarController.CreateStar(StarId++.ToString(), starPrefabs[prefabIdx], new Vector3(thing.x, thing.y, thing.z), StarsParent, CurrentRelativePosition);
+                    Vector3 pos = new(star.x * 15, star.y * 15, star.z * 15);
+                    StarController.CreateStar(StarId++.ToString(), starPrefabs[prefabIdx], pos, StarsParent);
                 }
             })
         );
@@ -64,33 +70,24 @@ public class SpaceController : MonoBehaviour
 
             Vector3 position = new(x, y, z);
             int prefabIdx = Random.Range(0, starPrefabs.Length);
-            StarController.CreateStar(StarId++.ToString(), starPrefabs[prefabIdx], position, StarsParent, CurrentRelativePosition);
+            StarController.CreateStar(StarId++.ToString(), starPrefabs[prefabIdx], position, StarsParent);
         }
     }
 
-    public void WarpTo(Vector3 pos)
+    public void WarpTo(SpaceCoord pos)
     {
         CurrentRelativePosition = pos;
-        LoadStars();
+        ClearStars();
+        LoadStars(pos.ra, pos.dec, pos.parallax);
         LoadConstellations();
     }
 
-    public void RegenerateStars()
+    private void ClearStars()
     {
-        //TODO: you actually need a proper method for loading the stars and binding them correctly
-
         foreach (Transform child in StarsParent)
         {
             Destroy(child.gameObject);
         }
-        ConstellationBuilder.ClearConnections();
-        BuildRandomStars();
-    }
-
-    public void LoadStars()
-    {
-        Debug.Log($"We should now be loading stars for the position {CurrentRelativePosition}");
-        RegenerateStars(); // to be changed for a db request
     }
 
     public void LoadConstellations()

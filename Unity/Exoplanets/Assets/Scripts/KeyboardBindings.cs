@@ -6,7 +6,6 @@ public static class KeyboardBindings
     public static KeyCode BACKWARD = KeyCode.S;
     public static KeyCode LEFT = KeyCode.A;
     public static KeyCode RIGHT = KeyCode.D;
-    public static KeyCode REGENERATE_STARS = KeyCode.R;
     public static KeyCode SAVE_STARS = KeyCode.F;
     public static KeyCode SAVE_CONSTELLATION = KeyCode.C;
     public static KeyCode ADD_TO_CONSTELLATION = KeyCode.Space;

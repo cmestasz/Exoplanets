@@ -3,7 +3,7 @@ public class SurroundingsRequest
 {
     public float ra;
     public float dec;
-    public float dist;
+    public float parallax;
 }
 
 [System.Serializable]
@@ -13,9 +13,9 @@ public class SurroundingsResponse
 }
 
 [System.Serializable]
-public class ExoplanetsRequest
+public class ExoplanetsByNameRequest
 {
-    public string name; // or id?
+    public string name;
 }
 
 [System.Serializable]

@@ -5,7 +5,7 @@ public class UIInteractor : MonoBehaviour
 {
     [SerializeField] private TMP_InputField constellationNameInput;
     [SerializeField] private TMP_Text infoText;
-    [SerializeField] private TMP_InputField warpToX, warpToY, warpToZ;
+    [SerializeField] private TMP_InputField warpToRA, warpToDEC, warpToPARALLAX;
     public static UIInteractor Instance { get; private set; }
 
 
@@ -24,11 +24,11 @@ public class UIInteractor : MonoBehaviour
         infoText.text = text;
     }
 
-    public Vector3 GetWarpPosition()
+    public SpaceCoord GetWarpPosition()
     {
-        float x = float.Parse(warpToX.text);
-        float y = float.Parse(warpToY.text);
-        float z = float.Parse(warpToZ.text);
-        return new Vector3(x, y, z);
+        float ra = float.Parse(warpToRA.text);
+        float dec = float.Parse(warpToDEC.text);
+        float parallax = float.Parse(warpToPARALLAX.text);
+        return new SpaceCoord(ra, dec, parallax);
     }
 }

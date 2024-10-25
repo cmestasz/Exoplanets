@@ -14,7 +14,7 @@
     </thead>
     <tbody>
         <tr>
-            <td colspan="3"><span><b>Curso</b></span>: Interacción Humano Computador + Arquitectura de Computadoras</td>
+            <td colspan="3"><span><b>Curso</b></span>: Interacción Humano Computador</td>
         </tr>
         <tr>
             <td colspan="3"><span><b>Fecha</b></span>: 20/09/2024</td>
