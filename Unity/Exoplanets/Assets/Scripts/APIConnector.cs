@@ -17,6 +17,7 @@ public class APIConnector
         }
         else
         {
+            Debug.Log(request.downloadHandler.text);
             callback(JsonUtility.FromJson<Response>(request.downloadHandler.text));
         }
     }
@@ -32,6 +33,7 @@ public class APIConnector
         }
         else
         {
+            Debug.Log(request.downloadHandler.text);
             Response response = JsonUtility.FromJson<Response>(request.downloadHandler.text);
             callback(response);
         }
@@ -59,6 +61,7 @@ public class APIConnector
         }
         else
         {
+            Debug.Log(request.downloadHandler.text);
             Response response = JsonUtility.FromJson<Response>(request.downloadHandler.text);
             callback(response);
         }

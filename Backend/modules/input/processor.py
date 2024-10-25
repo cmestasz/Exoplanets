@@ -81,9 +81,9 @@ def process_gesture(image):
                 if index_to_middle_dist > 0.05:
                     if mode == 'move':
                         if -20 <= index_angle <= 20:
-                            gesture_actions['move_right'] = True
-                        elif 160 <= index_angle <= 180 or -180 <= index_angle <= -160:
                             gesture_actions['move_left'] = True
+                        elif 160 <= index_angle <= 180 or -180 <= index_angle <= -160:
+                            gesture_actions['move_right'] = True
                         elif 60 < index_angle < 120:
                             gesture_actions['move_down'] = True
                         elif -120 < index_angle < -60:
@@ -111,4 +111,4 @@ def process_gesture(image):
     elif gesture_actions['move_right']:
         return Action.RIGHT
     
-    return None
+    return 'do_nothing'
