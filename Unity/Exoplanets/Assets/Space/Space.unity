@@ -222,7 +222,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   starPrefabs:
-  - {fileID: 1972576250904842090, guid: 45203d2b073d2484d822cf55d03fd7df, type: 3}
+  - {fileID: 1972576250904842090, guid: abd6ebe7d6a92a3488d7cb01c8af3242, type: 3}
   earthPrefab: {fileID: 3183531540321241393, guid: 83dfabb84829ef648973a96f83596015,
     type: 3}
   constellationConnectionPrefab: {fileID: 6346209793717162596, guid: 615b5f3ffb381b8499cb0abb41088e43,

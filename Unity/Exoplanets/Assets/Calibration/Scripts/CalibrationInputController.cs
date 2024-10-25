@@ -26,18 +26,7 @@ public class CalibrationInputController : MonoBehaviour
     private void ChangeWindow(int direction)
     {
         windowIdx = (windowIdx + direction + 4) % 4;
-        SRotateWindow(90 * (windowIdx - direction), 90 * windowIdx);
-        Debug.Log("Window index: " + windowIdx);
+        transform.rotation = Quaternion.Euler(0, windowIdx * 90, 0);
     }
 
-    private IEnumerator RotateWindow(float start, float end)
-    {
-        float t = 0;
-        while (t < 1)
-        {
-            t += Time.deltaTime;
-            transform.localRotation = Quaternion.Euler(0, Mathf.Lerp(start, end, t), 0);
-            yield return null;
-        }
-    }
 }

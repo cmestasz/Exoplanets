@@ -4,7 +4,6 @@ using UnityEngine;
 public class SpaceController : MonoBehaviour
 {
     [SerializeField] private GameObject[] starPrefabs;
-    [SerializeField] private GameObject earthPrefab;
     [SerializeField] private GameObject constellationConnectionPrefab;
     [SerializeField] private float starsPositionRange, starsScaleMin, starsScaleMax, amountOfStars;
     public static SpaceController Instance { get; private set; }
@@ -67,11 +66,6 @@ public class SpaceController : MonoBehaviour
             int prefabIdx = Random.Range(0, starPrefabs.Length);
             StarController.CreateStar(StarId++.ToString(), starPrefabs[prefabIdx], position, StarsParent, CurrentRelativePosition);
         }
-    }
-
-    private void SpawnEarth()
-    {
-        PlanetController.CreatePlanet("Earth", earthPrefab, Vector3.zero, 100, PlanetsParent, CurrentRelativePosition);
     }
 
     public void WarpTo(Vector3 pos)
