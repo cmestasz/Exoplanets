@@ -48,17 +48,38 @@ def celestial_to_cartesian_parallax(
 
 
 async def load_around_position(ra, dec, parallax) -> list[Star]:
+    print(f"RA: {ra}, DEC: {dec}, PARALLAX: {parallax}")
     dist = 1000 / parallax
 
     Gaia.ROW_LIMIT = 100
-    coord: SkyCoord = SkyCoord(
-        ra=ra,
-        dec=dec,
-        distance=dist * u.pc,
-        unit=(u.degree, u.degree, u.pc),
-        frame="icrs",
-    )
-    results: Table = Gaia.query_object_async(coordinate=coord, radius=45 * u.deg)
+
+    radius = 20 * u.pc
+    radius_rad = np.arctan2(radius.to(u.pc).value, dist)
+    radius_deg = radius_rad * u.rad.to(u.deg)
+
+
+    query = f'''
+SELECT TOP 4000
+    DESIGNATION, ra, dec, parallax,
+    DISTANCE(
+        POINT('ICRS', ra, dec),
+        POINT('ICRS', {ra}, {dec})
+    ) AS angular_distance,
+    ABS(1000/parallax - {dist}) AS radial_distance
+FROM gaiadr3.gaia_source
+WHERE 1=CONTAINS(
+    POINT('ICRS', ra, dec),
+    CIRCLE('ICRS', {ra}, {dec}, {radius_deg})
+)
+    AND parallax > 0
+    AND parallax/parallax_error > 5
+    AND ABS(1000/parallax - {dist}) < {radius.value}
+ORDER BY radial_distance ASC
+'''
+
+    job = Gaia.launch_job_async(query)
+    results = job.get_results()
+    
     ra_list = results["ra"]
     dec_list = results["dec"]
     designation_list = results["DESIGNATION"]

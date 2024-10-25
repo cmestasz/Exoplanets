@@ -13,6 +13,7 @@ public class PlayerController : MonoBehaviour
     public Vector3Int CurrentSector { get; private set; }
     private bool InputActive { get; set; }
     private WebCamTexture webcamTexture;
+    private string currentAction;
 
     // Start is called before the first frame update
     void Start()
@@ -54,18 +55,41 @@ public class PlayerController : MonoBehaviour
         {
             texture.SetPixels32(webcamTexture.GetPixels32());
             byte[] bytes = texture.EncodeToJPG(50);
-            
+
             yield return
                 APIConnector.PostBytes<InputResponse>("get_action_by_image", bytes, response =>
                 {
+                    currentAction = response.action;
                 });
             yield return new WaitForSeconds(updateDelay);
             yield return new WaitUntil(() => webcamInputActive);
         }
     }
 
-    private void ProcessAction(string action)
+    private void ProcessCurrentAction()
     {
+        if (currentAction == null) return;
+        switch (currentAction)
+        {
+            case "left":
+                transform.Rotate(Vector3.up, -rotateSpeed);
+                break;
+            case "right":
+                transform.Rotate(Vector3.up, rotateSpeed);
+                break;
+            case "up":
+                transform.Rotate(Vector3.left, -rotateSpeed);
+                break;
+            case "down":
+                transform.Rotate(Vector3.left, rotateSpeed);
+                break;
+            case "zoom_in":
+                transform.Translate(moveSpeed * Time.deltaTime * Vector3.forward);
+                break;
+            case "zoom_out":
+                transform.Translate(moveSpeed * Time.deltaTime * Vector3.back);
+                break;
+        }
     }
 
     void CheckMovement()

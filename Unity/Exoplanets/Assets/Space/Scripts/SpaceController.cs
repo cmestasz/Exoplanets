@@ -35,7 +35,7 @@ public class SpaceController : MonoBehaviour
 
     private void TestOnStart()
     {
-        LoadStars(90, 90, 1);
+        LoadStars(0, 0, 2);
     }
 
     private void LoadStars(float ra, float dec, float parallax)
@@ -49,10 +49,11 @@ public class SpaceController : MonoBehaviour
         StartCoroutine(
             APIConnector.Post<SurroundingsRequest, SurroundingsResponse>("load_surroundings", request, response =>
             {
-                foreach (Star thing in response.stars)
+                foreach (Star star in response.stars)
                 {
                     int prefabIdx = Random.Range(0, starPrefabs.Length);
-                    StarController.CreateStar(StarId++.ToString(), starPrefabs[prefabIdx], new Vector3(thing.x, thing.y, thing.z), StarsParent);
+                    Vector3 pos = new(star.x * 15, star.y * 15, star.z * 15);
+                    StarController.CreateStar(StarId++.ToString(), starPrefabs[prefabIdx], pos, StarsParent);
                 }
             })
         );
@@ -76,8 +77,17 @@ public class SpaceController : MonoBehaviour
     public void WarpTo(SpaceCoord pos)
     {
         CurrentRelativePosition = pos;
+        ClearStars();
         LoadStars(pos.ra, pos.dec, pos.parallax);
         LoadConstellations();
+    }
+
+    private void ClearStars()
+    {
+        foreach (Transform child in StarsParent)
+        {
+            Destroy(child.gameObject);
+        }
     }
 
     public void LoadConstellations()

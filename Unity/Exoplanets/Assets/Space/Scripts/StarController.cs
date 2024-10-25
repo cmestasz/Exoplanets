@@ -14,15 +14,11 @@ public class StarController : MonoBehaviour, IHasInfo
     public static StarController CreateStar(string id, GameObject prefab, Vector3 position, Transform parent)
     {
         GameObject star = Instantiate(prefab, position, Quaternion.identity, parent);
+        star.transform.localScale = Vector3.one * 2;
         StarController starController = star.GetComponent<StarController>();
         starController.Id = id;
         stars.Add(id, starController);
         return starController;
-    }
-
-    public static void LoadStars(Vector3 relativePosition)
-    {
-        RelativePosition = relativePosition;
     }
     
 }

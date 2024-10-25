@@ -36,4 +36,9 @@ public class SpaceCoord
         this.dec = dec;
         this.parallax = parallax;
     }
+
+    public override string ToString()
+    {
+        return $"ra: {ra}, dec: {dec}, parallax: {parallax}";
+    }
 }
