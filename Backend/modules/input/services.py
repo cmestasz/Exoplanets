@@ -2,6 +2,7 @@ from fastapi import UploadFile
 from .models import Action
 import numpy as np
 import cv2
+from processor import process_gesture
 
 async def process_input(file: UploadFile) -> str:
     file_bytes = await file.read()
@@ -13,6 +14,6 @@ async def process_input(file: UploadFile) -> str:
     cv2.imwrite("image.jpg", img)
     # aca se procesa la imagen
 
-    action = Action.ZOOM_IN
+    action = process_gesture(img)
 
     return action.value
