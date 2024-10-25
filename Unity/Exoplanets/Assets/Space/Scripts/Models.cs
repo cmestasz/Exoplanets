@@ -1,25 +1,18 @@
 [System.Serializable]
-public class SurroundingsRequest
-{
-    public string exoplanet_id;
-}
-[System.Serializable]
 public class Star
 {
-    public int x;
-    public int y;
-    public int z;
-    public int scale;
+    public float x;
+    public float y;
+    public float z;
     public string name;
-}
-[System.Serializable]
-public class SurroundingsResponse
-{
-    public Star[] stars;
 }
 
 [System.Serializable]
-public class InputResponse
+public class Exoplanet 
 {
-    public string action;
+    public float ra;
+    public float dec;
+    public float dist;
+    public string name;
+    // some other data
 }
