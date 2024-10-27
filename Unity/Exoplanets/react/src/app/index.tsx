@@ -1,12 +1,13 @@
 import { render } from '@reactunity/renderer';
 import React from 'react';
-import { Tailwind } from './tailwind';
+import './globals.css';
 
 function App() {
   return (
-    <view>
-      <Tailwind />
-    </view>
+    <>
+      <h1 className="text-white">Hello</h1>
+      <h2 className="text-white">ods</h2>
+    </>
   );
 }
 
