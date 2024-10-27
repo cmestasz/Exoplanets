@@ -16,8 +16,11 @@
         "@styles/*": [
           "src/styles/*"
         ],
-        "@types/*": [
+        "@mytypes/*": [
           "src/types/*"
+        ],
+        "@i18n/*": [
+          "src/i18n/*"
         ]
       }
     },
