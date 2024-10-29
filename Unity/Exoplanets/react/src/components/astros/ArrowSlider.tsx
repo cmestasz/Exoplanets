@@ -1,8 +1,8 @@
 import clsx from 'clsx';
-import { motion, Variants } from 'framer-motion';
 import { FaAngleLeft, FaAngleRight } from 'react-icons/fa6';
 import { twMerge } from 'tailwind-merge';
 import { DEFAULT_COLOR } from '@styles/colors';
+import { Style } from '@reactunity/renderer';
 
 interface ArrowSliderProps {
   toLeft?: boolean;
@@ -13,41 +13,41 @@ interface ArrowSliderProps {
 export default function ArrowSlider({
   toLeft, onClick, cardHover,
 }: ArrowSliderProps) {
-  const baseStyle = 'flex items-center justify-center border-primary hover:border-secondary border-2 w-10';
+  const baseStyle = 'border-primary hover:border-secondary border-2 w-10 max-h-48 group';
   const colors = DEFAULT_COLOR;
-  const rounded = toLeft ? 'rounded-s-lg' : 'rounded-e-lg';
-  const arrowVariants: Variants = {
-    ontap: {
-      x: toLeft ? -3 : 3, scale: 0.8,
-    },
-    animate: {
-      x: 0, scale: 1,
-    },
+  const leftArrow: Style = {
+    borderTopLeftRadius: 8,
+    borderBottomLeftRadius: 8,
+    borderRightColor: cardHover ? 'var(--secondary)' : '',
+  };
+  const rightArrow: Style = {
+    borderTopRightRadius: 8,
+    borderBottomRightRadius: 8,
+    borderLeftColor: cardHover ? 'var(--secondary)' : '',
   };
   return (
-    <motion.button
-      className={twMerge(baseStyle, colors, rounded, clsx(
-        {
-          'border-s-secondary': cardHover && !toLeft,
-          'border-e-secondary': cardHover && toLeft,
-        },
-      ))}
-      onClick={onClick}
+    <div
+      className={twMerge(baseStyle, colors)}
+      style={toLeft ? leftArrow : rightArrow}
     >
-      <motion.div
-        variants={arrowVariants}
-        whileTap="ontap"
-        animate="animate"
-        className="h-full w-full flex items-center justify-center"
+      <button
+        onClick={onClick}
+        className={twMerge(
+          'h-full w-full flex items-center justify-center active:scale-90',
+          clsx({
+            'active:trans-x-2': !toLeft,
+            'active:-trans-x-2': toLeft,
+          }),
+        )}
       >
         {
           toLeft ? (
-            <FaAngleLeft />
+            <FaAngleLeft className="text-primary group-hover:text-secondary transition-colors duration-300 ease-out" />
           ) : (
-            <FaAngleRight />
+            <FaAngleRight className="text-primary group-hover:text-secondary  transition-colors duration-300 ease-out" />
           )
         }
-      </motion.div>
-    </motion.button>
+      </button>
+    </div>
   );
 }

@@ -11,7 +11,7 @@ function App() {
     console.log('An Astro card');
   };
   return (
-    <>
+    <div className="flex">
       <h1 className="text-white">{t('components.form.input.error-update')}</h1>
       <h2 className="text-white">ods</h2>
       <AstrosSlider
@@ -20,7 +20,7 @@ function App() {
           { onClick: handleClick, astro: proximaCentauriB },
         ]}
       />
-    </>
+    </div>
   );
 }
 
