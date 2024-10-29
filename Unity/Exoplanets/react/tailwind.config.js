@@ -19,27 +19,9 @@ module.exports = {
           dark: 'var(--dark-green)',
         },
       },
-      keyframes: {
-        moveBackground: {
-          '0%': {
-            top: '0%', left: '0%', transform: 'translate(0, 0)',
-          }, // Esquina superior izquierda
-          '30%': {
-            top: '0%', left: '100%', transform: 'translate(-100%, 0)',
-          }, // Esquina superior derecha
-          '50%': {
-            top: '100%', left: '100%', transform: 'translate(-100%, -100%)',
-          }, // Esquina inferior derecha
-          '80%': {
-            top: '100%', left: '0%', transform: 'translate(0, -100%)',
-          }, // Esquina inferior izquierda
-          '100%': {
-            top: '0%', left: '0%', transform: 'translate(0, 0)',
-          }, // Regresa a la esquina superior izquierda
-        },
-      },
       animation: {
-        corners: 'moveBackground 20s 3s linear infinite',
+        'alert-in': 'alert-in .5s ease-in',
+        'alert-out': 'alert-out .5s ease-out',
       },
       fontFamily: {
         orbitron: 'var(--font-orbitron)',

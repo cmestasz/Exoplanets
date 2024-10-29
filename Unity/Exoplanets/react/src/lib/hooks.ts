@@ -1,37 +1,44 @@
-import { DEFAULT_ALERT_DURATION } from '@/constants/defaults';
-import { useState, useCallback } from 'react';
-
-export interface AlertOptions {
-  message: string;
-  type?: 'error' | 'success';
-  duration?: number;
-}
+import { useState, useCallback, useEffect } from 'react';
+import { AlertOptions, AlertState } from '@components/alerts/types';
+import { DEFAULT_ALERT_DURATION } from './constants';
 
 export function useAlert() {
-  const [isVisible, setIsVisible] = useState(false);
+  const [state, setState] = useState<AlertState>('hide');
   const [alertOptions, setAlertOptions] = useState<AlertOptions>({
     message: '',
     type: 'success',
     duration: DEFAULT_ALERT_DURATION,
   });
 
+  useEffect(() => {
+    let timer: number;
+
+    switch (state) {
+      case 'in':
+        timer = setTimeout(() => setState('visible'), 500);
+        break;
+      case 'visible':
+        timer = setTimeout(() => setState('out'), alertOptions.duration || DEFAULT_ALERT_DURATION);
+        break;
+      case 'out':
+        timer = setTimeout(() => setState('hide'), 500);
+        break;
+      default: break;
+    }
+
+    return () => clearTimeout(timer);
+  }, [state, alertOptions]);
+
   const showAlert = useCallback(({ message, type = 'success', duration = DEFAULT_ALERT_DURATION }: AlertOptions) => {
     setAlertOptions({ message, type, duration });
-    setIsVisible(true);
-    if (duration > 0) {
-      setTimeout(() => {
-        setIsVisible(false);
-      }, duration);
-      // return () => clearTimeout(timer);
-    }
-    // return () => { };
+    setState('in');
   }, []);
 
   const hideAlert = useCallback(() => {
-    setIsVisible(false);
+    setState('out');
   }, []);
 
   return {
-    isVisible, alertOptions, showAlert, hideAlert,
+    state, alertOptions, showAlert, hideAlert,
   };
 }
