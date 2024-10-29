@@ -2,8 +2,7 @@ import { DEFAULT_COLOR, INVERTED_COLOR } from '@styles/colors';
 import { Astro } from '@mytypes/Astro';
 import { FiExternalLink } from 'react-icons/fi';
 import { twMerge } from 'tailwind-merge';
-import { useEffect, useState } from 'react';
-import { useInOutAnimation } from '@lib/hooks';
+import { useState } from 'react';
 import clsx from 'clsx';
 
 export interface AstroCardProps<T extends Astro> {
@@ -20,7 +19,6 @@ export default function AstroCard<T extends Astro>({
   astro, onClick, invertedStyle, className, onDoubleClick, handExHover, size = 'normal',
 }: AstroCardProps<T>) {
   const [isHover, setIsHover] = useState<boolean>(false);
-  const { state, setState } = useInOutAnimation({ durationIn: 200 });
   const buttonBaseStyle = 'relative font-exo flex flex-col items-center gap-3 p-16 border-primary hover:border-secondary transition-all duration-200 ease-out hover:ease-out border-2 rounded-2xl';
   const buttonSizeStyle = size === 'normal' ? 'size-56' : 'size-48';
   const buttonColorStyle = invertedStyle ? INVERTED_COLOR : DEFAULT_COLOR;
@@ -28,14 +26,7 @@ export default function AstroCard<T extends Astro>({
   const handleHover = (ishover: boolean) => {
     setIsHover(ishover);
     handExHover(ishover);
-    if (ishover) {
-      setState('in');
-    } else {
-      setState('out');
-    }
   };
-  useEffect(() => {
-  }, [state, isHover]);
   return (
     <button
       onClick={onClick}
