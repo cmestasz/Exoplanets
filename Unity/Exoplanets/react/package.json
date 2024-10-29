@@ -13,7 +13,6 @@
     "@reactunity/previewer": "^0.18.0",
     "@reactunity/renderer": "^0.18.1",
     "clsx": "^2.1.1",
-    "framer-motion": "^11.11.10",
     "i18next": "^23.16.4",
     "postcss": "^8.4.47",
     "react": "^18.3.1",
