@@ -11,6 +11,7 @@ module.exports = (env, originalConfig) => ({
       '@lib': path.resolve(__dirname, 'src/lib'),
       '@styles': path.resolve(__dirname, 'src/styles'),
       '@mytypes': path.resolve(__dirname, 'src/types'),
+      '@public': path.resolve(__dirname, 'public'),
     },
   },
 });
