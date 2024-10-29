@@ -12,6 +12,18 @@
         ],
         "@lib/*": [
           "src/lib/*"
+        ],
+        "@styles/*": [
+          "src/styles/*"
+        ],
+        "@mytypes/*": [
+          "src/types/*"
+        ],
+        "@i18n/*": [
+          "src/i18n/*"
+        ],
+        "@public/*": [
+          "public/*"
         ]
       }
     },
