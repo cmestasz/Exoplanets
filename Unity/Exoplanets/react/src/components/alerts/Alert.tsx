@@ -1,11 +1,12 @@
 import clsx from 'clsx';
 import { twMerge } from 'tailwind-merge';
 import { FaXmark } from 'react-icons/fa6';
-import { AlertOptions, AlertState } from './types';
+import { InOutStates } from '@lib/hooks';
+import { AlertOptions } from './types';
 
 export interface AlertProps {
   alertOptions: AlertOptions;
-  state: AlertState;
+  state: InOutStates;
   hideAlert: () => void;
 }
 
@@ -19,7 +20,7 @@ export default function Alert({
   });
 
   return (
-    state !== 'hide' && (
+    state !== 'initial' && (
       <div
         key="alert"
         className={twMerge(
