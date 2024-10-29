@@ -48,5 +48,10 @@
     },
     "dotnet.defaultSolution": "Exoplanets.sln",
     "typescript.tsdk": "react/node_modules/typescript/lib",
-
+    "tailwindCSS.experimental.classRegex": [    
+        [
+            "([\"'`][^\"'`]*.*?[\"'`])",
+            "[\"'`]([^\"'`]*).*?[\"'`]"
+        ]
+    ]
 }
