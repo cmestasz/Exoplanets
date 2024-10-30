@@ -84,5 +84,9 @@ module.exports = {
         },
       );
     }),
+    plugin(({ addVariant }) => {
+      addVariant('enter', '&:enter');
+      addVariant('leave', '&:leave');
+    }),
   ],
 };

@@ -63,7 +63,7 @@ export default function AstroCard<T extends Astro>({
         isHover && (
           <FiExternalLink
             key="externalLinkCard"
-            className="absolute top-2 right-2 duration-300 transition-all [&:enter]:opacity-0 [&:enter]:trans-x-4 [&:enter]:-trans-y-4 [&:enter]:scale-75 [&:enter]:state-duration-0 state-duration-500 text-secondary trans-0 [&:leave]:trans-x-4 [&:leave]:-trans-y-4 [&:leave]:opacity-0 [&:leave]:text-primary [&:leave]:scale-70"
+            className="absolute top-2 right-2 duration-300 transition-all enter:opacity-0 enter:trans-x-4 enter:-trans-y-4 enter:scale-75 enter:state-duration-0 state-duration-500 text-secondary trans-0 leave:trans-x-4 leave:-trans-y-4 leave:opacity-0 leave:text-primary leave:scale-70"
             style={{ motion: '0.5s 0s ease-out' }}
           />
         )

@@ -40,39 +40,20 @@ export default function AstrosSlider<T extends Astro>({
     }
   };
 
-  // const cardVariants: Variants = {
-  //   initial: {
-  //     opacity: 0,
-  //   },
-  //   animate: {
-  //     opacity: 1,
-  //   },
-  //   exit: {
-  //     opacity: 0,
-  //   },
-  // };
-
   return (
     <div className="flex flex-row w-fit">
       <ArrowSlider toLeft onClick={handleBefore} cardHover={cardHover} />
       <div
         className="size-48 relative border-transparent border-t-primary hover:border-t-secondary border-b-primary hover:border-b-secondary border-2"
       >
-        {currentAstro && (
+        { currentAstro && (
           <div
             key={currentAstro.astro.name}
-            className="absolute size-full transition-all [&:enter]:opacity-0 [&:enter]:state-duration-0 state-duration-1000 [&:leave]:opacity-0"
-            // variants={cardVariants}
-            // initial="initial"
-            // animate="animate"
-            // exit="exit"
-            // transition={{ duration: 0.2 }}
-            // layout
+            className="absolute size-full transition-all enter:opacity-0 enter:state-duration-0 state-duration-1000 leave:opacity-0"
           >
             <AstroCard
               astro={currentAstro.astro}
               onClick={currentAstro.onClick}
-              // fontTitle="font-exo"
               className="rounded-none border-none px-6"
               handExHover={handleHover}
               size="small"
