@@ -16,7 +16,7 @@ module.exports = {
       10: '10px',
       full: '100%',
     },
-    stateDuration: {
+    duration: {
       0: '0s',
       100: '0.1s',
       300: '0.3s',
@@ -75,15 +75,43 @@ module.exports = {
           'state-duration': (value) => ({
             'state-duration': value,
           }),
+          'm-duration': (value) => ({
+            '--m-duration': value,
+            motion: 'var(--m-duration) var(--m-delay) var(--m-timing-function)',
+          }),
+          'm-delay': (value) => ({
+            '--m-delay': value,
+            motion: 'var(--m-duration) var(--m-delay) var(--m-timing-function)',
+          }),
         },
         {
-          values: theme('stateDuration'),
+          values: theme('duration'),
         },
       );
     }),
     plugin(({ addVariant }) => {
       addVariant('enter', '&:enter');
       addVariant('leave', '&:leave');
+    }),
+    plugin(({ addUtilities }) => {
+      addUtilities({
+        '.m-ease-out': {
+          '--m-timing-function': 'ease-out',
+          motion: 'var(--m-duration) var(--m-delay) var(--m-timing-function)',
+        },
+        '.m-ease-in': {
+          '--m-timing-function': 'ease-in',
+          motion: 'var(--m-duration) var(--m-delay) var(--m-timing-function)',
+        },
+        '.m-ease-in-out': {
+          '--m-timing-function': 'ease-in-out',
+          motion: 'var(--m-duration) var(--m-delay) var(--m-timing-function)',
+        },
+        ',m-ease-linear': {
+          '--m-timing-function': 'linear',
+          motion: 'var(--m-duration) var(--m-delay) var(--m-timing-function)',
+        },
+      });
     }),
   ],
 };
