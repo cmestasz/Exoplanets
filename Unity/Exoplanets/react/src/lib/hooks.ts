@@ -2,38 +2,8 @@ import { useState, useCallback, useEffect } from 'react';
 import { AlertOptions } from '@components/alerts/types';
 import { DEFAULT_ALERT_DURATION } from './constants';
 
-export type InOutStates = 'initial' | 'in' | 'normal' | 'out';
-
-interface InOutAnimationProps {
-  durationIn: number;
-  durationOut?: number;
-}
-
-export function useInOutAnimation({ durationIn, durationOut = durationIn }: InOutAnimationProps) {
-  const [state, setState] = useState<InOutStates>('initial');
-  useEffect(() => {
-    let timer: number;
-
-    switch (state) {
-      case 'in':
-        timer = setTimeout(() => setState('normal'), durationIn);
-        break;
-      case 'out':
-        timer = setTimeout(() => setState('initial'), durationOut);
-        break;
-      default: break;
-    }
-
-    return () => clearTimeout(timer);
-  }, [state]);
-
-  return {
-    state, setState,
-  };
-}
-
 export function useAlert() {
-  const { state, setState } = useInOutAnimation({ durationIn: 500 });
+  const [isVisible, setIsVisible] = useState<boolean>(false);
   const [alertOptions, setAlertOptions] = useState<AlertOptions>({
     message: '',
     type: 'success',
@@ -41,21 +11,26 @@ export function useAlert() {
   });
 
   useEffect(() => {
-    const timer: number = setTimeout(() => setState('out'), alertOptions.duration || DEFAULT_ALERT_DURATION);
-
+    let timer: number = 0;
+    if (isVisible) {
+      timer = setTimeout(
+        () => setIsVisible(false),
+        alertOptions.duration || DEFAULT_ALERT_DURATION,
+      );
+    }
     return () => clearTimeout(timer);
-  }, [state, alertOptions]);
+  }, [isVisible, alertOptions, setIsVisible]);
 
   const showAlert = useCallback(({ message, type = 'success', duration = DEFAULT_ALERT_DURATION }: AlertOptions) => {
     setAlertOptions({ message, type, duration });
-    setState('in');
-  }, []);
+    setIsVisible(true);
+  }, [setIsVisible]);
 
   const hideAlert = useCallback(() => {
-    setState('out');
-  }, []);
+    setIsVisible(false);
+  }, [setIsVisible]);
 
   return {
-    state, alertOptions, showAlert, hideAlert,
+    isVisible, alertOptions, showAlert, hideAlert,
   };
 }
