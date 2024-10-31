@@ -1,5 +1,3 @@
-import { FaXmark, FaCheck } from 'react-icons/fa6';
-
 interface OptionsProps {
   handleSending: () => void;
   handleCancel: () => void;
@@ -10,23 +8,27 @@ export default function Options({
 }: OptionsProps) {
   return (
     <div
-      className="flex gap-1"
+      className="flex flex-row gap-1"
     >
       <button
         onClick={handleSending}
-        className="text-green border-[1px] rounded-sm border-transparent hover:border-green transition-colors p-0.5 hover:bg-green-dark cursor-pointer"
+        className="text-green border-[1px] rounded-sm border-transparent hover:border-green transition-colors hover:bg-green-dark cursor-pointer aspect-square"
       >
-        <FaCheck
-          size={20}
-        />
+        <icon
+          className="text-green"
+        >
+          check
+        </icon>
       </button>
       <button
         onClick={handleCancel}
-        className="text-red border-[1px] rounded-sm border-transparent hover:border-red transition-colors p-0.5 hover:bg-red-dark cursor-pointer"
+        className="text-red border-[1px] rounded-sm border-transparent hover:border-red transition-colors hover:bg-red-dark cursor-pointer aspect-square"
       >
-        <FaXmark
-          size={20}
-        />
+        <icon
+          className="text-red"
+        >
+          close
+        </icon>
       </button>
     </div>
   );

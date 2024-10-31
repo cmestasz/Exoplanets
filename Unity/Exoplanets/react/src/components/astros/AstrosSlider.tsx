@@ -1,5 +1,7 @@
 import { Astro } from '@mytypes/Astro';
-import { useEffect, useRef, useState } from 'react';
+import {
+  useCallback, useEffect, useRef, useState,
+} from 'react';
 import { ArrayInfIterator } from '@lib/utils';
 import AstroCard, { AstroCardProps } from './AstroCard';
 import ArrowSlider from './ArrowSlider';
@@ -24,33 +26,21 @@ export default function AstrosSlider<T extends Astro>({
     }
   }, [astros]);
 
-  const handleHover = (isHover: boolean) => {
+  const handleHover = useCallback((isHover: boolean) => {
     setCardHover(isHover);
-  };
+  }, []);
 
-  const handleNext = () => {
+  const handleNext = useCallback(() => {
     if (iterator.current) {
       setCurrentAstro(iterator.current.next());
     }
-  };
+  }, [iterator]);
 
-  const handleBefore = () => {
+  const handleBefore = useCallback(() => {
     if (iterator.current) {
       setCurrentAstro(iterator.current.before());
     }
-  };
-
-  // const cardVariants: Variants = {
-  //   initial: {
-  //     opacity: 0,
-  //   },
-  //   animate: {
-  //     opacity: 1,
-  //   },
-  //   exit: {
-  //     opacity: 0,
-  //   },
-  // };
+  }, [iterator]);
 
   return (
     <div className="flex flex-row w-fit">
@@ -59,25 +49,14 @@ export default function AstrosSlider<T extends Astro>({
         className="size-48 relative border-transparent border-t-primary hover:border-t-secondary border-b-primary hover:border-b-secondary border-2"
       >
         {currentAstro && (
-          <div
+          <AstroCard
             key={currentAstro.astro.name}
-            className="absolute size-full transition-all [&:enter]:opacity-0 [&:enter]:state-duration-0 state-duration-1000 [&:leave]:opacity-0"
-            // variants={cardVariants}
-            // initial="initial"
-            // animate="animate"
-            // exit="exit"
-            // transition={{ duration: 0.2 }}
-            // layout
-          >
-            <AstroCard
-              astro={currentAstro.astro}
-              onClick={currentAstro.onClick}
-              // fontTitle="font-exo"
-              className="rounded-none border-none px-6"
-              handExHover={handleHover}
-              size="small"
-            />
-          </div>
+            astro={currentAstro.astro}
+            onClick={currentAstro.onClick}
+            className="rounded-none border-none px-6 absolute size-full transition-all duration-700 enter:opacity-0 enter:state-duration-0 state-duration-700 leave:opacity-0"
+            handExHover={handleHover}
+            size="small"
+          />
         )}
 
       </div>

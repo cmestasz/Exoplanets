@@ -1,6 +1,5 @@
 import { DEFAULT_COLOR, INVERTED_COLOR } from '@styles/colors';
 import { Astro } from '@mytypes/Astro';
-import { FiExternalLink } from 'react-icons/fi';
 import { twMerge } from 'tailwind-merge';
 import { useState } from 'react';
 import clsx from 'clsx';
@@ -42,18 +41,18 @@ export default function AstroCard<T extends Astro>({
       )}
     >
       <div
-        className="relative aspect-square rounded-full overflow-clip w-fit"
+        className={clsx(
+          'aspect-square rounded-full overflow-clip',
+          {
+            'w-40': size === 'normal',
+            'w-28': size === 'small',
+          },
+        )}
       >
         <image
           src={astro.imageUrl}
           alt={astro.name || ''}
-          className={twMerge(
-            'object-cover rounded-full',
-            clsx({
-              'w-40': size === 'normal',
-              'w-28': size === 'small',
-            }),
-          )}
+          className="object-cover rounded-full"
         />
       </div>
       <p className="w-full text-ellipsis overflow-hidden whitespace-nowrap">
@@ -61,11 +60,12 @@ export default function AstroCard<T extends Astro>({
       </p>
       {
         isHover && (
-          <FiExternalLink
+          <icon
             key="externalLinkCard"
-            className="absolute top-2 right-2 duration-300 transition-all [&:enter]:opacity-0 [&:enter]:trans-x-4 [&:enter]:-trans-y-4 [&:enter]:scale-75 [&:enter]:state-duration-0 state-duration-500 text-secondary trans-0 [&:leave]:trans-x-4 [&:leave]:-trans-y-4 [&:leave]:opacity-0 [&:leave]:text-primary [&:leave]:scale-70"
-            style={{ motion: '0.5s 0s ease-out' }}
-          />
+            className="absolute top-1 right-1 duration-300 transition-all enter:opacity-0 enter:trans-x-4 enter:-trans-y-4 enter:state-duration-0 state-duration-500 text-secondary trans-0 leave:trans-x-4 leave:-trans-y-4 leave:opacity-0 leave:text-primary m-duration-500 m-ease-out"
+          >
+            open_in_new
+          </icon>
         )
       }
     </button>

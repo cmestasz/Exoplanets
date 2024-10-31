@@ -1,34 +1,25 @@
-'use client';
-
-import { twMerge } from 'tailwind-merge';
-import { OptionLang } from '@mytypes/Language';
+import Language from '@mytypes/Language';
 
 interface OptionLangProps {
-  option: OptionLang;
-  onSelect?: () => void;
+  option: Language;
 }
 
 export default function OptionLanguage({
-  option, onSelect,
+  option,
 }: OptionLangProps) {
-  const baseStyle = 'cursor-pointer flex gap-2 justify-center items-center w-fit p-2 font-exo';
-  const Comp = onSelect ? 'button' : 'div';
   return (
-    <Comp
-      type="button"
-      className={twMerge(baseStyle)}
-      onClick={onSelect}
+    <view
+      className="flex flex-row gap-2 p-2 items-center size-full group"
     >
-      <img
-        src={`/img/${option.languageAbbr}.svg`}
-/*         width={20}
-        height={20} */
-        alt={option.languageName}
+      <image
+        src={option.img}
+        alt={option.disp}
+        className="h-full max-h-6 aspect-square"
       />
-      <span>
-        {option.languageName}
+      <span className="flex-auto text-secondary group-hover:text-primary">
+        {option.disp}
       </span>
 
-    </Comp>
+    </view>
   );
 }

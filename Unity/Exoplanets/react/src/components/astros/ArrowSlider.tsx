@@ -1,5 +1,4 @@
 import clsx from 'clsx';
-import { FaAngleLeft, FaAngleRight } from 'react-icons/fa6';
 import { twMerge } from 'tailwind-merge';
 import { DEFAULT_COLOR } from '@styles/colors';
 import { Style } from '@reactunity/renderer';
@@ -33,18 +32,23 @@ export default function ArrowSlider({
       <button
         onClick={onClick}
         className={twMerge(
-          'h-full w-full flex items-center justify-center active:scale-90',
+          'h-full w-full flex items-center justify-center m-duration-300 m-ease-in active:scale-90',
           clsx({
-            'active:trans-x-2': !toLeft,
-            'active:-trans-x-2': toLeft,
+            'active:trans-x-4': !toLeft,
+            'active:-trans-x-4': toLeft,
           }),
         )}
       >
         {
           toLeft ? (
-            <FaAngleLeft className="text-primary group-hover:text-secondary transition-colors duration-300 ease-out" />
+            <icon className="text-primary group-hover:text-secondary transition-colors duration-300 ease-out">
+              chevron_left
+            </icon>
+
           ) : (
-            <FaAngleRight className="text-primary group-hover:text-secondary  transition-colors duration-300 ease-out" />
+            <icon className="text-primary group-hover:text-secondary transition-colors duration-300 ease-out">
+              chevron_right
+            </icon>
           )
         }
       </button>

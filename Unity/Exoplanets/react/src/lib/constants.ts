@@ -2,13 +2,15 @@ import { Locale } from '@i18n/i18next';
 import Language from '@mytypes/Language';
 
 export const SPANISH: Language = {
-  languageAbbr: 'es',
-  languageName: 'Español',
+  abbr: 'es',
+  disp: 'Español',
+  img: '/img/es.png',
 };
 
 export const ENGLISH: Language = {
-  languageAbbr: 'en',
-  languageName: 'English',
+  abbr: 'en',
+  disp: 'English',
+  img: '/img/en.png',
 };
 
 export const DEFAULT_LANGUAGE: Language = SPANISH;

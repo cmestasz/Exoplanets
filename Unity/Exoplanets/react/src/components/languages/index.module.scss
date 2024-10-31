@@ -1,0 +1,30 @@
+:global {
+  .mat-input-field-target {
+    color: var(--secondary);
+  }
+  .mat-select-caret {
+    color: var(--secondary);
+    &:hover {
+      color: var(--secondary);
+    }
+  }
+  .mat-input-frame {
+    border: none !important;
+  }
+  .mat-input-field-target > :nth-child(2) {
+    & scroll {
+      background-color: var(--tertiary);
+      border-radius: 0 0 10px 10px;
+    }
+  }
+  .mat-select-option {
+    background-color: transparent !important;
+    padding-left: .75rem;
+  }
+  .mat-select-option-selected {
+    span {
+      color: var(--primary) !important;
+    }
+  }
+  
+}

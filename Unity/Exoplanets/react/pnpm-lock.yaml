@@ -8,6 +8,9 @@ importers:
 
   .:
     dependencies:
+      '@reactunity/material':
+        specifier: ^0.18.1
+        version: 0.18.1(@reactunity/renderer@0.18.1(react@18.3.1))(react@18.3.1)
       '@reactunity/previewer':
         specifier: ^0.18.0
         version: 0.18.0(@reactunity/scripts@0.18.4)
@@ -29,9 +32,6 @@ importers:
       react-i18next:
         specifier: ^15.1.0
         version: 15.1.0(i18next@23.16.4)(react@18.3.1)
-      react-icons:
-        specifier: ^5.3.0
-        version: 5.3.0(react@18.3.1)
       tailwind-merge:
         specifier: ^2.5.4
         version: 2.5.4
@@ -1067,6 +1067,12 @@ packages:
         optional: true
       webpack-plugin-serve:
         optional: true
+
+  '@reactunity/material@0.18.1':
+    resolution: {integrity: sha512-HCFAyPwTLyzrImwvJvINYjFu9Wfn7kTfVx2z44gM9/P1WiVgkMCBQsg6Q5EpzIhWkMWpbJJ2hfT/P0z+MLfP/w==}
+    peerDependencies:
+      '@reactunity/renderer': '*'
+      react: ^18.0.0
 
   '@reactunity/previewer@0.18.0':
     resolution: {integrity: sha512-U2AR1X3aMSH9C6x2s/ouFtfwJ9bMLNNgFT9bjmgQwG2ST4buq2WXF54Ksl1aAqQiQv3fjRiCpcNukmMeWql18A==}
@@ -3393,6 +3399,9 @@ packages:
     resolution: {integrity: sha512-JUeY0F/fQZgIod31Ja1eJgiSxLn7BfQlCnqhwXFBzFHEw63OdLK7VJUJ7bnzNsWgCyoUP5tEp1VRY8rDaYzqOA==}
     engines: {node: '>= 4.0.0'}
 
+  memoize-one@6.0.0:
+    resolution: {integrity: sha512-rkpe71W0N0c0Xz6QD0eJETuWAJGnJ9afsl1srmwPrI+yBCkge5EycXXbYRyvL29zZVUWQCY7InPRCv3GDXuZNw==}
+
   merge-descriptors@1.0.3:
     resolution: {integrity: sha512-gaNvAS7TZ897/rVaZ0nMtAyxNyi/pdbjbAwUpFQpN70GqnVfOiXpeUUMKRBmzXaSQ8DdTX4/0ms62r2K+hE6mQ==}
 
@@ -3882,11 +3891,6 @@ packages:
         optional: true
       react-native:
         optional: true
-
-  react-icons@5.3.0:
-    resolution: {integrity: sha512-DnUk8aFbTyQPSkCfF8dbX6kQjXA9DktMeJqfjrg6cK9vwQVMxmcA3BfP4QoiztVmEHtwlTgLFsPuH2NskKT6eg==}
-    peerDependencies:
-      react: '*'
 
   react-is@16.13.1:
     resolution: {integrity: sha512-24e6ynE2H+OKt4kqsOvNd8kBpV65zoxbA4BVsEOB3ARVWQki/DHzaUoC5KuON/BiccDaCCTZBuOcfZs70kR8bQ==}
@@ -5967,6 +5971,13 @@ snapshots:
     optionalDependencies:
       type-fest: 0.21.3
       webpack-dev-server: 5.1.0(webpack@5.95.0)
+
+  '@reactunity/material@0.18.1(@reactunity/renderer@0.18.1(react@18.3.1))(react@18.3.1)':
+    dependencies:
+      '@reactunity/renderer': 0.18.1(react@18.3.1)
+      clsx: 2.1.1
+      memoize-one: 6.0.0
+      react: 18.3.1
 
   '@reactunity/previewer@0.18.0(@reactunity/scripts@0.18.4)':
     dependencies:
@@ -8882,6 +8893,8 @@ snapshots:
       tree-dump: 1.0.2(tslib@2.8.0)
       tslib: 2.8.0
 
+  memoize-one@6.0.0: {}
+
   merge-descriptors@1.0.3: {}
 
   merge-stream@2.0.0: {}
@@ -9350,10 +9363,6 @@ snapshots:
       '@babel/runtime': 7.25.9
       html-parse-stringify: 3.0.1
       i18next: 23.16.4
-      react: 18.3.1
-
-  react-icons@5.3.0(react@18.3.1):
-    dependencies:
       react: 18.3.1
 
   react-is@16.13.1: {}

@@ -8,14 +8,15 @@ module.exports = {
   ],
   theme: {
     translate: {
-      0: '0',
-      1: '1',
-      2: '2',
-      4: '4',
-      8: '8',
-      10: '10',
+      0: '0px',
+      1: '1px',
+      2: '2px',
+      4: '4px',
+      8: '8px',
+      10: '10px',
+      full: '100%',
     },
-    stateDuration: {
+    duration: {
       0: '0s',
       100: '0.1s',
       300: '0.3s',
@@ -39,10 +40,6 @@ module.exports = {
           dark: 'var(--dark-green)',
         },
       },
-      animation: {
-        'alert-in': 'alert-in .5s ease-in',
-        'alert-out': 'alert-out .5s ease-out',
-      },
       fontFamily: {
         orbitron: 'var(--font-orbitron)',
         audiowide: 'var(--font-audiowide)',
@@ -55,16 +52,16 @@ module.exports = {
       matchUtilities(
         {
           'trans-x': (value) => ({
-            '--trans-val-x': `${value}px`,
+            '--trans-val-x': value,
             translate: 'var(--trans-val-x) var(--trans-val-y)',
           }),
           'trans-y': (value) => ({
-            '--trans-val-y': `${value}px`,
+            '--trans-val-y': value,
             translate: 'var(--trans-val-x) var(--trans-val-y)',
           }),
           trans: (value) => ({
-            '--trans-val-x': `${value}px`,
-            '--trans-val-y': `${value}px`,
+            '--trans-val-x': value,
+            '--trans-val-y': value,
             translate: 'var(--trans-val-x) var(--trans-val-y)',
           }),
         },
@@ -78,11 +75,43 @@ module.exports = {
           'state-duration': (value) => ({
             'state-duration': value,
           }),
+          'm-duration': (value) => ({
+            '--m-duration': value,
+            motion: 'var(--m-duration) var(--m-delay) var(--m-timing-function)',
+          }),
+          'm-delay': (value) => ({
+            '--m-delay': value,
+            motion: 'var(--m-duration) var(--m-delay) var(--m-timing-function)',
+          }),
         },
         {
-          values: theme('stateDuration'),
+          values: theme('duration'),
         },
       );
+    }),
+    plugin(({ addVariant }) => {
+      addVariant('enter', '&:enter');
+      addVariant('leave', '&:leave');
+    }),
+    plugin(({ addUtilities }) => {
+      addUtilities({
+        '.m-ease-out': {
+          '--m-timing-function': 'ease-out',
+          motion: 'var(--m-duration) var(--m-delay) var(--m-timing-function)',
+        },
+        '.m-ease-in': {
+          '--m-timing-function': 'ease-in',
+          motion: 'var(--m-duration) var(--m-delay) var(--m-timing-function)',
+        },
+        '.m-ease-in-out': {
+          '--m-timing-function': 'ease-in-out',
+          motion: 'var(--m-duration) var(--m-delay) var(--m-timing-function)',
+        },
+        ',m-ease-linear': {
+          '--m-timing-function': 'linear',
+          motion: 'var(--m-duration) var(--m-delay) var(--m-timing-function)',
+        },
+      });
     }),
   ],
 };

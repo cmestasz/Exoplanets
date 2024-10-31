@@ -1,42 +1,57 @@
-'use client';
-
-import { AVAILABLE_LANGUAGES, DEFAULT_LANGUAGE } from '@/constants/defaults';
-import Language, { OptionLang } from '@/types/Language';
-import { usePathname, useRouter } from '@/i18n/routing';
-import Select from '../form/select/Select';
+import Language from '@mytypes/Language';
+import { useTranslation } from 'react-i18next';
+import { AVAILABLE_LANGUAGES, DEFAULT_LANGUAGE } from '@lib/constants';
+import i18n from '@i18n/i18n';
+import { Locale } from '@i18n/i18next';
+import { Select } from '@reactunity/material';
 import OptionLanguage from './OptionLanguage';
+import './index.module.scss';
 
 interface SelectLanguageProps {
-  showLabel: boolean;
+  showLabel?: boolean;
 }
 
 export default function SelectLanguage({
   showLabel,
 }: SelectLanguageProps) {
-  const locale = useLocale();
-  const router = useRouter();
-  const pathname = usePathname();
-  const t = useTranslations('components.languages');
-  const label = showLabel ? t('selectLang') : undefined;
-  const languages: OptionLang[] = AVAILABLE_LANGUAGES
-    .map((lang: Language) => ({ unique: lang.languageAbbr, ...lang }));
-  const defLanguage = AVAILABLE_LANGUAGES
-    .find((lang: Language) => lang.languageAbbr === locale) || DEFAULT_LANGUAGE;
-  const defOption: OptionLang = { unique: defLanguage.languageAbbr, ...defLanguage };
-  const pushLanguage = (lang: Language) => {
-    router.replace(pathname, { locale: lang.languageAbbr });
+  const { t } = useTranslation();
+  const language = Interop.UnityEngine.Application.systemLanguage.toString();
+  console.log(language);
+  const label = showLabel ? t('components.languages.selectLang') : undefined;
+  const defaultLang = AVAILABLE_LANGUAGES
+    .find((lang: Language) => lang.disp === language) || DEFAULT_LANGUAGE;
+  const updateLanguage = (locale: Locale) => {
+    i18n.changeLanguage(locale);
   };
   return (
-    <Select
-      def={defOption}
-      label={label}
-      comp={OptionLanguage}
+    <view
+      className="flex flex-col gap-1 justify-center w-fit p-3"
     >
-      {
-        languages.map((lang: OptionLang) => (
-          <OptionLanguage key={lang.unique} option={lang} onSelect={() => pushLanguage(lang)} />
-        ))
-      }
-    </Select>
+      {label && (
+        <p className="font-audiowide text-primary text-xl">
+          {label}
+        </p>
+      )}
+      <Select
+        initialValue={defaultLang.abbr}
+        className="font-exo text-secondary"
+        onChange={(val: Locale) => updateLanguage(val)}
+        variant="outlined"
+      >
+        {
+          AVAILABLE_LANGUAGES.map((lang: Language) => (
+            <Select.Option
+              key={lang.abbr}
+              value={lang.abbr}
+            >
+              <OptionLanguage
+                option={lang}
+              />
+            </Select.Option>
+          ))
+        }
+      </Select>
+    </view>
+
   );
 }

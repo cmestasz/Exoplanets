@@ -1,29 +1,39 @@
-import { twMerge } from 'tailwind-merge';
-import { DEFAULT_COLOR, INVERTED_COLOR } from '@styles/colors';
-import { HeaderBoxProps } from '../form/select/types';
+import Text from '@components/ui/Text';
+import clsx from 'clsx';
 
-export interface HeaderUserBoxProps extends HeaderBoxProps {
-  image: string;
-  className?: string;
+interface HeaderUserBoxProps {
+  photo?: string;
+  username: string;
+  opened: boolean;
+  onClick: () => void;
 }
 
 export default function HeaderUserBox({
-  image, title, invertedStyle, className,
+  photo, username, onClick, opened,
 }: HeaderUserBoxProps) {
-  const baseStyle = 'cursor-pointer flex gap-2 justify-center items-center w-fit p-2 font-exo';
-  const colorStyle = invertedStyle ? INVERTED_COLOR : DEFAULT_COLOR;
   return (
-    <div
-      className={twMerge(baseStyle, colorStyle, className)}
+    <Text
+      asButton
+      invertedStyle
+      onClick={onClick}
+      className={clsx({
+        'hover:text-primary text-primary': opened,
+      })}
+      size="lg"
     >
-      <img
-        src={image}
-        /* width={20}
-        height={20} */
-        alt={title}
-        className="rounded-full"
-      />
-      {title}
-    </div>
+      {
+        photo ? (
+          <image
+            src={photo}
+          />
+        ) : (
+          <icon>
+            person
+          </icon>
+        )
+      }
+      {username}
+      <icon>keyboard_arrow_down</icon>
+    </Text>
   );
 }
