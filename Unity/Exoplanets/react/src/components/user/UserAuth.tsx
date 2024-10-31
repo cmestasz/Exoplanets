@@ -1,6 +1,6 @@
 import User from '@mytypes/User';
 import { useTranslation } from 'react-i18next';
-import Interactivetext from '../ui/Text';
+import Text from '@components/ui/Text';
 import UserBox from './UserBox';
 
 export default function UserAuth() {
@@ -10,7 +10,7 @@ export default function UserAuth() {
     email: 'lsequeiros@unsa.edu.pe',
     lastNames: 'Sequeiros Condori',
     names: 'Luis Gustavo',
-    photo: '/img/es.svg',
+    photo: '/img/es.png',
     username: 'gusCreator',
   };
   if (user) {
@@ -19,13 +19,13 @@ export default function UserAuth() {
     );
   }
   return (
-    <Interactivetext
-      leftGraphic={Image}
-      lgProps={{
-        src: '/img/google.svg', width: 20, height: 20, alt: t('profileImage'),
-      }}
-      content={t('login')}
-      className="gap-1"
-    />
+    <Text
+      size="lg"
+    >
+      <image
+        src="/img/google.png"
+      />
+      {t('components.user.login')}
+    </Text>
   );
 }
