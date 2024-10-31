@@ -53,7 +53,7 @@ export default function AstrosSlider<T extends Astro>({
             key={currentAstro.astro.name}
             astro={currentAstro.astro}
             onClick={currentAstro.onClick}
-            className="rounded-none border-none px-6 absolute size-full transition-all enter:opacity-0 enter:state-duration-0 state-duration-500 leave:opacity-0"
+            className="rounded-none border-none px-6 absolute size-full transition-all duration-700 enter:opacity-0 enter:state-duration-0 state-duration-700 leave:opacity-0"
             handExHover={handleHover}
             size="small"
           />

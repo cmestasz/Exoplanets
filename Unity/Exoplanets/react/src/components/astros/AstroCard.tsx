@@ -41,18 +41,18 @@ export default function AstroCard<T extends Astro>({
       )}
     >
       <div
-        className="relative aspect-square rounded-full overflow-clip w-fit"
+        className={clsx(
+          'aspect-square rounded-full overflow-clip',
+          {
+            'w-40': size === 'normal',
+            'w-28': size === 'small',
+          },
+        )}
       >
         <image
           src={astro.imageUrl}
           alt={astro.name || ''}
-          className={twMerge(
-            'object-cover rounded-full',
-            clsx({
-              'w-40': size === 'normal',
-              'w-28': size === 'small',
-            }),
-          )}
+          className="object-cover rounded-full"
         />
       </div>
       <p className="w-full text-ellipsis overflow-hidden whitespace-nowrap">
