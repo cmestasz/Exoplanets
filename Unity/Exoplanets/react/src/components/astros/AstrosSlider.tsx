@@ -1,5 +1,7 @@
 import { Astro } from '@mytypes/Astro';
-import { useEffect, useRef, useState } from 'react';
+import {
+  useCallback, useEffect, useRef, useState,
+} from 'react';
 import { ArrayInfIterator } from '@lib/utils';
 import AstroCard, { AstroCardProps } from './AstroCard';
 import ArrowSlider from './ArrowSlider';
@@ -24,21 +26,21 @@ export default function AstrosSlider<T extends Astro>({
     }
   }, [astros]);
 
-  const handleHover = (isHover: boolean) => {
+  const handleHover = useCallback((isHover: boolean) => {
     setCardHover(isHover);
-  };
+  }, []);
 
-  const handleNext = () => {
+  const handleNext = useCallback(() => {
     if (iterator.current) {
       setCurrentAstro(iterator.current.next());
     }
-  };
+  }, [iterator]);
 
-  const handleBefore = () => {
+  const handleBefore = useCallback(() => {
     if (iterator.current) {
       setCurrentAstro(iterator.current.before());
     }
-  };
+  }, [iterator]);
 
   return (
     <div className="flex flex-row w-fit">
@@ -46,19 +48,15 @@ export default function AstrosSlider<T extends Astro>({
       <div
         className="size-48 relative border-transparent border-t-primary hover:border-t-secondary border-b-primary hover:border-b-secondary border-2"
       >
-        { currentAstro && (
-          <div
+        {currentAstro && (
+          <AstroCard
             key={currentAstro.astro.name}
-            className="absolute size-full transition-all enter:opacity-0 enter:state-duration-0 state-duration-1000 leave:opacity-0"
-          >
-            <AstroCard
-              astro={currentAstro.astro}
-              onClick={currentAstro.onClick}
-              className="rounded-none border-none px-6"
-              handExHover={handleHover}
-              size="small"
-            />
-          </div>
+            astro={currentAstro.astro}
+            onClick={currentAstro.onClick}
+            className="rounded-none border-none px-6 absolute size-full transition-all enter:opacity-0 enter:state-duration-0 state-duration-500 leave:opacity-0"
+            handExHover={handleHover}
+            size="small"
+          />
         )}
 
       </div>

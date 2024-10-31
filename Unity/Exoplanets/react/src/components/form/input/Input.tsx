@@ -2,7 +2,6 @@ import { INVERTED_COLOR } from '@styles/colors';
 import {
   useContext, useEffect, useRef, useState,
 } from 'react';
-import { FaEdit } from 'react-icons/fa';
 import { useTranslation } from 'react-i18next';
 import { AlertOptions } from '@components/alerts/types';
 import { UGUIElements } from '@reactunity/renderer/ugui';
@@ -71,7 +70,6 @@ export default function Input({
     if (stateInput === 'editing' && inputRef.current) {
       inputRef.current.Focus();
     }
-    console.log('stateInput: ', stateInput);
   }, [stateInput]);
   const baseStyle = 'flex flex-col gap-2 justify-center w-fit p-3';
   return (
@@ -112,10 +110,12 @@ export default function Input({
         }
         {
           stateInput === 'normal' && (
-            <FaEdit
+            <icon
               onClick={handleEdit}
               className={`${INVERTED_COLOR} cursor-pointer`}
-            />
+            >
+              edit
+            </icon>
           )
         }
       </div>
