@@ -1,6 +1,5 @@
 import clsx from 'clsx';
 import { twMerge } from 'tailwind-merge';
-import { FaXmark } from 'react-icons/fa6';
 import { createContext } from 'react';
 import { AlertOptions } from './types';
 
@@ -29,10 +28,12 @@ export default function Alert({
       )}
     >
       <span className="flex-auto">{alertOptions.message}</span>
-      <FaXmark
+      <icon
         onClick={hideAlert}
         className="cursor-pointer text-red flex-auto"
-      />
+      >
+        close
+      </icon>
     </view>
   );
 }
