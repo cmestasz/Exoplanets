@@ -9,6 +9,7 @@ import { useAlert } from '@lib/hooks';
 import Alert, { AlertContext } from '@components/alerts/Alert';
 import SelectLanguage from '@components/languages/SelectLanguage';
 import { useMemo } from 'react';
+import Text from '@components/ui/Text';
 
 function App() {
   const { t } = useTranslation();
@@ -36,6 +37,14 @@ function App() {
           defaultValue="xd"
         />
         <SelectLanguage />
+        <Text
+          size="xl"
+        >
+          <image
+            src="/img/google.png"
+          />
+          Hola
+        </Text>
         {
           isVisible && (
             <Alert

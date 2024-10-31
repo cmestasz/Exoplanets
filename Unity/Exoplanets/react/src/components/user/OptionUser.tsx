@@ -2,7 +2,7 @@
 
 import { twMerge } from 'tailwind-merge';
 import { Option } from '../form/select/types';
-import IntreractiveText from '../ui/InteractiveText';
+import IntreractiveText from '../ui/Text';
 
 interface OptionUserProps {
   option: Option;

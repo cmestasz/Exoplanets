@@ -1,24 +1,15 @@
 type TextBaseProps = {
   invertedStyle?: boolean;
-  content: string;
   className?: string;
+  children?: React.ReactNode;
+  size?: 'xs' | 'sm' | 'base' | 'lg' | 'xl';
 };
 
-interface AsButton extends TextBaseProps {
-  asButton?: boolean;
+type AsButton = {
+  asButton?: true;
   onClick?: () => void;
-}
+};
 
-interface WithLeftGraphic<T> extends TextBaseProps {
-  leftGraphic?: React.ComponentType<T>;
-  lgProps?: T;
-}
-
-interface WithRightGraphic<E> extends TextBaseProps {
-  rightGraphic?: React.ComponentType<E>;
-  rgProps?: E;
-}
-
-export type InteractiveTextProps<T, E> = WithLeftGraphic<T>
-& WithRightGraphic<E>
-& AsButton;
+export type TextProps =
+  TextBaseProps
+  & AsButton;

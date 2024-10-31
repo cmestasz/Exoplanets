@@ -1,6 +1,6 @@
 import User from '@mytypes/User';
 import { useTranslation } from 'react-i18next';
-import Interactivetext from '../ui/InteractiveText';
+import Interactivetext from '../ui/Text';
 import UserBox from './UserBox';
 
 export default function UserAuth() {
