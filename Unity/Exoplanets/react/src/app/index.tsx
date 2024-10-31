@@ -7,6 +7,8 @@ import { kepler22b, proximaCentauriB } from '@lib/mock';
 import Input from '@components/form/input/Input';
 import { useAlert } from '@lib/hooks';
 import Alert, { AlertContext } from '@components/alerts/Alert';
+import SelectLanguage from '@components/languages/SelectLanguage';
+import { useMemo } from 'react';
 
 function App() {
   const { t } = useTranslation();
@@ -16,22 +18,24 @@ function App() {
   const handleClick = () => {
     console.log('An Astro card');
   };
+  const astros = useMemo(() => [
+    { onClick: handleClick, astro: kepler22b },
+    { onClick: handleClick, astro: proximaCentauriB },
+  ], []);
   return (
     <div className="flex relative">
       <AlertContext.Provider value={showAlert}>
         <h1 className="text-white">{t('components.form.input.error-update')}</h1>
         <h2 className="text-white">ods</h2>
         <AstrosSlider
-          astros={[
-            { onClick: handleClick, astro: kepler22b },
-            { onClick: handleClick, astro: proximaCentauriB },
-          ]}
+          astros={astros}
         />
         <Input
           name={t('components.user.login')}
           label="other label"
           defaultValue="xd"
         />
+        <SelectLanguage />
         {
           isVisible && (
             <Alert
