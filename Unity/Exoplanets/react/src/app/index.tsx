@@ -9,7 +9,7 @@ import { useAlert } from '@lib/hooks';
 import Alert, { AlertContext } from '@components/alerts/Alert';
 import SelectLanguage from '@components/languages/SelectLanguage';
 import { useMemo } from 'react';
-import Text from '@components/ui/Text';
+import UserAuth from '@components/user/UserAuth';
 
 function App() {
   const { t } = useTranslation();
@@ -24,7 +24,7 @@ function App() {
     { onClick: handleClick, astro: proximaCentauriB },
   ], []);
   return (
-    <div className="flex relative">
+    <view>
       <AlertContext.Provider value={showAlert}>
         <h1 className="text-white">{t('components.form.input.error-update')}</h1>
         <h2 className="text-white">ods</h2>
@@ -36,15 +36,8 @@ function App() {
           label="other label"
           defaultValue="xd"
         />
+        <UserAuth />
         <SelectLanguage />
-        <Text
-          size="xl"
-        >
-          <image
-            src="/img/google.png"
-          />
-          Hola
-        </Text>
         {
           isVisible && (
             <Alert
@@ -54,7 +47,7 @@ function App() {
           )
         }
       </AlertContext.Provider>
-    </div>
+    </view>
   );
 }
 
