@@ -1,6 +1,7 @@
 import { render } from '@reactunity/renderer';
 import './globals.css';
 import '@i18n/i18n';
+//import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import AstrosSlider from '@components/astros/AstrosSlider';
 import { kepler22b, proximaCentauriB } from '@lib/mock';
@@ -23,6 +24,26 @@ function App() {
     { onClick: handleClick, astro: kepler22b },
     { onClick: handleClick, astro: proximaCentauriB },
   ], []);
+  /*
+  return (
+    <AlertContext.Provider value={{ alertOptions, hideAlert, showAlert }}>
+      <BrowserRouter>
+        <Routes>
+          <Route path="/" element={<HomePage astros={astros} />} />
+          <Route path="/exoplanetas" element={<ExoplanetasPage astros={astros} />} />
+          rutas ...
+          ...
+          ...
+          ...
+        </Routes>
+      </BrowserRouter>
+      {isVisible && (
+        <Alert alertOptions={alertOptions} hideAlert={hideAlert} />
+      )}
+      
+    </AlertContext.Provider>
+  );
+  */
   return (
     <view>
       <AlertContext.Provider value={showAlert}>
