@@ -17,6 +17,21 @@ public class Exoplanet
     // some other data
 }
 
+[System.Serializable]
+public class StarPair
+{
+    public Star star1;
+    public Star star2;
+}
+
+[System.Serializable]
+public class Constellation
+{
+    public string reference;
+    public string name;
+    public StarPair[] connections;
+}
+
 // dont use inside other classes, for standarization purposes
 [System.Serializable]
 public class SpaceCoord

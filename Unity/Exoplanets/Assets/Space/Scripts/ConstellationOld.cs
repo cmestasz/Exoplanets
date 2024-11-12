@@ -1,16 +1,16 @@
 using System;
 using System.Collections.Generic;
 
-public class Constellation
+public class ConstellationOld
 {
     public string Id { get; private set; }
     public bool IsSaved { get; private set; }
     public HashSet<Tuple<StarController, StarController>> Connections { get; private set; } = new(); 
-    public static Dictionary<string, Constellation> Constellations { get; private set; } = new();
+    public static Dictionary<string, ConstellationOld> Constellations { get; private set; } = new();
 
-    public static Constellation CreateConstellation()
+    public static ConstellationOld CreateConstellation()
     {
-        Constellation constellation = new();
+        ConstellationOld constellation = new();
         return constellation;
     }
 

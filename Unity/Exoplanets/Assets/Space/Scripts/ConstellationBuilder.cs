@@ -6,7 +6,7 @@ public class ConstellationBuilder
     public Transform ConnectionsParent { get; private set; }
     public GameObject ConstellationConnectionPrefab { get; private set; }
     public List<LineRenderer> ConstellationLines { get; private set; } = new();
-    public Constellation CurrentConstellation { get; private set; }
+    public ConstellationOld CurrentConstellation { get; private set; }
 
     public ConstellationBuilder(GameObject constellationConnectionPrefab, Transform connectionsParent)
     {
@@ -23,7 +23,7 @@ public class ConstellationBuilder
         lineRenderer.SetPosition(1, star2.transform.position);
         ConstellationLines.Add(lineRenderer);
 
-        CurrentConstellation ??= Constellation.CreateConstellation();
+        CurrentConstellation ??= ConstellationOld.CreateConstellation();
         CurrentConstellation.AddConnection(star1, star2);
     }
 

@@ -13,6 +13,18 @@ public class SurroundingsResponse
 }
 
 [System.Serializable]
+public class ConstellationsRequest
+{
+    public string reference;
+}
+
+[System.Serializable]
+public class ConstellationsResponse
+{
+    public Constellation[] constellations;
+}
+
+[System.Serializable]
 public class ExoplanetsByNameRequest
 {
     public string name;

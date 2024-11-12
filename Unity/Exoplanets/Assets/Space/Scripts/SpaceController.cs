@@ -1,17 +1,22 @@
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Rendering;
+using UnityEngine.Rendering.Universal;
 
 public class SpaceController : MonoBehaviour
 {
     [SerializeField] private GameObject[] starPrefabs;
     [SerializeField] private GameObject constellationConnectionPrefab;
     [SerializeField] private float starsPositionRange, starsScaleMin, starsScaleMax, amountOfStars;
+    [SerializeField] private GameObject postProcessing;
     public static SpaceController Instance { get; private set; }
     public ConstellationBuilder ConstellationBuilder { get; private set; }
     public Transform StarsParent { get; private set; }
     public Transform PlanetsParent { get; private set; }
-    public SpaceCoord CurrentRelativePosition { get; private set; }
+    public string CurrentReference { get; private set; }
     private int StarId { get; set; } = 0;
+    private ColorAdjustments ColorAdjustments { get; set; }
 
     private void Awake()
     {
@@ -29,16 +34,35 @@ public class SpaceController : MonoBehaviour
         ConstellationBuilder = new(constellationConnectionPrefab, transform.Find("ConstellationConnections"));
         StarsParent = transform.Find("Stars");
         PlanetsParent = transform.Find("Planets");
-        CurrentRelativePosition = new();
+        ColorAdjustments = postProcessing.GetComponent<Volume>().profile.components[1] as ColorAdjustments;
     }
 
 
     private void TestOnStart()
     {
-        LoadStars(0, 0, 2);
+        LoadStarsAsync(0, 0, 2, response => BuildStars(response.stars));
     }
 
-    private void LoadStars(float ra, float dec, float parallax)
+    private void BuildStars(Star[] stars)
+    {
+        foreach (Star star in stars)
+        {
+            int prefabIdx = Random.Range(0, starPrefabs.Length);
+            Vector3 pos = new(star.x * 15, star.y * 15, star.z * 15);
+            StarController.CreateStar(StarId++.ToString(), starPrefabs[prefabIdx], pos, StarsParent);
+        }
+    }
+
+    private void BuildConstellations(Constellation[] constellations)
+    {
+        Debug.Log("Building constellations");
+        foreach (Constellation constellation in constellations)
+        {
+            // ConstellationBuilder.BuildConstellation(constellation);
+        }
+    }
+
+    private void LoadStarsAsync(float ra, float dec, float parallax, System.Action<SurroundingsResponse> callback)
     {
         SurroundingsRequest request = new()
         {
@@ -46,40 +70,39 @@ public class SpaceController : MonoBehaviour
             dec = dec,
             parallax = parallax
         };
-        StartCoroutine(
-            APIConnector.Post<SurroundingsRequest, SurroundingsResponse>("load_surroundings", request, response =>
-            {
-                foreach (Star star in response.stars)
-                {
-                    int prefabIdx = Random.Range(0, starPrefabs.Length);
-                    Vector3 pos = new(star.x * 15, star.y * 15, star.z * 15);
-                    StarController.CreateStar(StarId++.ToString(), starPrefabs[prefabIdx], pos, StarsParent);
-                }
-            })
-        );
-    }
-
-
-    private void BuildRandomStars()
-    {
-        for (int i = 0; i < amountOfStars; i++)
-        {
-            float x = Random.Range(-starsPositionRange, starsPositionRange);
-            float y = Random.Range(-starsPositionRange, starsPositionRange);
-            float z = Random.Range(-starsPositionRange, starsPositionRange);
-
-            Vector3 position = new(x, y, z);
-            int prefabIdx = Random.Range(0, starPrefabs.Length);
-            StarController.CreateStar(StarId++.ToString(), starPrefabs[prefabIdx], position, StarsParent);
-        }
+        StartCoroutine(APIConnector.Post<SurroundingsRequest, SurroundingsResponse>("load_surroundings", request, callback));
     }
 
     public void WarpTo(SpaceCoord pos)
     {
-        CurrentRelativePosition = pos;
+        StartCoroutine(WarpToAnim(pos));
+    }
+
+    private IEnumerator WarpToAnim(SpaceCoord pos)
+    {
+        float exposure = 0;
+        while (exposure < 20)
+        {
+            exposure += 0.25f;
+            ColorAdjustments.postExposure.value = exposure;
+            yield return null;
+        }
         ClearStars();
-        LoadStars(pos.ra, pos.dec, pos.parallax);
-        LoadConstellations();
+        Star[] stars = null;
+        LoadStarsAsync(pos.ra, pos.dec, pos.parallax, response => stars = response.stars);
+        Constellation[] constellations = null;
+        LoadConstellationsAsync(response => constellations = response.constellations);
+        yield return new WaitUntil(() => stars != null && constellations != null);
+
+        BuildStars(stars);
+        BuildConstellations(constellations);
+
+        while (exposure > 0)
+        {
+            exposure -= 0.25f;
+            ColorAdjustments.postExposure.value = exposure;
+            yield return null;
+        }
     }
 
     private void ClearStars()
@@ -90,10 +113,14 @@ public class SpaceController : MonoBehaviour
         }
     }
 
-    public void LoadConstellations()
+    public void LoadConstellationsAsync(System.Action<ConstellationsResponse> callback)
     {
-        Debug.Log($"We should now be loading constellations for the position {CurrentRelativePosition}");
-        // db request
+        Debug.Log($"We should now be loading constellations for the exoplanet reference {CurrentReference}");
+        ConstellationsResponse response = new()
+        {
+            constellations = new Constellation[1]
+        };
+        callback(response);
     }
 
     public void AddConstellationConnection(StarController star1, StarController star2)
