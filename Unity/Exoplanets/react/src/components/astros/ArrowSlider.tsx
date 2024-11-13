@@ -1,5 +1,4 @@
 import clsx from 'clsx';
-import { twMerge } from 'tailwind-merge';
 import { DEFAULT_COLOR } from '@styles/colors';
 import { Style } from '@reactunity/renderer';
 
@@ -12,8 +11,6 @@ interface ArrowSliderProps {
 export default function ArrowSlider({
   toLeft, onClick, cardHover,
 }: ArrowSliderProps) {
-  const baseStyle = 'border-primary hover:border-secondary border-2 w-10 max-h-48 group';
-  const colors = DEFAULT_COLOR;
   const leftArrow: Style = {
     borderTopLeftRadius: 8,
     borderBottomLeftRadius: 8,
@@ -26,17 +23,20 @@ export default function ArrowSlider({
   };
   return (
     <div
-      className={twMerge(baseStyle, colors)}
+      className={clsx(
+        'border-primary hover:border-secondary border-2 w-10 max-h-48 group',
+        DEFAULT_COLOR,
+      )}
       style={toLeft ? leftArrow : rightArrow}
     >
       <button
         onClick={onClick}
-        className={twMerge(
+        className={clsx(
           'h-full w-full flex items-center justify-center m-duration-300 m-ease-in active:scale-90',
-          clsx({
+          {
             'active:trans-x-4': !toLeft,
             'active:-trans-x-4': toLeft,
-          }),
+          },
         )}
       >
         {

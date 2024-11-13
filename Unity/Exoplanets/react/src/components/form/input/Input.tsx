@@ -73,7 +73,7 @@ export default function Input({
   }, [stateInput]);
   const baseStyle = 'flex flex-col gap-2 justify-center w-fit p-3';
   return (
-    <div
+    <form
       className={baseStyle}
     >
       {label && (
@@ -92,6 +92,7 @@ export default function Input({
           name={name}
           ref={inputRef}
           onFocus={handleEdit}
+          onSubmit={handleSending}
           className="bg-transparent cursor-text focus:outline-none focus:border-b-2 border-b-transparent focus:border-b-primary transition-colors font-exo text-lg flex-grow rounded-none"
           {...props}
         />
@@ -119,6 +120,6 @@ export default function Input({
           )
         }
       </div>
-    </div>
+    </form>
   );
 }
