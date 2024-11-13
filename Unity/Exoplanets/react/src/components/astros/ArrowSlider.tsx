@@ -31,12 +31,12 @@ export default function ArrowSlider({
     >
       <button
         onClick={onClick}
-        className={twMerge(
+        className={clsx(
           'h-full w-full flex items-center justify-center m-duration-300 m-ease-in active:scale-90',
-          clsx({
+          {
             'active:trans-x-4': !toLeft,
             'active:-trans-x-4': toLeft,
-          }),
+          },
         )}
       >
         {
