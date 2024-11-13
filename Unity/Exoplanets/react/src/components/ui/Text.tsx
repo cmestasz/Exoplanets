@@ -11,19 +11,22 @@ export default function Text({
   className,
   children,
 }: TextProps) {
-  const baseStyle = 'cursor-pointer flex flex-row gap-2 items-center w-fit p-2 font-exo';
-  const colorStyle = invertedStyle ? INVERTED_COLOR : DEFAULT_COLOR;
   const Comp = asButton ? 'button' : 'view';
   return (
     <Comp
       onClick={asButton ? onClick : undefined}
-      className={twMerge(baseStyle, colorStyle, clsx({
-        'max-h-6 text-xs': size === 'xs',
-        'max-h-7 text-sm': size === 'sm',
-        'max-h-8 text-base': size === 'base',
-        'max-h-9 text-lg': size === 'lg',
-        'max-h-10 text-xl': size === 'xl',
-      }), className)}
+      className={twMerge(
+        clsx({
+          [INVERTED_COLOR]: invertedStyle,
+          [DEFAULT_COLOR]: !invertedStyle,
+          'max-h-6 text-xs': size === 'xs',
+          'max-h-7 text-sm': size === 'sm',
+          'max-h-8 text-base': size === 'base',
+          'max-h-9 text-lg': size === 'lg',
+          'max-h-10 text-xl': size === 'xl',
+        }),
+        className,
+      )}
     >
       {children}
     </Comp>

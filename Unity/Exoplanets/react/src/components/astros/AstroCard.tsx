@@ -18,10 +18,9 @@ export default function AstroCard<T extends Astro>({
   astro, onClick, invertedStyle, className, onDoubleClick, handExHover, size = 'normal',
 }: AstroCardProps<T>) {
   const [isHover, setIsHover] = useState<boolean>(false);
-  const buttonBaseStyle = 'relative font-exo flex flex-col items-center gap-3 p-16 border-primary hover:border-secondary transition-all duration-200 ease-out hover:ease-out border-2 rounded-2xl';
+  const buttonBaseStyle = 'relative font-exo flex flex-col items-center gap-3 p-16 border-primary hover:border-secondary transition-all duration-200 hover:ease-out border-2 rounded-2xl ease-in-out active:scale-[0.98] active:ease-out';
   const buttonSizeStyle = size === 'normal' ? 'size-56' : 'size-48';
   const buttonColorStyle = invertedStyle ? INVERTED_COLOR : DEFAULT_COLOR;
-  const buttonAnimation = 'scale-1 ease-in-out active:scale-[0.98] active:ease-out duration-100';
   const handleHover = (ishover: boolean) => {
     setIsHover(ishover);
     handExHover(ishover);
@@ -36,7 +35,6 @@ export default function AstroCard<T extends Astro>({
         buttonBaseStyle,
         buttonSizeStyle,
         buttonColorStyle,
-        buttonAnimation,
         className,
       )}
     >
