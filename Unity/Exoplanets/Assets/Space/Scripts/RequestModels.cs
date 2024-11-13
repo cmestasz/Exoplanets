@@ -3,7 +3,7 @@ public class SurroundingsRequest
 {
     public float ra;
     public float dec;
-    public float parallax;
+    public float dist;
 }
 
 [System.Serializable]

@@ -1101,7 +1101,7 @@ GameObject:
   - component: {fileID: 1425404265}
   - component: {fileID: 1425404264}
   m_Layer: 5
-  m_Name: WarpToPARALLAX
+  m_Name: WarpToDIST
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1527,7 +1527,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: parallax
+  m_text: dist
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -1995,7 +1995,7 @@ MonoBehaviour:
   infoText: {fileID: 1417293934}
   warpToRA: {fileID: 318529767}
   warpToDEC: {fileID: 2094301398}
-  warpToPARALLAX: {fileID: 1425404264}
+  warpToDIST: {fileID: 1425404264}
 --- !u!1 &1789398175
 GameObject:
   m_ObjectHideFlags: 0

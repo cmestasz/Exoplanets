@@ -38,22 +38,22 @@ public class SpaceCoord
 {
     public float ra;
     public float dec;
-    public float parallax;
+    public float dist;
 
     public SpaceCoord()
     {
-        parallax = 1;
+        dist = 1;
     }
 
-    public SpaceCoord(float ra, float dec, float parallax)
+    public SpaceCoord(float ra, float dec, float dist)
     {
         this.ra = ra;
         this.dec = dec;
-        this.parallax = parallax;
+        this.dist = dist;
     }
 
     public override string ToString()
     {
-        return $"ra: {ra}, dec: {dec}, parallax: {parallax}";
+        return $"ra: {ra}, dec: {dec}, dist: {dist}";
     }
 }

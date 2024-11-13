@@ -62,13 +62,13 @@ public class SpaceController : MonoBehaviour
         }
     }
 
-    private void LoadStarsAsync(float ra, float dec, float parallax, System.Action<SurroundingsResponse> callback)
+    private void LoadStarsAsync(float ra, float dec, float dist, System.Action<SurroundingsResponse> callback)
     {
         SurroundingsRequest request = new()
         {
             ra = ra,
             dec = dec,
-            parallax = parallax
+            dist = dist
         };
         StartCoroutine(APIConnector.Post<SurroundingsRequest, SurroundingsResponse>("load_surroundings", request, callback));
     }
@@ -89,7 +89,7 @@ public class SpaceController : MonoBehaviour
         }
         ClearStars();
         Star[] stars = null;
-        LoadStarsAsync(pos.ra, pos.dec, pos.parallax, response => stars = response.stars);
+        LoadStarsAsync(pos.ra, pos.dec, pos.dist, response => stars = response.stars);
         Constellation[] constellations = null;
         LoadConstellationsAsync(response => constellations = response.constellations);
         yield return new WaitUntil(() => stars != null && constellations != null);
