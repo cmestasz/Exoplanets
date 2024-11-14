@@ -16,11 +16,9 @@
     "i18next": "^23.16.4",
     "postcss": "^8.4.47",
     "react": "^18.3.1",
-    "react-dom": "^18.3.1",
     "react-i18next": "^15.1.0",
     "react-router-dom": "^6.28.0",
-    "tailwind-merge": "^2.5.4",
-    "yarn": "^1.22.22"
+    "tailwind-merge": "^2.5.4"
   },
   "devDependencies": {
     "@reactunity/scripts": "^0.18.4",

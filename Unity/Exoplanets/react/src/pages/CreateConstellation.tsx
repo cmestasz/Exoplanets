@@ -1,6 +1,6 @@
 import { useNavigate } from 'react-router-dom';
 
-const CrearConstelacion = () => {
+export default function CreateConstellation() {
   const navigate = useNavigate();
 
   return (
@@ -10,6 +10,4 @@ const CrearConstelacion = () => {
       <button onClick={() => navigate('/')}>Volver al Inicio</button>
     </div>
   );
-};
-
-export default CrearConstelacion;
+}
