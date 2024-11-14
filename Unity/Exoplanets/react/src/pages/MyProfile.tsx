@@ -7,7 +7,7 @@ export default function MyProfile() {
     <div>
       <h1>Mi Cuenta</h1>
       <button onClick={() => navigate(-1)}>Retroceder</button>
-      <button onClick={() => navigate('/')}>Volver al Inicio</button>
+      <button onClick={() => navigate('')}>Volver al Inicio</button>
     </div>
   );
 }

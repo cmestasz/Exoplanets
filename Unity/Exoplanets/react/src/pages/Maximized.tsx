@@ -7,7 +7,7 @@ export default function Maximized() {
     <div>
       <h1>Vista 3D Maximizada</h1>
       <button onClick={() => navigate(-1)}>Retroceder</button>
-      <button onClick={() => navigate('/')}>Volver al Inicio</button>
+      <button onClick={() => navigate('')}>Volver al Inicio</button>
     </div>
   );
 }

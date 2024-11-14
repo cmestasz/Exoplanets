@@ -10,9 +10,9 @@ export default function SeeExoplanet() {
         Exoplaneta
         {id}
       </h1>
-      <button onClick={() => navigate('/maximizado')}>Ver en 3D</button>
+      <button onClick={() => navigate('max')}>Ver en 3D</button>
       <button onClick={() => navigate(-1)}>Retroceder</button>
-      <button onClick={() => navigate('/')}>Volver al Inicio</button>
+      <button onClick={() => navigate('')}>Volver al Inicio</button>
     </div>
   );
 }
