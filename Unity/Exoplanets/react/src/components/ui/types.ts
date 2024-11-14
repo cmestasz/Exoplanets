@@ -8,6 +8,7 @@ type TextBaseProps = {
 type AsButton = {
   asButton?: true;
   onClick?: () => void;
+  disabled?: boolean;
 };
 
 export type TextProps =

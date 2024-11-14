@@ -16,7 +16,7 @@ export default function HeaderUserBox({
       asButton
       invertedStyle
       onClick={onClick}
-      className={clsx({
+      className={clsx('w-full', {
         'hover:text-primary text-primary': opened,
       })}
       size="lg"

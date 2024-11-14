@@ -7,6 +7,7 @@ export default function Text({
   invertedStyle,
   onClick,
   asButton,
+  disabled,
   size = 'base',
   className,
   children,
@@ -15,7 +16,9 @@ export default function Text({
   return (
     <Comp
       onClick={asButton ? onClick : undefined}
+      disabled={disabled}
       className={twMerge(
+        'cursor-pointer flex flex-row gap-2 items-center w-fit p-2 font-exo',
         clsx({
           [INVERTED_COLOR]: invertedStyle,
           [DEFAULT_COLOR]: !invertedStyle,
@@ -25,6 +28,7 @@ export default function Text({
           'max-h-9 text-lg': size === 'lg',
           'max-h-10 text-xl': size === 'xl',
         }),
+        'disabled:text-primary disabled:cursor-default',
         className,
       )}
     >
