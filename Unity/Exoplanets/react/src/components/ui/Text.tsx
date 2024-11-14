@@ -7,16 +7,24 @@ export default function Text({
   invertedStyle,
   onClick,
   asButton,
+  asLink,
+  url,
   disabled,
   size = 'base',
   className,
   children,
 }: TextProps) {
-  const Comp = asButton ? 'button' : 'view';
+  const Comp = (asButton && 'button') || (asLink && 'anchor') || 'view';
+  let props = {};
+  if (asButton) {
+    props = { onClick, disabled };
+  }
+  if (asLink) {
+    props = { url };
+  }
   return (
     <Comp
-      onClick={asButton ? onClick : undefined}
-      disabled={disabled}
+      {...props}
       className={twMerge(
         'cursor-pointer flex flex-row gap-2 items-center w-fit p-2 font-exo',
         clsx({

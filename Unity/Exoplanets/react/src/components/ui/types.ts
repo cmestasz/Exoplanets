@@ -6,11 +6,29 @@ type TextBaseProps = {
 };
 
 type AsButton = {
-  asButton?: true;
-  onClick?: () => void;
+  asButton: true;
+  onClick: () => void;
   disabled?: boolean;
+  asLink?: undefined;
+  url?: undefined;
+};
+
+type AsLink = {
+  asLink: true;
+  url: string;
+  asButton?: undefined;
+  onClick?: undefined;
+  disabled?: undefined;
+};
+
+type OnlyText = {
+  asButton?: undefined;
+  asLink?: undefined;
+  onClick?: undefined;
+  disabled?: undefined;
+  url?: undefined;
 };
 
 export type TextProps =
   TextBaseProps
-  & AsButton;
+  & (AsButton | AsLink | OnlyText);
