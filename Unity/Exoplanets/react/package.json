@@ -10,7 +10,6 @@
     "lint": "react-unity-scripts lint"
   },
   "dependencies": {
-    "@reactunity/material": "^0.18.1",
     "@reactunity/previewer": "^0.18.0",
     "@reactunity/renderer": "^0.18.1",
     "clsx": "^2.1.1",
