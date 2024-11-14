@@ -11,7 +11,7 @@ import Alert, { AlertContext } from '@components/alerts/Alert';
 import SelectLanguage from '@components/languages/SelectLanguage';
 import { useMemo } from 'react';
 import UserAuth from '@components/user/UserAuth';
-import Text from '@components/ui/Text';
+import { Text } from '@components/ui/Text';
 import AppRoutes from './routes';
 
 function App() {

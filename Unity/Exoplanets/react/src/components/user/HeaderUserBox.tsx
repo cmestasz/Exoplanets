@@ -1,4 +1,4 @@
-import Text from '@components/ui/Text';
+import { Text } from '@components/ui/Text';
 import clsx from 'clsx';
 import { twMerge } from 'tailwind-merge';
 
