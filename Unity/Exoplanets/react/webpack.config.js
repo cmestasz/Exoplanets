@@ -12,6 +12,7 @@ module.exports = (env, originalConfig) => ({
       '@styles': path.resolve(__dirname, 'src/styles'),
       '@mytypes': path.resolve(__dirname, 'src/types'),
       '@public': path.resolve(__dirname, 'public'),
+      '@pages': path.resolve(__dirname, 'src/pages'),
     },
   },
 });

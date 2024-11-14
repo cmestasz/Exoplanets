@@ -1,38 +1,41 @@
-  {
-    "extends": "@reactunity/scripts",
-    "compilerOptions": {
-      "baseUrl": "./",
-      "jsxImportSource": "@reactunity/renderer/ugui",
-      "types": [
-        "@reactunity/scripts/main"
+{
+  "extends": "@reactunity/scripts",
+  "compilerOptions": {
+    "baseUrl": "./",
+    "jsxImportSource": "@reactunity/renderer/ugui",
+    "types": [
+      "@reactunity/scripts/main"
+    ],
+    "paths": {
+      "@components/*": [
+        "src/components/*"
       ],
-      "paths": {
-        "@components/*": [
-          "src/components/*"
-        ],
-        "@lib/*": [
-          "src/lib/*"
-        ],
-        "@styles/*": [
-          "src/styles/*"
-        ],
-        "@mytypes/*": [
-          "src/types/*"
-        ],
-        "@i18n/*": [
-          "src/i18n/*"
-        ],
-        "@public/*": [
-          "public/*"
-        ]
-      }
-    },
-    "files": [
-      "src/index.tsx",
-    ],
-    "include": [
-      "./src",
-      "tailwind.config.js",
-      "webpack.config.js"
-    ],
-  }
+      "@lib/*": [
+        "src/lib/*"
+      ],
+      "@styles/*": [
+        "src/styles/*"
+      ],
+      "@mytypes/*": [
+        "src/types/*"
+      ],
+      "@i18n/*": [
+        "src/i18n/*"
+      ],
+      "@public/*": [
+        "public/*"
+      ],
+      "@pages/*": [
+        "src/pages/*"
+      ]
+    }
+  },
+  "files": [
+    "src/index.tsx"
+  ],
+  "include": [
+    "./src",
+    "tailwind.config.js",
+    "webpack.config.js"
+  ]
+}
