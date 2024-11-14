@@ -29,7 +29,7 @@ export default function UserBox({
         username={username}
         photo={photo}
         opened={opened}
-        onClick={() => setOpened(!opened)}
+        onClick={() => setOpened((p) => !p)}
       />
       {
         opened && (

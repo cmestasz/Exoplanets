@@ -43,7 +43,7 @@ export default function SelectLanguage({
         <HeaderSelectLang
           lang={currentLang}
           opened={opened}
-          onClick={() => setOpened(!opened)}
+          onClick={() => setOpened((p) => !p)}
         />
         {
           opened && (
