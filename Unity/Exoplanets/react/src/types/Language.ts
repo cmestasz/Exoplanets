@@ -4,4 +4,5 @@ export default interface Language {
   abbr: Locale;
   disp: string;
   img: string;
+  code: string;
 }

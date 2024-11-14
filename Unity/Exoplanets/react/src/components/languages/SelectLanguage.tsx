@@ -24,10 +24,9 @@ export default function SelectLanguage({
     i18n.changeLanguage(lang.abbr);
   }, []);
   useEffect(() => {
-    const language = Interop.UnityEngine.Application.systemLanguage.toString();
-    console.log(language);
+    const language = Interop.UnityEngine.Application.systemLanguage;
     const defaultLang = AVAILABLE_LANGUAGES
-      .find((lang: Language) => lang.disp === language);
+      .find((lang: Language) => lang.code === language.toString());
     setCurrentLang(defaultLang || DEFAULT_LANGUAGE);
   }, []);
   return (
