@@ -1,31 +1,27 @@
+using System;
 using UnityEngine;
 
 public class MoveSkybox : MonoBehaviour
 {
-    public float speed = 0.5f;
-    private Vector3 direction = Vector3.right;
+    public float speed = -0.5f;
 
     void Update()
     {
-        RenderSettings.skybox.SetFloat("_Rotation", Time.time * speed);
+        float currentRotation = RenderSettings.skybox.GetFloat("_Rotation");
 
-        if (Time.time % 4 < 1)
-        {
-            direction = Vector3.right;
-        }
-        else if (Time.time % 4 < 2)
-        {
-            direction = Vector3.down;
-        }
-        else if (Time.time % 4 < 3)
-        {
-            direction = Vector3.left;
-        }
-        else
-        {
-            direction = Vector3.up;
-        }
+        currentRotation += Time.deltaTime * speed;
+        RenderSettings.skybox.SetFloat("_Rotation", currentRotation);
 
-        RenderSettings.skybox.SetVector("_MainTex_ST", new Vector4(direction.x * Time.time * speed, direction.y * Time.time * speed, 0, 0));
+        if (currentRotation >= 360f)
+        {
+            RenderSettings.skybox.SetFloat("_Rotation", 0f);
+            speed = -Mathf.Abs(speed);
+        }
+        else if (currentRotation <= -360f)
+        {
+            RenderSettings.skybox.SetFloat("_Rotation", 0f);
+            speed = Mathf.Abs(speed);
+        }
     }
+
 }
