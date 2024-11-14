@@ -11,6 +11,7 @@ import Alert, { AlertContext } from '@components/alerts/Alert';
 import SelectLanguage from '@components/languages/SelectLanguage';
 import { useMemo } from 'react';
 import UserAuth from '@components/user/UserAuth';
+import { Text } from '@components/ui/Text';
 import AppRoutes from './routes';
 
 function App() {
@@ -47,6 +48,13 @@ function App() {
             label="other label"
             defaultValue="xd"
           />
+          <anchor
+            // eslint-disable-next-line react/no-unknown-property
+            url="https://github.com/cmestasz/Exoplanets"
+          >
+            Github
+          </anchor>
+          <Text asLink url="https://github.com/cmestasz/Exoplanets">Github</Text>
         </div>
         <AppRoutes />
       </AlertContext.Provider>

@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { AVAILABLE_LANGUAGES, DEFAULT_LANGUAGE } from '@lib/constants';
 import i18n from '@i18n/i18n';
 import { useCallback, useEffect, useState } from 'react';
-import Text from '@components/ui/Text';
+import { Text } from '@components/ui/Text';
 import { twMerge } from 'tailwind-merge';
 import HeaderSelectLang from './HeaderSelectLang';
 
