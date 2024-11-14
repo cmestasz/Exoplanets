@@ -11,14 +11,16 @@ import { Route, Routes } from 'react-router-dom';
 export default function AppRoutes() {
   return (
     <Routes>
-      <Route path="/" element={<MainMenu />} />
-      <Route path="/exoplanetas" element={<Exoplanets />} />
-      <Route path="/exoplanetas/:id" element={<SeeExoplanet />} />
-      <Route path="/estrellas" element={<Stars />} />
-      <Route path="/estrellas/:id" element={<SeeStar />} />
-      <Route path="/estrellas/crear-constelacion" element={<CreateConstellation />} />
-      <Route path="/mi-cuenta" element={<MyProfile />} />
-      <Route path="/maximizado" element={<Maximized />} />
+      <Route path="" element={<MainMenu />} />
+      <Route path="exoplanets" element={<Exoplanets />}>
+        <Route path=":id" element={<SeeExoplanet />} />
+      </Route>
+      <Route path="stars" element={<Stars />}>
+        <Route path=":id" element={<SeeStar />} />
+        <Route path="create" element={<CreateConstellation />} />
+      </Route>
+      <Route path="profile" element={<MyProfile />} />
+      <Route path="max" element={<Maximized />} />
     </Routes>
   );
 }

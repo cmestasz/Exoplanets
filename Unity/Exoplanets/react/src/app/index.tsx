@@ -11,7 +11,7 @@ import Alert, { AlertContext } from '@components/alerts/Alert';
 import SelectLanguage from '@components/languages/SelectLanguage';
 import { useMemo } from 'react';
 import UserAuth from '@components/user/UserAuth';
-import MainMenu from '@pages/MainMenu';
+import AppRoutes from './routes';
 
 function App() {
   const { t } = useTranslation();
@@ -29,12 +29,14 @@ function App() {
   ], []);
 
   return (
-    <MemoryRouter>
+    <MemoryRouter
+      initialEntries={[`/${global.location.hash.replace(/^#/, '')}`]}
+      initialIndex={0}
+    >
       <AlertContext.Provider value={showAlert}>
         <div>
           <h1 className="text-white">{t('components.form.input.error-update')}</h1>
           <SelectLanguage />
-          <MainMenu />
           <UserAuth />
           {isVisible && <Alert alertOptions={alertOptions} hideAlert={hideAlert} />}
 
@@ -46,6 +48,7 @@ function App() {
             defaultValue="xd"
           />
         </div>
+        <AppRoutes />
       </AlertContext.Provider>
     </MemoryRouter>
   );

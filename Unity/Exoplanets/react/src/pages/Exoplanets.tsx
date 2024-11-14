@@ -7,7 +7,7 @@ export default function Exoplanets() {
     <div>
       <h1>Lista de Exoplanetas</h1>
       <button onClick={() => navigate(-1)}>Retroceder</button>
-      <button onClick={() => navigate('/')}>Volver al Inicio</button>
+      <button onClick={() => navigate('')}>Volver al Inicio</button>
 
     </div>
   );
