@@ -1,13 +1,14 @@
 import { DEFAULT_COLOR, INVERTED_COLOR } from '@styles/colors';
 import clsx from 'clsx';
 import { twMerge } from 'tailwind-merge';
+import React from 'react';
 import {
   AsButton, AsLink, OnlyText, TextBaseProps,
 } from './types';
 
-export function Text(props: TextBaseProps & OnlyText): JSX.Element;
-export function Text(props: TextBaseProps & AsButton): JSX.Element;
-export function Text(props: TextBaseProps & AsLink): JSX.Element;
+export function Text(props: TextBaseProps & OnlyText): React.JSX.Element;
+export function Text(props: TextBaseProps & AsButton): React.JSX.Element;
+export function Text(props: TextBaseProps & AsLink): React.JSX.Element;
 
 export function Text(props: TextBaseProps & (AsButton | AsLink | OnlyText)): JSX.Element {
   const {
