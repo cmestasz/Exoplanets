@@ -1,0 +1,2069 @@
+diff --git a/dist/esm/PostgrestBuilder.d.ts b/dist/esm/PostgrestBuilder.d.ts
+new file mode 100644
+index 0000000000000000000000000000000000000000..8c7ab8d71cba877e7f9e76b7515e60b7373dbfef
+--- /dev/null
++++ b/dist/esm/PostgrestBuilder.d.ts
+@@ -0,0 +1,26 @@
++import type { Fetch, PostgrestSingleResponse } from './types';
++export default abstract class PostgrestBuilder<Result> implements PromiseLike<PostgrestSingleResponse<Result>> {
++    protected method: 'GET' | 'HEAD' | 'POST' | 'PATCH' | 'DELETE';
++    protected url: URL;
++    protected headers: Record<string, string>;
++    protected schema?: string;
++    protected body?: unknown;
++    protected shouldThrowOnError: boolean;
++    protected signal?: AbortSignal;
++    protected fetch: Fetch;
++    protected isMaybeSingle: boolean;
++    constructor(builder: PostgrestBuilder<Result>);
++    /**
++     * If there's an error with the query, throwOnError will reject the promise by
++     * throwing the error instead of returning it as part of a successful response.
++     *
++     * {@link https://github.com/supabase/supabase-js/issues/92}
++     */
++    throwOnError(): this;
++    /**
++     * Set an HTTP header for the request.
++     */
++    setHeader(name: string, value: string): this;
++    then<TResult1 = PostgrestSingleResponse<Result>, TResult2 = never>(onfulfilled?: ((value: PostgrestSingleResponse<Result>) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): PromiseLike<TResult1 | TResult2>;
++}
++//# sourceMappingURL=PostgrestBuilder.d.ts.map
+\ No newline at end of file
+diff --git a/dist/esm/PostgrestBuilder.d.ts.map b/dist/esm/PostgrestBuilder.d.ts.map
+new file mode 100644
+index 0000000000000000000000000000000000000000..0f5e9f7feba8409f935cad3d5909cb1b76bf72ac
+--- /dev/null
++++ b/dist/esm/PostgrestBuilder.d.ts.map
+@@ -0,0 +1 @@
++{"version":3,"file":"PostgrestBuilder.d.ts","sourceRoot":"","sources":["../../src/PostgrestBuilder.ts"],"names":[],"mappings":"AAGA,OAAO,KAAK,EAAE,KAAK,EAAE,uBAAuB,EAAE,MAAM,SAAS,CAAA;AAG7D,MAAM,CAAC,OAAO,CAAC,QAAQ,OAAO,gBAAgB,CAAC,MAAM,CACnD,YAAW,WAAW,CAAC,uBAAuB,CAAC,MAAM,CAAC,CAAC;IAEvD,SAAS,CAAC,MAAM,EAAE,KAAK,GAAG,MAAM,GAAG,MAAM,GAAG,OAAO,GAAG,QAAQ,CAAA;IAC9D,SAAS,CAAC,GAAG,EAAE,GAAG,CAAA;IAClB,SAAS,CAAC,OAAO,EAAE,MAAM,CAAC,MAAM,EAAE,MAAM,CAAC,CAAA;IACzC,SAAS,CAAC,MAAM,CAAC,EAAE,MAAM,CAAA;IACzB,SAAS,CAAC,IAAI,CAAC,EAAE,OAAO,CAAA;IACxB,SAAS,CAAC,kBAAkB,UAAQ;IACpC,SAAS,CAAC,MAAM,CAAC,EAAE,WAAW,CAAA;IAC9B,SAAS,CAAC,KAAK,EAAE,KAAK,CAAA;IACtB,SAAS,CAAC,aAAa,EAAE,OAAO,CAAA;gBAEpB,OAAO,EAAE,gBAAgB,CAAC,MAAM,CAAC;IAmB7C;;;;;OAKG;IACH,YAAY,IAAI,IAAI;IAKpB;;OAEG;IACH,SAAS,CAAC,IAAI,EAAE,MAAM,EAAE,KAAK,EAAE,MAAM,GAAG,IAAI;IAM5C,IAAI,CAAC,QAAQ,GAAG,uBAAuB,CAAC,MAAM,CAAC,EAAE,QAAQ,GAAG,KAAK,EAC/D,WAAW,CAAC,EACR,CAAC,CAAC,KAAK,EAAE,uBAAuB,CAAC,MAAM,CAAC,KAAK,QAAQ,GAAG,WAAW,CAAC,QAAQ,CAAC,CAAC,GAC9E,SAAS,GACT,IAAI,EACR,UAAU,CAAC,EAAE,CAAC,CAAC,MAAM,EAAE,GAAG,KAAK,QAAQ,GAAG,WAAW,CAAC,QAAQ,CAAC,CAAC,GAAG,SAAS,GAAG,IAAI,GAClF,WAAW,CAAC,QAAQ,GAAG,QAAQ,CAAC;CAuIpC"}
+\ No newline at end of file
+diff --git a/dist/esm/PostgrestBuilder.js b/dist/esm/PostgrestBuilder.js
+new file mode 100644
+index 0000000000000000000000000000000000000000..1a193503f07b967ef2af3d05c082f50cfa1d79ff
+--- /dev/null
++++ b/dist/esm/PostgrestBuilder.js
+@@ -0,0 +1,180 @@
++// @ts-ignore
++import nodeFetch from '@supabase/node-fetch';
++import PostgrestError from './PostgrestError';
++export default class PostgrestBuilder {
++    constructor(builder) {
++        this.shouldThrowOnError = false;
++        this.method = builder.method;
++        this.url = builder.url;
++        this.headers = builder.headers;
++        this.schema = builder.schema;
++        this.body = builder.body;
++        this.shouldThrowOnError = builder.shouldThrowOnError;
++        this.signal = builder.signal;
++        this.isMaybeSingle = builder.isMaybeSingle;
++        if (builder.fetch) {
++            this.fetch = builder.fetch;
++        }
++        else if (typeof fetch === 'undefined') {
++            this.fetch = nodeFetch;
++        }
++        else {
++            this.fetch = fetch;
++        }
++    }
++    /**
++     * If there's an error with the query, throwOnError will reject the promise by
++     * throwing the error instead of returning it as part of a successful response.
++     *
++     * {@link https://github.com/supabase/supabase-js/issues/92}
++     */
++    throwOnError() {
++        this.shouldThrowOnError = true;
++        return this;
++    }
++    /**
++     * Set an HTTP header for the request.
++     */
++    setHeader(name, value) {
++        this.headers = Object.assign({}, this.headers);
++        this.headers[name] = value;
++        return this;
++    }
++    then(onfulfilled, onrejected) {
++        // https://postgrest.org/en/stable/api.html#switching-schemas
++        if (this.schema === undefined) {
++            // skip
++        }
++        else if (['GET', 'HEAD'].includes(this.method)) {
++            this.headers['Accept-Profile'] = this.schema;
++        }
++        else {
++            this.headers['Content-Profile'] = this.schema;
++        }
++        if (this.method !== 'GET' && this.method !== 'HEAD') {
++            this.headers['Content-Type'] = 'application/json';
++        }
++        // NOTE: Invoke w/o `this` to avoid illegal invocation error.
++        // https://github.com/supabase/postgrest-js/pull/247
++        const _fetch = this.fetch;
++        let res = _fetch(this.url.toString(), {
++            method: this.method,
++            headers: this.headers,
++            body: JSON.stringify(this.body),
++            signal: this.signal,
++        }).then(async (res) => {
++            var _a, _b, _c;
++            let error = null;
++            let data = null;
++            let count = null;
++            let status = res.status;
++            let statusText = res.statusText;
++            if (res.ok) {
++                if (this.method !== 'HEAD') {
++                    const body = await res.text();
++                    if (body === '') {
++                        // Prefer: return=minimal
++                    }
++                    else if (this.headers['Accept'] === 'text/csv') {
++                        data = body;
++                    }
++                    else if (this.headers['Accept'] &&
++                        this.headers['Accept'].includes('application/vnd.pgrst.plan+text')) {
++                        data = body;
++                    }
++                    else {
++                        data = JSON.parse(body);
++                    }
++                }
++                const countHeader = (_a = this.headers['Prefer']) === null || _a === void 0 ? void 0 : _a.match(/count=(exact|planned|estimated)/);
++                const contentRange = (_b = res.headers.get('content-range')) === null || _b === void 0 ? void 0 : _b.split('/');
++                if (countHeader && contentRange && contentRange.length > 1) {
++                    count = parseInt(contentRange[1]);
++                }
++                // Temporary partial fix for https://github.com/supabase/postgrest-js/issues/361
++                // Issue persists e.g. for `.insert([...]).select().maybeSingle()`
++                if (this.isMaybeSingle && this.method === 'GET' && Array.isArray(data)) {
++                    if (data.length > 1) {
++                        error = {
++                            // https://github.com/PostgREST/postgrest/blob/a867d79c42419af16c18c3fb019eba8df992626f/src/PostgREST/Error.hs#L553
++                            code: 'PGRST116',
++                            details: `Results contain ${data.length} rows, application/vnd.pgrst.object+json requires 1 row`,
++                            hint: null,
++                            message: 'JSON object requested, multiple (or no) rows returned',
++                        };
++                        data = null;
++                        count = null;
++                        status = 406;
++                        statusText = 'Not Acceptable';
++                    }
++                    else if (data.length === 1) {
++                        data = data[0];
++                    }
++                    else {
++                        data = null;
++                    }
++                }
++            }
++            else {
++                const body = await res.text();
++                try {
++                    error = JSON.parse(body);
++                    // Workaround for https://github.com/supabase/postgrest-js/issues/295
++                    if (Array.isArray(error) && res.status === 404) {
++                        data = [];
++                        error = null;
++                        status = 200;
++                        statusText = 'OK';
++                    }
++                }
++                catch (_d) {
++                    // Workaround for https://github.com/supabase/postgrest-js/issues/295
++                    if (res.status === 404 && body === '') {
++                        status = 204;
++                        statusText = 'No Content';
++                    }
++                    else {
++                        error = {
++                            message: body,
++                        };
++                    }
++                }
++                if (error && this.isMaybeSingle && ((_c = error === null || error === void 0 ? void 0 : error.details) === null || _c === void 0 ? void 0 : _c.includes('0 rows'))) {
++                    error = null;
++                    status = 200;
++                    statusText = 'OK';
++                }
++                if (error && this.shouldThrowOnError) {
++                    throw new PostgrestError(error);
++                }
++            }
++            const postgrestResponse = {
++                error,
++                data,
++                count,
++                status,
++                statusText,
++            };
++            return postgrestResponse;
++        });
++        if (!this.shouldThrowOnError) {
++            res = res.catch((fetchError) => {
++                var _a, _b, _c;
++                return ({
++                    error: {
++                        message: `${(_a = fetchError === null || fetchError === void 0 ? void 0 : fetchError.name) !== null && _a !== void 0 ? _a : 'FetchError'}: ${fetchError === null || fetchError === void 0 ? void 0 : fetchError.message}`,
++                        details: `${(_b = fetchError === null || fetchError === void 0 ? void 0 : fetchError.stack) !== null && _b !== void 0 ? _b : ''}`,
++                        hint: '',
++                        code: `${(_c = fetchError === null || fetchError === void 0 ? void 0 : fetchError.code) !== null && _c !== void 0 ? _c : ''}`,
++                    },
++                    data: null,
++                    count: null,
++                    status: 0,
++                    statusText: '',
++                });
++            });
++        }
++        return res.then(onfulfilled, onrejected);
++    }
++}
++//# sourceMappingURL=PostgrestBuilder.js.map
+\ No newline at end of file
+diff --git a/dist/esm/PostgrestBuilder.js.map b/dist/esm/PostgrestBuilder.js.map
+new file mode 100644
+index 0000000000000000000000000000000000000000..b4d9a73e27f1f3bd61ebb8b00cc4a6bfc2f26ee6
+--- /dev/null
++++ b/dist/esm/PostgrestBuilder.js.map
+@@ -0,0 +1 @@
++{"version":3,"file":"PostgrestBuilder.js","sourceRoot":"","sources":["../../src/PostgrestBuilder.ts"],"names":[],"mappings":"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"}
+\ No newline at end of file
+diff --git a/dist/esm/PostgrestClient.d.ts b/dist/esm/PostgrestClient.d.ts
+new file mode 100644
+index 0000000000000000000000000000000000000000..3e0d4da28dee2ffeab671b4333302dc5aa1bb55f
+--- /dev/null
++++ b/dist/esm/PostgrestClient.d.ts
+@@ -0,0 +1,72 @@
++import PostgrestQueryBuilder from './PostgrestQueryBuilder';
++import PostgrestFilterBuilder from './PostgrestFilterBuilder';
++import { Fetch, GenericSchema } from './types';
++/**
++ * PostgREST client.
++ *
++ * @typeParam Database - Types for the schema from the [type
++ * generator](https://supabase.com/docs/reference/javascript/next/typescript-support)
++ *
++ * @typeParam SchemaName - Postgres schema to switch to. Must be a string
++ * literal, the same one passed to the constructor. If the schema is not
++ * `"public"`, this must be supplied manually.
++ */
++export default class PostgrestClient<Database = any, SchemaName extends string & keyof Database = 'public' extends keyof Database ? 'public' : string & keyof Database, Schema extends GenericSchema = Database[SchemaName] extends GenericSchema ? Database[SchemaName] : any> {
++    url: string;
++    headers: Record<string, string>;
++    schemaName?: SchemaName;
++    fetch?: Fetch;
++    /**
++     * Creates a PostgREST client.
++     *
++     * @param url - URL of the PostgREST endpoint
++     * @param options - Named parameters
++     * @param options.headers - Custom headers
++     * @param options.schema - Postgres schema to switch to
++     * @param options.fetch - Custom fetch
++     */
++    constructor(url: string, { headers, schema, fetch, }?: {
++        headers?: Record<string, string>;
++        schema?: SchemaName;
++        fetch?: Fetch;
++    });
++    from<TableName extends string & keyof Schema['Tables'], Table extends Schema['Tables'][TableName]>(relation: TableName): PostgrestQueryBuilder<Schema, Table, TableName>;
++    from<ViewName extends string & keyof Schema['Views'], View extends Schema['Views'][ViewName]>(relation: ViewName): PostgrestQueryBuilder<Schema, View, ViewName>;
++    /**
++     * Select a schema to query or perform an function (rpc) call.
++     *
++     * The schema needs to be on the list of exposed schemas inside Supabase.
++     *
++     * @param schema - The schema to query
++     */
++    schema<DynamicSchema extends string & keyof Database>(schema: DynamicSchema): PostgrestClient<Database, DynamicSchema, Database[DynamicSchema] extends GenericSchema ? Database[DynamicSchema] : any>;
++    /**
++     * Perform a function call.
++     *
++     * @param fn - The function name to call
++     * @param args - The arguments to pass to the function call
++     * @param options - Named parameters
++     * @param options.head - When set to `true`, `data` will not be returned.
++     * Useful if you only need the count.
++     * @param options.get - When set to `true`, the function will be called with
++     * read-only access mode.
++     * @param options.count - Count algorithm to use to count rows returned by the
++     * function. Only applicable for [set-returning
++     * functions](https://www.postgresql.org/docs/current/functions-srf.html).
++     *
++     * `"exact"`: Exact but slow count algorithm. Performs a `COUNT(*)` under the
++     * hood.
++     *
++     * `"planned"`: Approximated but fast count algorithm. Uses the Postgres
++     * statistics under the hood.
++     *
++     * `"estimated"`: Uses exact count for low numbers and planned count for high
++     * numbers.
++     */
++    rpc<FnName extends string & keyof Schema['Functions'], Fn extends Schema['Functions'][FnName]>(fn: FnName, args?: Fn['Args'], { head, get, count, }?: {
++        head?: boolean;
++        get?: boolean;
++        count?: 'exact' | 'planned' | 'estimated';
++    }): PostgrestFilterBuilder<Schema, Fn['Returns'] extends any[] ? Fn['Returns'][number] extends Record<string, unknown> ? Fn['Returns'][number] : never : never, Fn['Returns'], FnName, null>;
++}
++//# sourceMappingURL=PostgrestClient.d.ts.map
+\ No newline at end of file
+diff --git a/dist/esm/PostgrestClient.d.ts.map b/dist/esm/PostgrestClient.d.ts.map
+new file mode 100644
+index 0000000000000000000000000000000000000000..d7da6d0616fdcf4e7bfc282e701b7291a76ef398
+--- /dev/null
++++ b/dist/esm/PostgrestClient.d.ts.map
+@@ -0,0 +1 @@
++{"version":3,"file":"PostgrestClient.d.ts","sourceRoot":"","sources":["../../src/PostgrestClient.ts"],"names":[],"mappings":"AAAA,OAAO,qBAAqB,MAAM,yBAAyB,CAAA;AAC3D,OAAO,sBAAsB,MAAM,0BAA0B,CAAA;AAG7D,OAAO,EAAE,KAAK,EAAE,aAAa,EAAE,MAAM,SAAS,CAAA;AAE9C;;;;;;;;;GASG;AACH,MAAM,CAAC,OAAO,OAAO,eAAe,CAClC,QAAQ,GAAG,GAAG,EACd,UAAU,SAAS,MAAM,GAAG,MAAM,QAAQ,GAAG,QAAQ,SAAS,MAAM,QAAQ,GACxE,QAAQ,GACR,MAAM,GAAG,MAAM,QAAQ,EAC3B,MAAM,SAAS,aAAa,GAAG,QAAQ,CAAC,UAAU,CAAC,SAAS,aAAa,GACrE,QAAQ,CAAC,UAAU,CAAC,GACpB,GAAG;IAEP,GAAG,EAAE,MAAM,CAAA;IACX,OAAO,EAAE,MAAM,CAAC,MAAM,EAAE,MAAM,CAAC,CAAA;IAC/B,UAAU,CAAC,EAAE,UAAU,CAAA;IACvB,KAAK,CAAC,EAAE,KAAK,CAAA;IAGb;;;;;;;;OAQG;gBAED,GAAG,EAAE,MAAM,EACX,EACE,OAAY,EACZ,MAAM,EACN,KAAK,GACN,GAAE;QACD,OAAO,CAAC,EAAE,MAAM,CAAC,MAAM,EAAE,MAAM,CAAC,CAAA;QAChC,MAAM,CAAC,EAAE,UAAU,CAAA;QACnB,KAAK,CAAC,EAAE,KAAK,CAAA;KACT;IAQR,IAAI,CACF,SAAS,SAAS,MAAM,GAAG,MAAM,MAAM,CAAC,QAAQ,CAAC,EACjD,KAAK,SAAS,MAAM,CAAC,QAAQ,CAAC,CAAC,SAAS,CAAC,EACzC,QAAQ,EAAE,SAAS,GAAG,qBAAqB,CAAC,MAAM,EAAE,KAAK,EAAE,SAAS,CAAC;IACvE,IAAI,CAAC,QAAQ,SAAS,MAAM,GAAG,MAAM,MAAM,CAAC,OAAO,CAAC,EAAE,IAAI,SAAS,MAAM,CAAC,OAAO,CAAC,CAAC,QAAQ,CAAC,EAC1F,QAAQ,EAAE,QAAQ,GACjB,qBAAqB,CAAC,MAAM,EAAE,IAAI,EAAE,QAAQ,CAAC;IAehD;;;;;;OAMG;IACH,MAAM,CAAC,aAAa,SAAS,MAAM,GAAG,MAAM,QAAQ,EAClD,MAAM,EAAE,aAAa,GACpB,eAAe,CAChB,QAAQ,EACR,aAAa,EACb,QAAQ,CAAC,aAAa,CAAC,SAAS,aAAa,GAAG,QAAQ,CAAC,aAAa,CAAC,GAAG,GAAG,CAC9E;IAQD;;;;;;;;;;;;;;;;;;;;;;OAsBG;IACH,GAAG,CAAC,MAAM,SAAS,MAAM,GAAG,MAAM,MAAM,CAAC,WAAW,CAAC,EAAE,EAAE,SAAS,MAAM,CAAC,WAAW,CAAC,CAAC,MAAM,CAAC,EAC3F,EAAE,EAAE,MAAM,EACV,IAAI,GAAE,EAAE,CAAC,MAAM,CAAM,EACrB,EACE,IAAY,EACZ,GAAW,EACX,KAAK,GACN,GAAE;QACD,IAAI,CAAC,EAAE,OAAO,CAAA;QACd,GAAG,CAAC,EAAE,OAAO,CAAA;QACb,KAAK,CAAC,EAAE,OAAO,GAAG,SAAS,GAAG,WAAW,CAAA;KACrC,GACL,sBAAsB,CACvB,MAAM,EACN,EAAE,CAAC,SAAS,CAAC,SAAS,GAAG,EAAE,GACvB,EAAE,CAAC,SAAS,CAAC,CAAC,MAAM,CAAC,SAAS,MAAM,CAAC,MAAM,EAAE,OAAO,CAAC,GACnD,EAAE,CAAC,SAAS,CAAC,CAAC,MAAM,CAAC,GACrB,KAAK,GACP,KAAK,EACT,EAAE,CAAC,SAAS,CAAC,EACb,MAAM,EACN,IAAI,CACL;CAmCF"}
+\ No newline at end of file
+diff --git a/dist/esm/PostgrestClient.js b/dist/esm/PostgrestClient.js
+new file mode 100644
+index 0000000000000000000000000000000000000000..6036035fbbcc40180710faf9de6b53fbde4d1bac
+--- /dev/null
++++ b/dist/esm/PostgrestClient.js
+@@ -0,0 +1,116 @@
++import PostgrestQueryBuilder from './PostgrestQueryBuilder';
++import PostgrestFilterBuilder from './PostgrestFilterBuilder';
++import { DEFAULT_HEADERS } from './constants';
++/**
++ * PostgREST client.
++ *
++ * @typeParam Database - Types for the schema from the [type
++ * generator](https://supabase.com/docs/reference/javascript/next/typescript-support)
++ *
++ * @typeParam SchemaName - Postgres schema to switch to. Must be a string
++ * literal, the same one passed to the constructor. If the schema is not
++ * `"public"`, this must be supplied manually.
++ */
++export default class PostgrestClient {
++    // TODO: Add back shouldThrowOnError once we figure out the typings
++    /**
++     * Creates a PostgREST client.
++     *
++     * @param url - URL of the PostgREST endpoint
++     * @param options - Named parameters
++     * @param options.headers - Custom headers
++     * @param options.schema - Postgres schema to switch to
++     * @param options.fetch - Custom fetch
++     */
++    constructor(url, { headers = {}, schema, fetch, } = {}) {
++        this.url = url;
++        this.headers = Object.assign(Object.assign({}, DEFAULT_HEADERS), headers);
++        this.schemaName = schema;
++        this.fetch = fetch;
++    }
++    /**
++     * Perform a query on a table or a view.
++     *
++     * @param relation - The table or view name to query
++     */
++    from(relation) {
++        const url = new URL(`${this.url}/${relation}`);
++        return new PostgrestQueryBuilder(url, {
++            headers: Object.assign({}, this.headers),
++            schema: this.schemaName,
++            fetch: this.fetch,
++        });
++    }
++    /**
++     * Select a schema to query or perform an function (rpc) call.
++     *
++     * The schema needs to be on the list of exposed schemas inside Supabase.
++     *
++     * @param schema - The schema to query
++     */
++    schema(schema) {
++        return new PostgrestClient(this.url, {
++            headers: this.headers,
++            schema,
++            fetch: this.fetch,
++        });
++    }
++    /**
++     * Perform a function call.
++     *
++     * @param fn - The function name to call
++     * @param args - The arguments to pass to the function call
++     * @param options - Named parameters
++     * @param options.head - When set to `true`, `data` will not be returned.
++     * Useful if you only need the count.
++     * @param options.get - When set to `true`, the function will be called with
++     * read-only access mode.
++     * @param options.count - Count algorithm to use to count rows returned by the
++     * function. Only applicable for [set-returning
++     * functions](https://www.postgresql.org/docs/current/functions-srf.html).
++     *
++     * `"exact"`: Exact but slow count algorithm. Performs a `COUNT(*)` under the
++     * hood.
++     *
++     * `"planned"`: Approximated but fast count algorithm. Uses the Postgres
++     * statistics under the hood.
++     *
++     * `"estimated"`: Uses exact count for low numbers and planned count for high
++     * numbers.
++     */
++    rpc(fn, args = {}, { head = false, get = false, count, } = {}) {
++        let method;
++        const url = new URL(`${this.url}/rpc/${fn}`);
++        let body;
++        if (head || get) {
++            method = head ? 'HEAD' : 'GET';
++            Object.entries(args)
++                // params with undefined value needs to be filtered out, otherwise it'll
++                // show up as `?param=undefined`
++                .filter(([_, value]) => value !== undefined)
++                // array values need special syntax
++                .map(([name, value]) => [name, Array.isArray(value) ? `{${value.join(',')}}` : `${value}`])
++                .forEach(([name, value]) => {
++                url.searchParams.append(name, value);
++            });
++        }
++        else {
++            method = 'POST';
++            body = args;
++        }
++        const headers = Object.assign({}, this.headers);
++        if (count) {
++            headers['Prefer'] = `count=${count}`;
++        }
++        return new PostgrestFilterBuilder({
++            method,
++            url,
++            headers,
++            schema: this.schemaName,
++            body,
++            fetch: this.fetch,
++            allowEmpty: false,
++        });
++    }
++}
++//# sourceMappingURL=PostgrestClient.js.map
+\ No newline at end of file
+diff --git a/dist/esm/PostgrestClient.js.map b/dist/esm/PostgrestClient.js.map
+new file mode 100644
+index 0000000000000000000000000000000000000000..6b72a2cb1949e5bfa4969925ef1926d3d1617d9a
+--- /dev/null
++++ b/dist/esm/PostgrestClient.js.map
+@@ -0,0 +1 @@
++{"version":3,"file":"PostgrestClient.js","sourceRoot":"","sources":["../../src/PostgrestClient.ts"],"names":[],"mappings":"AAAA,OAAO,qBAAqB,MAAM,yBAAyB,CAAA;AAC3D,OAAO,sBAAsB,MAAM,0BAA0B,CAAA;AAE7D,OAAO,EAAE,eAAe,EAAE,MAAM,aAAa,CAAA;AAG7C;;;;;;;;;GASG;AACH,MAAM,CAAC,OAAO,OAAO,eAAe;IAclC,mEAAmE;IACnE;;;;;;;;OAQG;IACH,YACE,GAAW,EACX,EACE,OAAO,GAAG,EAAE,EACZ,MAAM,EACN,KAAK,MAKH,EAAE;QAEN,IAAI,CAAC,GAAG,GAAG,GAAG,CAAA;QACd,IAAI,CAAC,OAAO,mCAAQ,eAAe,GAAK,OAAO,CAAE,CAAA;QACjD,IAAI,CAAC,UAAU,GAAG,MAAM,CAAA;QACxB,IAAI,CAAC,KAAK,GAAG,KAAK,CAAA;IACpB,CAAC;IASD;;;;OAIG;IACH,IAAI,CAAC,QAAgB;QACnB,MAAM,GAAG,GAAG,IAAI,GAAG,CAAC,GAAG,IAAI,CAAC,GAAG,IAAI,QAAQ,EAAE,CAAC,CAAA;QAC9C,OAAO,IAAI,qBAAqB,CAAC,GAAG,EAAE;YACpC,OAAO,oBAAO,IAAI,CAAC,OAAO,CAAE;YAC5B,MAAM,EAAE,IAAI,CAAC,UAAU;YACvB,KAAK,EAAE,IAAI,CAAC,KAAK;SAClB,CAAC,CAAA;IACJ,CAAC;IAED;;;;;;OAMG;IACH,MAAM,CACJ,MAAqB;QAMrB,OAAO,IAAI,eAAe,CAAC,IAAI,CAAC,GAAG,EAAE;YACnC,OAAO,EAAE,IAAI,CAAC,OAAO;YACrB,MAAM;YACN,KAAK,EAAE,IAAI,CAAC,KAAK;SAClB,CAAC,CAAA;IACJ,CAAC;IAED;;;;;;;;;;;;;;;;;;;;;;OAsBG;IACH,GAAG,CACD,EAAU,EACV,OAAmB,EAAE,EACrB,EACE,IAAI,GAAG,KAAK,EACZ,GAAG,GAAG,KAAK,EACX,KAAK,MAKH,EAAE;QAYN,IAAI,MAA+B,CAAA;QACnC,MAAM,GAAG,GAAG,IAAI,GAAG,CAAC,GAAG,IAAI,CAAC,GAAG,QAAQ,EAAE,EAAE,CAAC,CAAA;QAC5C,IAAI,IAAyB,CAAA;QAC7B,IAAI,IAAI,IAAI,GAAG,EAAE;YACf,MAAM,GAAG,IAAI,CAAC,CAAC,CAAC,MAAM,CAAC,CAAC,CAAC,KAAK,CAAA;YAC9B,MAAM,CAAC,OAAO,CAAC,IAAI,CAAC;gBAClB,wEAAwE;gBACxE,gCAAgC;iBAC/B,MAAM,CAAC,CAAC,CAAC,CAAC,EAAE,KAAK,CAAC,EAAE,EAAE,CAAC,KAAK,KAAK,SAAS,CAAC;gBAC5C,mCAAmC;iBAClC,GAAG,CAAC,CAAC,CAAC,IAAI,EAAE,KAAK,CAAC,EAAE,EAAE,CAAC,CAAC,IAAI,EAAE,KAAK,CAAC,OAAO,CAAC,KAAK,CAAC,CAAC,CAAC,CAAC,IAAI,KAAK,CAAC,IAAI,CAAC,GAAG,CAAC,GAAG,CAAC,CAAC,CAAC,GAAG,KAAK,EAAE,CAAC,CAAC;iBAC1F,OAAO,CAAC,CAAC,CAAC,IAAI,EAAE,KAAK,CAAC,EAAE,EAAE;gBACzB,GAAG,CAAC,YAAY,CAAC,MAAM,CAAC,IAAI,EAAE,KAAK,CAAC,CAAA;YACtC,CAAC,CAAC,CAAA;SACL;aAAM;YACL,MAAM,GAAG,MAAM,CAAA;YACf,IAAI,GAAG,IAAI,CAAA;SACZ;QAED,MAAM,OAAO,qBAAQ,IAAI,CAAC,OAAO,CAAE,CAAA;QACnC,IAAI,KAAK,EAAE;YACT,OAAO,CAAC,QAAQ,CAAC,GAAG,SAAS,KAAK,EAAE,CAAA;SACrC;QAED,OAAO,IAAI,sBAAsB,CAAC;YAChC,MAAM;YACN,GAAG;YACH,OAAO;YACP,MAAM,EAAE,IAAI,CAAC,UAAU;YACvB,IAAI;YACJ,KAAK,EAAE,IAAI,CAAC,KAAK;YACjB,UAAU,EAAE,KAAK;SAC4B,CAAC,CAAA;IAClD,CAAC;CACF"}
+\ No newline at end of file
+diff --git a/dist/esm/PostgrestError.d.ts b/dist/esm/PostgrestError.d.ts
+new file mode 100644
+index 0000000000000000000000000000000000000000..e073f6f8c26cdfd9c97cddd78ae4dd3fe519a865
+--- /dev/null
++++ b/dist/esm/PostgrestError.d.ts
+@@ -0,0 +1,17 @@
++/**
++ * Error format
++ *
++ * {@link https://postgrest.org/en/stable/api.html?highlight=options#errors-and-http-status-codes}
++ */
++export default class PostgrestError extends Error {
++    details: string;
++    hint: string;
++    code: string;
++    constructor(context: {
++        message: string;
++        details: string;
++        hint: string;
++        code: string;
++    });
++}
++//# sourceMappingURL=PostgrestError.d.ts.map
+\ No newline at end of file
+diff --git a/dist/esm/PostgrestError.d.ts.map b/dist/esm/PostgrestError.d.ts.map
+new file mode 100644
+index 0000000000000000000000000000000000000000..7b4b0cdb00863bfb3c322c6ee743383767e07c0a
+--- /dev/null
++++ b/dist/esm/PostgrestError.d.ts.map
+@@ -0,0 +1 @@
++{"version":3,"file":"PostgrestError.d.ts","sourceRoot":"","sources":["../../src/PostgrestError.ts"],"names":[],"mappings":"AAAA;;;;GAIG;AACH,MAAM,CAAC,OAAO,OAAO,cAAe,SAAQ,KAAK;IAC/C,OAAO,EAAE,MAAM,CAAA;IACf,IAAI,EAAE,MAAM,CAAA;IACZ,IAAI,EAAE,MAAM,CAAA;gBAEA,OAAO,EAAE;QAAE,OAAO,EAAE,MAAM,CAAC;QAAC,OAAO,EAAE,MAAM,CAAC;QAAC,IAAI,EAAE,MAAM,CAAC;QAAC,IAAI,EAAE,MAAM,CAAA;KAAE;CAOtF"}
+\ No newline at end of file
+diff --git a/dist/esm/PostgrestError.js b/dist/esm/PostgrestError.js
+new file mode 100644
+index 0000000000000000000000000000000000000000..0f63d2a32870142a07469857d98b855c3b32c9ec
+--- /dev/null
++++ b/dist/esm/PostgrestError.js
+@@ -0,0 +1,15 @@
++/**
++ * Error format
++ *
++ * {@link https://postgrest.org/en/stable/api.html?highlight=options#errors-and-http-status-codes}
++ */
++export default class PostgrestError extends Error {
++    constructor(context) {
++        super(context.message);
++        this.name = 'PostgrestError';
++        this.details = context.details;
++        this.hint = context.hint;
++        this.code = context.code;
++    }
++}
++//# sourceMappingURL=PostgrestError.js.map
+\ No newline at end of file
+diff --git a/dist/esm/PostgrestError.js.map b/dist/esm/PostgrestError.js.map
+new file mode 100644
+index 0000000000000000000000000000000000000000..fb3d22d5d6c89f714fceeb1e7272cd048be91f81
+--- /dev/null
++++ b/dist/esm/PostgrestError.js.map
+@@ -0,0 +1 @@
++{"version":3,"file":"PostgrestError.js","sourceRoot":"","sources":["../../src/PostgrestError.ts"],"names":[],"mappings":"AAAA;;;;GAIG;AACH,MAAM,CAAC,OAAO,OAAO,cAAe,SAAQ,KAAK;IAK/C,YAAY,OAAyE;QACnF,KAAK,CAAC,OAAO,CAAC,OAAO,CAAC,CAAA;QACtB,IAAI,CAAC,IAAI,GAAG,gBAAgB,CAAA;QAC5B,IAAI,CAAC,OAAO,GAAG,OAAO,CAAC,OAAO,CAAA;QAC9B,IAAI,CAAC,IAAI,GAAG,OAAO,CAAC,IAAI,CAAA;QACxB,IAAI,CAAC,IAAI,GAAG,OAAO,CAAC,IAAI,CAAA;IAC1B,CAAC;CACF"}
+\ No newline at end of file
+diff --git a/dist/esm/PostgrestFilterBuilder.d.ts b/dist/esm/PostgrestFilterBuilder.d.ts
+new file mode 100644
+index 0000000000000000000000000000000000000000..7bf7c8082c59713334cb01daf99a5d57c630d5f5
+--- /dev/null
++++ b/dist/esm/PostgrestFilterBuilder.d.ts
+@@ -0,0 +1,84 @@
++import PostgrestTransformBuilder from './PostgrestTransformBuilder';
++import { GenericSchema } from './types';
++declare type FilterOperator = 'eq' | 'neq' | 'gt' | 'gte' | 'lt' | 'lte' | 'like' | 'ilike' | 'is' | 'in' | 'cs' | 'cd' | 'sl' | 'sr' | 'nxl' | 'nxr' | 'adj' | 'ov' | 'fts' | 'plfts' | 'phfts' | 'wfts';
++export default class PostgrestFilterBuilder<Schema extends GenericSchema, Row extends Record<string, unknown>, Result, RelationName = unknown, Relationships = unknown> extends PostgrestTransformBuilder<Schema, Row, Result, RelationName, Relationships> {
++    eq<ColumnName extends string & keyof Row>(column: ColumnName, value: NonNullable<Row[ColumnName]>): this;
++    eq<Value extends unknown>(column: string, value: NonNullable<Value>): this;
++    neq<ColumnName extends string & keyof Row>(column: ColumnName, value: Row[ColumnName]): this;
++    neq(column: string, value: unknown): this;
++    gt<ColumnName extends string & keyof Row>(column: ColumnName, value: Row[ColumnName]): this;
++    gt(column: string, value: unknown): this;
++    gte<ColumnName extends string & keyof Row>(column: ColumnName, value: Row[ColumnName]): this;
++    gte(column: string, value: unknown): this;
++    lt<ColumnName extends string & keyof Row>(column: ColumnName, value: Row[ColumnName]): this;
++    lt(column: string, value: unknown): this;
++    lte<ColumnName extends string & keyof Row>(column: ColumnName, value: Row[ColumnName]): this;
++    lte(column: string, value: unknown): this;
++    like<ColumnName extends string & keyof Row>(column: ColumnName, pattern: string): this;
++    like(column: string, pattern: string): this;
++    likeAllOf<ColumnName extends string & keyof Row>(column: ColumnName, patterns: readonly string[]): this;
++    likeAllOf(column: string, patterns: readonly string[]): this;
++    likeAnyOf<ColumnName extends string & keyof Row>(column: ColumnName, patterns: readonly string[]): this;
++    likeAnyOf(column: string, patterns: readonly string[]): this;
++    ilike<ColumnName extends string & keyof Row>(column: ColumnName, pattern: string): this;
++    ilike(column: string, pattern: string): this;
++    ilikeAllOf<ColumnName extends string & keyof Row>(column: ColumnName, patterns: readonly string[]): this;
++    ilikeAllOf(column: string, patterns: readonly string[]): this;
++    ilikeAnyOf<ColumnName extends string & keyof Row>(column: ColumnName, patterns: readonly string[]): this;
++    ilikeAnyOf(column: string, patterns: readonly string[]): this;
++    is<ColumnName extends string & keyof Row>(column: ColumnName, value: Row[ColumnName] & (boolean | null)): this;
++    is(column: string, value: boolean | null): this;
++    in<ColumnName extends string & keyof Row>(column: ColumnName, values: ReadonlyArray<Row[ColumnName]>): this;
++    in(column: string, values: readonly unknown[]): this;
++    contains<ColumnName extends string & keyof Row>(column: ColumnName, value: string | ReadonlyArray<Row[ColumnName]> | Record<string, unknown>): this;
++    contains(column: string, value: string | readonly unknown[] | Record<string, unknown>): this;
++    containedBy<ColumnName extends string & keyof Row>(column: ColumnName, value: string | ReadonlyArray<Row[ColumnName]> | Record<string, unknown>): this;
++    containedBy(column: string, value: string | readonly unknown[] | Record<string, unknown>): this;
++    rangeGt<ColumnName extends string & keyof Row>(column: ColumnName, range: string): this;
++    rangeGt(column: string, range: string): this;
++    rangeGte<ColumnName extends string & keyof Row>(column: ColumnName, range: string): this;
++    rangeGte(column: string, range: string): this;
++    rangeLt<ColumnName extends string & keyof Row>(column: ColumnName, range: string): this;
++    rangeLt(column: string, range: string): this;
++    rangeLte<ColumnName extends string & keyof Row>(column: ColumnName, range: string): this;
++    rangeLte(column: string, range: string): this;
++    rangeAdjacent<ColumnName extends string & keyof Row>(column: ColumnName, range: string): this;
++    rangeAdjacent(column: string, range: string): this;
++    overlaps<ColumnName extends string & keyof Row>(column: ColumnName, value: string | ReadonlyArray<Row[ColumnName]>): this;
++    overlaps(column: string, value: string | readonly unknown[]): this;
++    textSearch<ColumnName extends string & keyof Row>(column: ColumnName, query: string, options?: {
++        config?: string;
++        type?: 'plain' | 'phrase' | 'websearch';
++    }): this;
++    textSearch(column: string, query: string, options?: {
++        config?: string;
++        type?: 'plain' | 'phrase' | 'websearch';
++    }): this;
++    match<ColumnName extends string & keyof Row>(query: Record<ColumnName, Row[ColumnName]>): this;
++    match(query: Record<string, unknown>): this;
++    not<ColumnName extends string & keyof Row>(column: ColumnName, operator: FilterOperator, value: Row[ColumnName]): this;
++    not(column: string, operator: string, value: unknown): this;
++    /**
++     * Match only rows which satisfy at least one of the filters.
++     *
++     * Unlike most filters, `filters` is used as-is and needs to follow [PostgREST
++     * syntax](https://postgrest.org/en/stable/api.html#operators). You also need
++     * to make sure it's properly sanitized.
++     *
++     * It's currently not possible to do an `.or()` filter across multiple tables.
++     *
++     * @param filters - The filters to use, following PostgREST syntax
++     * @param options - Named parameters
++     * @param options.referencedTable - Set this to filter on referenced tables
++     * instead of the parent table
++     * @param options.foreignTable - Deprecated, use `referencedTable` instead
++     */
++    or(filters: string, { foreignTable, referencedTable, }?: {
++        foreignTable?: string;
++        referencedTable?: string;
++    }): this;
++    filter<ColumnName extends string & keyof Row>(column: ColumnName, operator: `${'' | 'not.'}${FilterOperator}`, value: unknown): this;
++    filter(column: string, operator: string, value: unknown): this;
++}
++export {};
++//# sourceMappingURL=PostgrestFilterBuilder.d.ts.map
+\ No newline at end of file
+diff --git a/dist/esm/PostgrestFilterBuilder.d.ts.map b/dist/esm/PostgrestFilterBuilder.d.ts.map
+new file mode 100644
+index 0000000000000000000000000000000000000000..5008c8a0703a17b1d46ee12b030b948e4132d384
+--- /dev/null
++++ b/dist/esm/PostgrestFilterBuilder.d.ts.map
+@@ -0,0 +1 @@
++{"version":3,"file":"PostgrestFilterBuilder.d.ts","sourceRoot":"","sources":["../../src/PostgrestFilterBuilder.ts"],"names":[],"mappings":"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"}
+\ No newline at end of file
+diff --git a/dist/esm/PostgrestFilterBuilder.js b/dist/esm/PostgrestFilterBuilder.js
+new file mode 100644
+index 0000000000000000000000000000000000000000..500430f117b5cdcaa31ae1ab1e1063d0600f2a03
+--- /dev/null
++++ b/dist/esm/PostgrestFilterBuilder.js
+@@ -0,0 +1,375 @@
++import PostgrestTransformBuilder from './PostgrestTransformBuilder';
++export default class PostgrestFilterBuilder extends PostgrestTransformBuilder {
++    /**
++     * Match only rows where `column` is equal to `value`.
++     *
++     * To check if the value of `column` is NULL, you should use `.is()` instead.
++     *
++     * @param column - The column to filter on
++     * @param value - The value to filter with
++     */
++    eq(column, value) {
++        this.url.searchParams.append(column, `eq.${value}`);
++        return this;
++    }
++    /**
++     * Match only rows where `column` is not equal to `value`.
++     *
++     * @param column - The column to filter on
++     * @param value - The value to filter with
++     */
++    neq(column, value) {
++        this.url.searchParams.append(column, `neq.${value}`);
++        return this;
++    }
++    /**
++     * Match only rows where `column` is greater than `value`.
++     *
++     * @param column - The column to filter on
++     * @param value - The value to filter with
++     */
++    gt(column, value) {
++        this.url.searchParams.append(column, `gt.${value}`);
++        return this;
++    }
++    /**
++     * Match only rows where `column` is greater than or equal to `value`.
++     *
++     * @param column - The column to filter on
++     * @param value - The value to filter with
++     */
++    gte(column, value) {
++        this.url.searchParams.append(column, `gte.${value}`);
++        return this;
++    }
++    /**
++     * Match only rows where `column` is less than `value`.
++     *
++     * @param column - The column to filter on
++     * @param value - The value to filter with
++     */
++    lt(column, value) {
++        this.url.searchParams.append(column, `lt.${value}`);
++        return this;
++    }
++    /**
++     * Match only rows where `column` is less than or equal to `value`.
++     *
++     * @param column - The column to filter on
++     * @param value - The value to filter with
++     */
++    lte(column, value) {
++        this.url.searchParams.append(column, `lte.${value}`);
++        return this;
++    }
++    /**
++     * Match only rows where `column` matches `pattern` case-sensitively.
++     *
++     * @param column - The column to filter on
++     * @param pattern - The pattern to match with
++     */
++    like(column, pattern) {
++        this.url.searchParams.append(column, `like.${pattern}`);
++        return this;
++    }
++    /**
++     * Match only rows where `column` matches all of `patterns` case-sensitively.
++     *
++     * @param column - The column to filter on
++     * @param patterns - The patterns to match with
++     */
++    likeAllOf(column, patterns) {
++        this.url.searchParams.append(column, `like(all).{${patterns.join(',')}}`);
++        return this;
++    }
++    /**
++     * Match only rows where `column` matches any of `patterns` case-sensitively.
++     *
++     * @param column - The column to filter on
++     * @param patterns - The patterns to match with
++     */
++    likeAnyOf(column, patterns) {
++        this.url.searchParams.append(column, `like(any).{${patterns.join(',')}}`);
++        return this;
++    }
++    /**
++     * Match only rows where `column` matches `pattern` case-insensitively.
++     *
++     * @param column - The column to filter on
++     * @param pattern - The pattern to match with
++     */
++    ilike(column, pattern) {
++        this.url.searchParams.append(column, `ilike.${pattern}`);
++        return this;
++    }
++    /**
++     * Match only rows where `column` matches all of `patterns` case-insensitively.
++     *
++     * @param column - The column to filter on
++     * @param patterns - The patterns to match with
++     */
++    ilikeAllOf(column, patterns) {
++        this.url.searchParams.append(column, `ilike(all).{${patterns.join(',')}}`);
++        return this;
++    }
++    /**
++     * Match only rows where `column` matches any of `patterns` case-insensitively.
++     *
++     * @param column - The column to filter on
++     * @param patterns - The patterns to match with
++     */
++    ilikeAnyOf(column, patterns) {
++        this.url.searchParams.append(column, `ilike(any).{${patterns.join(',')}}`);
++        return this;
++    }
++    /**
++     * Match only rows where `column` IS `value`.
++     *
++     * For non-boolean columns, this is only relevant for checking if the value of
++     * `column` is NULL by setting `value` to `null`.
++     *
++     * For boolean columns, you can also set `value` to `true` or `false` and it
++     * will behave the same way as `.eq()`.
++     *
++     * @param column - The column to filter on
++     * @param value - The value to filter with
++     */
++    is(column, value) {
++        this.url.searchParams.append(column, `is.${value}`);
++        return this;
++    }
++    /**
++     * Match only rows where `column` is included in the `values` array.
++     *
++     * @param column - The column to filter on
++     * @param values - The values array to filter with
++     */
++    in(column, values) {
++        const cleanedValues = Array.from(new Set(values))
++            .map((s) => {
++            // handle postgrest reserved characters
++            // https://postgrest.org/en/v7.0.0/api.html#reserved-characters
++            if (typeof s === 'string' && new RegExp('[,()]').test(s))
++                return `"${s}"`;
++            else
++                return `${s}`;
++        })
++            .join(',');
++        this.url.searchParams.append(column, `in.(${cleanedValues})`);
++        return this;
++    }
++    /**
++     * Only relevant for jsonb, array, and range columns. Match only rows where
++     * `column` contains every element appearing in `value`.
++     *
++     * @param column - The jsonb, array, or range column to filter on
++     * @param value - The jsonb, array, or range value to filter with
++     */
++    contains(column, value) {
++        if (typeof value === 'string') {
++            // range types can be inclusive '[', ']' or exclusive '(', ')' so just
++            // keep it simple and accept a string
++            this.url.searchParams.append(column, `cs.${value}`);
++        }
++        else if (Array.isArray(value)) {
++            // array
++            this.url.searchParams.append(column, `cs.{${value.join(',')}}`);
++        }
++        else {
++            // json
++            this.url.searchParams.append(column, `cs.${JSON.stringify(value)}`);
++        }
++        return this;
++    }
++    /**
++     * Only relevant for jsonb, array, and range columns. Match only rows where
++     * every element appearing in `column` is contained by `value`.
++     *
++     * @param column - The jsonb, array, or range column to filter on
++     * @param value - The jsonb, array, or range value to filter with
++     */
++    containedBy(column, value) {
++        if (typeof value === 'string') {
++            // range
++            this.url.searchParams.append(column, `cd.${value}`);
++        }
++        else if (Array.isArray(value)) {
++            // array
++            this.url.searchParams.append(column, `cd.{${value.join(',')}}`);
++        }
++        else {
++            // json
++            this.url.searchParams.append(column, `cd.${JSON.stringify(value)}`);
++        }
++        return this;
++    }
++    /**
++     * Only relevant for range columns. Match only rows where every element in
++     * `column` is greater than any element in `range`.
++     *
++     * @param column - The range column to filter on
++     * @param range - The range to filter with
++     */
++    rangeGt(column, range) {
++        this.url.searchParams.append(column, `sr.${range}`);
++        return this;
++    }
++    /**
++     * Only relevant for range columns. Match only rows where every element in
++     * `column` is either contained in `range` or greater than any element in
++     * `range`.
++     *
++     * @param column - The range column to filter on
++     * @param range - The range to filter with
++     */
++    rangeGte(column, range) {
++        this.url.searchParams.append(column, `nxl.${range}`);
++        return this;
++    }
++    /**
++     * Only relevant for range columns. Match only rows where every element in
++     * `column` is less than any element in `range`.
++     *
++     * @param column - The range column to filter on
++     * @param range - The range to filter with
++     */
++    rangeLt(column, range) {
++        this.url.searchParams.append(column, `sl.${range}`);
++        return this;
++    }
++    /**
++     * Only relevant for range columns. Match only rows where every element in
++     * `column` is either contained in `range` or less than any element in
++     * `range`.
++     *
++     * @param column - The range column to filter on
++     * @param range - The range to filter with
++     */
++    rangeLte(column, range) {
++        this.url.searchParams.append(column, `nxr.${range}`);
++        return this;
++    }
++    /**
++     * Only relevant for range columns. Match only rows where `column` is
++     * mutually exclusive to `range` and there can be no element between the two
++     * ranges.
++     *
++     * @param column - The range column to filter on
++     * @param range - The range to filter with
++     */
++    rangeAdjacent(column, range) {
++        this.url.searchParams.append(column, `adj.${range}`);
++        return this;
++    }
++    /**
++     * Only relevant for array and range columns. Match only rows where
++     * `column` and `value` have an element in common.
++     *
++     * @param column - The array or range column to filter on
++     * @param value - The array or range value to filter with
++     */
++    overlaps(column, value) {
++        if (typeof value === 'string') {
++            // range
++            this.url.searchParams.append(column, `ov.${value}`);
++        }
++        else {
++            // array
++            this.url.searchParams.append(column, `ov.{${value.join(',')}}`);
++        }
++        return this;
++    }
++    /**
++     * Only relevant for text and tsvector columns. Match only rows where
++     * `column` matches the query string in `query`.
++     *
++     * @param column - The text or tsvector column to filter on
++     * @param query - The query text to match with
++     * @param options - Named parameters
++     * @param options.config - The text search configuration to use
++     * @param options.type - Change how the `query` text is interpreted
++     */
++    textSearch(column, query, { config, type } = {}) {
++        let typePart = '';
++        if (type === 'plain') {
++            typePart = 'pl';
++        }
++        else if (type === 'phrase') {
++            typePart = 'ph';
++        }
++        else if (type === 'websearch') {
++            typePart = 'w';
++        }
++        const configPart = config === undefined ? '' : `(${config})`;
++        this.url.searchParams.append(column, `${typePart}fts${configPart}.${query}`);
++        return this;
++    }
++    /**
++     * Match only rows where each column in `query` keys is equal to its
++     * associated value. Shorthand for multiple `.eq()`s.
++     *
++     * @param query - The object to filter with, with column names as keys mapped
++     * to their filter values
++     */
++    match(query) {
++        Object.entries(query).forEach(([column, value]) => {
++            this.url.searchParams.append(column, `eq.${value}`);
++        });
++        return this;
++    }
++    /**
++     * Match only rows which doesn't satisfy the filter.
++     *
++     * Unlike most filters, `opearator` and `value` are used as-is and need to
++     * follow [PostgREST
++     * syntax](https://postgrest.org/en/stable/api.html#operators). You also need
++     * to make sure they are properly sanitized.
++     *
++     * @param column - The column to filter on
++     * @param operator - The operator to be negated to filter with, following
++     * PostgREST syntax
++     * @param value - The value to filter with, following PostgREST syntax
++     */
++    not(column, operator, value) {
++        this.url.searchParams.append(column, `not.${operator}.${value}`);
++        return this;
++    }
++    /**
++     * Match only rows which satisfy at least one of the filters.
++     *
++     * Unlike most filters, `filters` is used as-is and needs to follow [PostgREST
++     * syntax](https://postgrest.org/en/stable/api.html#operators). You also need
++     * to make sure it's properly sanitized.
++     *
++     * It's currently not possible to do an `.or()` filter across multiple tables.
++     *
++     * @param filters - The filters to use, following PostgREST syntax
++     * @param options - Named parameters
++     * @param options.referencedTable - Set this to filter on referenced tables
++     * instead of the parent table
++     * @param options.foreignTable - Deprecated, use `referencedTable` instead
++     */
++    or(filters, { foreignTable, referencedTable = foreignTable, } = {}) {
++        const key = referencedTable ? `${referencedTable}.or` : 'or';
++        this.url.searchParams.append(key, `(${filters})`);
++        return this;
++    }
++    /**
++     * Match only rows which satisfy the filter. This is an escape hatch - you
++     * should use the specific filter methods wherever possible.
++     *
++     * Unlike most filters, `opearator` and `value` are used as-is and need to
++     * follow [PostgREST
++     * syntax](https://postgrest.org/en/stable/api.html#operators). You also need
++     * to make sure they are properly sanitized.
++     *
++     * @param column - The column to filter on
++     * @param operator - The operator to filter with, following PostgREST syntax
++     * @param value - The value to filter with, following PostgREST syntax
++     */
++    filter(column, operator, value) {
++        this.url.searchParams.append(column, `${operator}.${value}`);
++        return this;
++    }
++}
++//# sourceMappingURL=PostgrestFilterBuilder.js.map
+\ No newline at end of file
+diff --git a/dist/esm/PostgrestFilterBuilder.js.map b/dist/esm/PostgrestFilterBuilder.js.map
+new file mode 100644
+index 0000000000000000000000000000000000000000..c646516cff2678f4c7f5d2327c1eb9c53d2d7179
+--- /dev/null
++++ b/dist/esm/PostgrestFilterBuilder.js.map
+@@ -0,0 +1 @@
++{"version":3,"file":"PostgrestFilterBuilder.js","sourceRoot":"","sources":["../../src/PostgrestFilterBuilder.ts"],"names":[],"mappings":"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"}
+\ No newline at end of file
+diff --git a/dist/esm/PostgrestQueryBuilder.d.ts b/dist/esm/PostgrestQueryBuilder.d.ts
+new file mode 100644
+index 0000000000000000000000000000000000000000..e6bfe65a03b6192983a1baf917db5a7a6f65e497
+--- /dev/null
++++ b/dist/esm/PostgrestQueryBuilder.d.ts
+@@ -0,0 +1,117 @@
++import PostgrestFilterBuilder from './PostgrestFilterBuilder';
++import { GetResult } from './select-query-parser/result';
++import { Fetch, GenericSchema, GenericTable, GenericView } from './types';
++export default class PostgrestQueryBuilder<Schema extends GenericSchema, Relation extends GenericTable | GenericView, RelationName = unknown, Relationships = Relation extends {
++    Relationships: infer R;
++} ? R : unknown> {
++    url: URL;
++    headers: Record<string, string>;
++    schema?: string;
++    signal?: AbortSignal;
++    fetch?: Fetch;
++    constructor(url: URL, { headers, schema, fetch, }: {
++        headers?: Record<string, string>;
++        schema?: string;
++        fetch?: Fetch;
++    });
++    /**
++     * Perform a SELECT query on the table or view.
++     *
++     * @param columns - The columns to retrieve, separated by commas. Columns can be renamed when returned with `customName:columnName`
++     *
++     * @param options - Named parameters
++     *
++     * @param options.head - When set to `true`, `data` will not be returned.
++     * Useful if you only need the count.
++     *
++     * @param options.count - Count algorithm to use to count rows in the table or view.
++     *
++     * `"exact"`: Exact but slow count algorithm. Performs a `COUNT(*)` under the
++     * hood.
++     *
++     * `"planned"`: Approximated but fast count algorithm. Uses the Postgres
++     * statistics under the hood.
++     *
++     * `"estimated"`: Uses exact count for low numbers and planned count for high
++     * numbers.
++     */
++    select<Query extends string = '*', ResultOne = GetResult<Schema, Relation['Row'], RelationName, Relationships, Query>>(columns?: Query, { head, count, }?: {
++        head?: boolean;
++        count?: 'exact' | 'planned' | 'estimated';
++    }): PostgrestFilterBuilder<Schema, Relation['Row'], ResultOne[], RelationName, Relationships>;
++    insert<Row extends Relation extends {
++        Insert: unknown;
++    } ? Relation['Insert'] : never>(values: Row, options?: {
++        count?: 'exact' | 'planned' | 'estimated';
++    }): PostgrestFilterBuilder<Schema, Relation['Row'], null, RelationName, Relationships>;
++    insert<Row extends Relation extends {
++        Insert: unknown;
++    } ? Relation['Insert'] : never>(values: Row[], options?: {
++        count?: 'exact' | 'planned' | 'estimated';
++        defaultToNull?: boolean;
++    }): PostgrestFilterBuilder<Schema, Relation['Row'], null, RelationName, Relationships>;
++    upsert<Row extends Relation extends {
++        Insert: unknown;
++    } ? Relation['Insert'] : never>(values: Row, options?: {
++        onConflict?: string;
++        ignoreDuplicates?: boolean;
++        count?: 'exact' | 'planned' | 'estimated';
++    }): PostgrestFilterBuilder<Schema, Relation['Row'], null, RelationName, Relationships>;
++    upsert<Row extends Relation extends {
++        Insert: unknown;
++    } ? Relation['Insert'] : never>(values: Row[], options?: {
++        onConflict?: string;
++        ignoreDuplicates?: boolean;
++        count?: 'exact' | 'planned' | 'estimated';
++        defaultToNull?: boolean;
++    }): PostgrestFilterBuilder<Schema, Relation['Row'], null, RelationName, Relationships>;
++    /**
++     * Perform an UPDATE on the table or view.
++     *
++     * By default, updated rows are not returned. To return it, chain the call
++     * with `.select()` after filters.
++     *
++     * @param values - The values to update with
++     *
++     * @param options - Named parameters
++     *
++     * @param options.count - Count algorithm to use to count updated rows.
++     *
++     * `"exact"`: Exact but slow count algorithm. Performs a `COUNT(*)` under the
++     * hood.
++     *
++     * `"planned"`: Approximated but fast count algorithm. Uses the Postgres
++     * statistics under the hood.
++     *
++     * `"estimated"`: Uses exact count for low numbers and planned count for high
++     * numbers.
++     */
++    update<Row extends Relation extends {
++        Update: unknown;
++    } ? Relation['Update'] : never>(values: Row, { count, }?: {
++        count?: 'exact' | 'planned' | 'estimated';
++    }): PostgrestFilterBuilder<Schema, Relation['Row'], null, RelationName, Relationships>;
++    /**
++     * Perform a DELETE on the table or view.
++     *
++     * By default, deleted rows are not returned. To return it, chain the call
++     * with `.select()` after filters.
++     *
++     * @param options - Named parameters
++     *
++     * @param options.count - Count algorithm to use to count deleted rows.
++     *
++     * `"exact"`: Exact but slow count algorithm. Performs a `COUNT(*)` under the
++     * hood.
++     *
++     * `"planned"`: Approximated but fast count algorithm. Uses the Postgres
++     * statistics under the hood.
++     *
++     * `"estimated"`: Uses exact count for low numbers and planned count for high
++     * numbers.
++     */
++    delete({ count, }?: {
++        count?: 'exact' | 'planned' | 'estimated';
++    }): PostgrestFilterBuilder<Schema, Relation['Row'], null, RelationName, Relationships>;
++}
++//# sourceMappingURL=PostgrestQueryBuilder.d.ts.map
+\ No newline at end of file
+diff --git a/dist/esm/PostgrestQueryBuilder.d.ts.map b/dist/esm/PostgrestQueryBuilder.d.ts.map
+new file mode 100644
+index 0000000000000000000000000000000000000000..213424e9f8d547d3b19a6f02845d324bb4b16c3c
+--- /dev/null
++++ b/dist/esm/PostgrestQueryBuilder.d.ts.map
+@@ -0,0 +1 @@
++{"version":3,"file":"PostgrestQueryBuilder.d.ts","sourceRoot":"","sources":["../../src/PostgrestQueryBuilder.ts"],"names":[],"mappings":"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"}
+\ No newline at end of file
+diff --git a/dist/esm/PostgrestQueryBuilder.js b/dist/esm/PostgrestQueryBuilder.js
+new file mode 100644
+index 0000000000000000000000000000000000000000..a5b580d9c235c91f7e2ec087db08ad6b61c8f61f
+--- /dev/null
++++ b/dist/esm/PostgrestQueryBuilder.js
+@@ -0,0 +1,265 @@
++import PostgrestFilterBuilder from './PostgrestFilterBuilder';
++export default class PostgrestQueryBuilder {
++    constructor(url, { headers = {}, schema, fetch, }) {
++        this.url = url;
++        this.headers = headers;
++        this.schema = schema;
++        this.fetch = fetch;
++    }
++    /**
++     * Perform a SELECT query on the table or view.
++     *
++     * @param columns - The columns to retrieve, separated by commas. Columns can be renamed when returned with `customName:columnName`
++     *
++     * @param options - Named parameters
++     *
++     * @param options.head - When set to `true`, `data` will not be returned.
++     * Useful if you only need the count.
++     *
++     * @param options.count - Count algorithm to use to count rows in the table or view.
++     *
++     * `"exact"`: Exact but slow count algorithm. Performs a `COUNT(*)` under the
++     * hood.
++     *
++     * `"planned"`: Approximated but fast count algorithm. Uses the Postgres
++     * statistics under the hood.
++     *
++     * `"estimated"`: Uses exact count for low numbers and planned count for high
++     * numbers.
++     */
++    select(columns, { head = false, count, } = {}) {
++        const method = head ? 'HEAD' : 'GET';
++        // Remove whitespaces except when quoted
++        let quoted = false;
++        const cleanedColumns = (columns !== null && columns !== void 0 ? columns : '*')
++            .split('')
++            .map((c) => {
++            if (/\s/.test(c) && !quoted) {
++                return '';
++            }
++            if (c === '"') {
++                quoted = !quoted;
++            }
++            return c;
++        })
++            .join('');
++        this.url.searchParams.set('select', cleanedColumns);
++        if (count) {
++            this.headers['Prefer'] = `count=${count}`;
++        }
++        return new PostgrestFilterBuilder({
++            method,
++            url: this.url,
++            headers: this.headers,
++            schema: this.schema,
++            fetch: this.fetch,
++            allowEmpty: false,
++        });
++    }
++    /**
++     * Perform an INSERT into the table or view.
++     *
++     * By default, inserted rows are not returned. To return it, chain the call
++     * with `.select()`.
++     *
++     * @param values - The values to insert. Pass an object to insert a single row
++     * or an array to insert multiple rows.
++     *
++     * @param options - Named parameters
++     *
++     * @param options.count - Count algorithm to use to count inserted rows.
++     *
++     * `"exact"`: Exact but slow count algorithm. Performs a `COUNT(*)` under the
++     * hood.
++     *
++     * `"planned"`: Approximated but fast count algorithm. Uses the Postgres
++     * statistics under the hood.
++     *
++     * `"estimated"`: Uses exact count for low numbers and planned count for high
++     * numbers.
++     *
++     * @param options.defaultToNull - Make missing fields default to `null`.
++     * Otherwise, use the default value for the column. Only applies for bulk
++     * inserts.
++     */
++    insert(values, { count, defaultToNull = true, } = {}) {
++        const method = 'POST';
++        const prefersHeaders = [];
++        if (this.headers['Prefer']) {
++            prefersHeaders.push(this.headers['Prefer']);
++        }
++        if (count) {
++            prefersHeaders.push(`count=${count}`);
++        }
++        if (!defaultToNull) {
++            prefersHeaders.push('missing=default');
++        }
++        this.headers['Prefer'] = prefersHeaders.join(',');
++        if (Array.isArray(values)) {
++            const columns = values.reduce((acc, x) => acc.concat(Object.keys(x)), []);
++            if (columns.length > 0) {
++                const uniqueColumns = [...new Set(columns)].map((column) => `"${column}"`);
++                this.url.searchParams.set('columns', uniqueColumns.join(','));
++            }
++        }
++        return new PostgrestFilterBuilder({
++            method,
++            url: this.url,
++            headers: this.headers,
++            schema: this.schema,
++            body: values,
++            fetch: this.fetch,
++            allowEmpty: false,
++        });
++    }
++    /**
++     * Perform an UPSERT on the table or view. Depending on the column(s) passed
++     * to `onConflict`, `.upsert()` allows you to perform the equivalent of
++     * `.insert()` if a row with the corresponding `onConflict` columns doesn't
++     * exist, or if it does exist, perform an alternative action depending on
++     * `ignoreDuplicates`.
++     *
++     * By default, upserted rows are not returned. To return it, chain the call
++     * with `.select()`.
++     *
++     * @param values - The values to upsert with. Pass an object to upsert a
++     * single row or an array to upsert multiple rows.
++     *
++     * @param options - Named parameters
++     *
++     * @param options.onConflict - Comma-separated UNIQUE column(s) to specify how
++     * duplicate rows are determined. Two rows are duplicates if all the
++     * `onConflict` columns are equal.
++     *
++     * @param options.ignoreDuplicates - If `true`, duplicate rows are ignored. If
++     * `false`, duplicate rows are merged with existing rows.
++     *
++     * @param options.count - Count algorithm to use to count upserted rows.
++     *
++     * `"exact"`: Exact but slow count algorithm. Performs a `COUNT(*)` under the
++     * hood.
++     *
++     * `"planned"`: Approximated but fast count algorithm. Uses the Postgres
++     * statistics under the hood.
++     *
++     * `"estimated"`: Uses exact count for low numbers and planned count for high
++     * numbers.
++     *
++     * @param options.defaultToNull - Make missing fields default to `null`.
++     * Otherwise, use the default value for the column. This only applies when
++     * inserting new rows, not when merging with existing rows under
++     * `ignoreDuplicates: false`. This also only applies when doing bulk upserts.
++     */
++    upsert(values, { onConflict, ignoreDuplicates = false, count, defaultToNull = true, } = {}) {
++        const method = 'POST';
++        const prefersHeaders = [`resolution=${ignoreDuplicates ? 'ignore' : 'merge'}-duplicates`];
++        if (onConflict !== undefined)
++            this.url.searchParams.set('on_conflict', onConflict);
++        if (this.headers['Prefer']) {
++            prefersHeaders.push(this.headers['Prefer']);
++        }
++        if (count) {
++            prefersHeaders.push(`count=${count}`);
++        }
++        if (!defaultToNull) {
++            prefersHeaders.push('missing=default');
++        }
++        this.headers['Prefer'] = prefersHeaders.join(',');
++        if (Array.isArray(values)) {
++            const columns = values.reduce((acc, x) => acc.concat(Object.keys(x)), []);
++            if (columns.length > 0) {
++                const uniqueColumns = [...new Set(columns)].map((column) => `"${column}"`);
++                this.url.searchParams.set('columns', uniqueColumns.join(','));
++            }
++        }
++        return new PostgrestFilterBuilder({
++            method,
++            url: this.url,
++            headers: this.headers,
++            schema: this.schema,
++            body: values,
++            fetch: this.fetch,
++            allowEmpty: false,
++        });
++    }
++    /**
++     * Perform an UPDATE on the table or view.
++     *
++     * By default, updated rows are not returned. To return it, chain the call
++     * with `.select()` after filters.
++     *
++     * @param values - The values to update with
++     *
++     * @param options - Named parameters
++     *
++     * @param options.count - Count algorithm to use to count updated rows.
++     *
++     * `"exact"`: Exact but slow count algorithm. Performs a `COUNT(*)` under the
++     * hood.
++     *
++     * `"planned"`: Approximated but fast count algorithm. Uses the Postgres
++     * statistics under the hood.
++     *
++     * `"estimated"`: Uses exact count for low numbers and planned count for high
++     * numbers.
++     */
++    update(values, { count, } = {}) {
++        const method = 'PATCH';
++        const prefersHeaders = [];
++        if (this.headers['Prefer']) {
++            prefersHeaders.push(this.headers['Prefer']);
++        }
++        if (count) {
++            prefersHeaders.push(`count=${count}`);
++        }
++        this.headers['Prefer'] = prefersHeaders.join(',');
++        return new PostgrestFilterBuilder({
++            method,
++            url: this.url,
++            headers: this.headers,
++            schema: this.schema,
++            body: values,
++            fetch: this.fetch,
++            allowEmpty: false,
++        });
++    }
++    /**
++     * Perform a DELETE on the table or view.
++     *
++     * By default, deleted rows are not returned. To return it, chain the call
++     * with `.select()` after filters.
++     *
++     * @param options - Named parameters
++     *
++     * @param options.count - Count algorithm to use to count deleted rows.
++     *
++     * `"exact"`: Exact but slow count algorithm. Performs a `COUNT(*)` under the
++     * hood.
++     *
++     * `"planned"`: Approximated but fast count algorithm. Uses the Postgres
++     * statistics under the hood.
++     *
++     * `"estimated"`: Uses exact count for low numbers and planned count for high
++     * numbers.
++     */
++    delete({ count, } = {}) {
++        const method = 'DELETE';
++        const prefersHeaders = [];
++        if (count) {
++            prefersHeaders.push(`count=${count}`);
++        }
++        if (this.headers['Prefer']) {
++            prefersHeaders.unshift(this.headers['Prefer']);
++        }
++        this.headers['Prefer'] = prefersHeaders.join(',');
++        return new PostgrestFilterBuilder({
++            method,
++            url: this.url,
++            headers: this.headers,
++            schema: this.schema,
++            fetch: this.fetch,
++            allowEmpty: false,
++        });
++    }
++}
++//# sourceMappingURL=PostgrestQueryBuilder.js.map
+\ No newline at end of file
+diff --git a/dist/esm/PostgrestQueryBuilder.js.map b/dist/esm/PostgrestQueryBuilder.js.map
+new file mode 100644
+index 0000000000000000000000000000000000000000..7b511e29ec02bea1559e963054467b441a578968
+--- /dev/null
++++ b/dist/esm/PostgrestQueryBuilder.js.map
+@@ -0,0 +1 @@
++{"version":3,"file":"PostgrestQueryBuilder.js","sourceRoot":"","sources":["../../src/PostgrestQueryBuilder.ts"],"names":[],"mappings":"AACA,OAAO,sBAAsB,MAAM,0BAA0B,CAAA;AAI7D,MAAM,CAAC,OAAO,OAAO,qBAAqB;IAYxC,YACE,GAAQ,EACR,EACE,OAAO,GAAG,EAAE,EACZ,MAAM,EACN,KAAK,GAKN;QAED,IAAI,CAAC,GAAG,GAAG,GAAG,CAAA;QACd,IAAI,CAAC,OAAO,GAAG,OAAO,CAAA;QACtB,IAAI,CAAC,MAAM,GAAG,MAAM,CAAA;QACpB,IAAI,CAAC,KAAK,GAAG,KAAK,CAAA;IACpB,CAAC;IAED;;;;;;;;;;;;;;;;;;;;OAoBG;IACH,MAAM,CAIJ,OAAe,EACf,EACE,IAAI,GAAG,KAAK,EACZ,KAAK,MAIH,EAAE;QAEN,MAAM,MAAM,GAAG,IAAI,CAAC,CAAC,CAAC,MAAM,CAAC,CAAC,CAAC,KAAK,CAAA;QACpC,wCAAwC;QACxC,IAAI,MAAM,GAAG,KAAK,CAAA;QAClB,MAAM,cAAc,GAAG,CAAC,OAAO,aAAP,OAAO,cAAP,OAAO,GAAI,GAAG,CAAC;aACpC,KAAK,CAAC,EAAE,CAAC;aACT,GAAG,CAAC,CAAC,CAAC,EAAE,EAAE;YACT,IAAI,IAAI,CAAC,IAAI,CAAC,CAAC,CAAC,IAAI,CAAC,MAAM,EAAE;gBAC3B,OAAO,EAAE,CAAA;aACV;YACD,IAAI,CAAC,KAAK,GAAG,EAAE;gBACb,MAAM,GAAG,CAAC,MAAM,CAAA;aACjB;YACD,OAAO,CAAC,CAAA;QACV,CAAC,CAAC;aACD,IAAI,CAAC,EAAE,CAAC,CAAA;QACX,IAAI,CAAC,GAAG,CAAC,YAAY,CAAC,GAAG,CAAC,QAAQ,EAAE,cAAc,CAAC,CAAA;QACnD,IAAI,KAAK,EAAE;YACT,IAAI,CAAC,OAAO,CAAC,QAAQ,CAAC,GAAG,SAAS,KAAK,EAAE,CAAA;SAC1C;QAED,OAAO,IAAI,sBAAsB,CAAC;YAChC,MAAM;YACN,GAAG,EAAE,IAAI,CAAC,GAAG;YACb,OAAO,EAAE,IAAI,CAAC,OAAO;YACrB,MAAM,EAAE,IAAI,CAAC,MAAM;YACnB,KAAK,EAAE,IAAI,CAAC,KAAK;YACjB,UAAU,EAAE,KAAK;SAC0B,CAAC,CAAA;IAChD,CAAC;IAgBD;;;;;;;;;;;;;;;;;;;;;;;;;OAyBG;IACH,MAAM,CACJ,MAAmB,EACnB,EACE,KAAK,EACL,aAAa,GAAG,IAAI,MAIlB,EAAE;QAEN,MAAM,MAAM,GAAG,MAAM,CAAA;QAErB,MAAM,cAAc,GAAG,EAAE,CAAA;QACzB,IAAI,IAAI,CAAC,OAAO,CAAC,QAAQ,CAAC,EAAE;YAC1B,cAAc,CAAC,IAAI,CAAC,IAAI,CAAC,OAAO,CAAC,QAAQ,CAAC,CAAC,CAAA;SAC5C;QACD,IAAI,KAAK,EAAE;YACT,cAAc,CAAC,IAAI,CAAC,SAAS,KAAK,EAAE,CAAC,CAAA;SACtC;QACD,IAAI,CAAC,aAAa,EAAE;YAClB,cAAc,CAAC,IAAI,CAAC,iBAAiB,CAAC,CAAA;SACvC;QACD,IAAI,CAAC,OAAO,CAAC,QAAQ,CAAC,GAAG,cAAc,CAAC,IAAI,CAAC,GAAG,CAAC,CAAA;QAEjD,IAAI,KAAK,CAAC,OAAO,CAAC,MAAM,CAAC,EAAE;YACzB,MAAM,OAAO,GAAG,MAAM,CAAC,MAAM,CAAC,CAAC,GAAG,EAAE,CAAC,EAAE,EAAE,CAAC,GAAG,CAAC,MAAM,CAAC,MAAM,CAAC,IAAI,CAAC,CAAC,CAAC,CAAC,EAAE,EAAc,CAAC,CAAA;YACrF,IAAI,OAAO,CAAC,MAAM,GAAG,CAAC,EAAE;gBACtB,MAAM,aAAa,GAAG,CAAC,GAAG,IAAI,GAAG,CAAC,OAAO,CAAC,CAAC,CAAC,GAAG,CAAC,CAAC,MAAM,EAAE,EAAE,CAAC,IAAI,MAAM,GAAG,CAAC,CAAA;gBAC1E,IAAI,CAAC,GAAG,CAAC,YAAY,CAAC,GAAG,CAAC,SAAS,EAAE,aAAa,CAAC,IAAI,CAAC,GAAG,CAAC,CAAC,CAAA;aAC9D;SACF;QAED,OAAO,IAAI,sBAAsB,CAAC;YAChC,MAAM;YACN,GAAG,EAAE,IAAI,CAAC,GAAG;YACb,OAAO,EAAE,IAAI,CAAC,OAAO;YACrB,MAAM,EAAE,IAAI,CAAC,MAAM;YACnB,IAAI,EAAE,MAAM;YACZ,KAAK,EAAE,IAAI,CAAC,KAAK;YACjB,UAAU,EAAE,KAAK;SACmB,CAAC,CAAA;IACzC,CAAC;IAoBD;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;OAqCG;IACH,MAAM,CACJ,MAAmB,EACnB,EACE,UAAU,EACV,gBAAgB,GAAG,KAAK,EACxB,KAAK,EACL,aAAa,GAAG,IAAI,MAMlB,EAAE;QAEN,MAAM,MAAM,GAAG,MAAM,CAAA;QAErB,MAAM,cAAc,GAAG,CAAC,cAAc,gBAAgB,CAAC,CAAC,CAAC,QAAQ,CAAC,CAAC,CAAC,OAAO,aAAa,CAAC,CAAA;QAEzF,IAAI,UAAU,KAAK,SAAS;YAAE,IAAI,CAAC,GAAG,CAAC,YAAY,CAAC,GAAG,CAAC,aAAa,EAAE,UAAU,CAAC,CAAA;QAClF,IAAI,IAAI,CAAC,OAAO,CAAC,QAAQ,CAAC,EAAE;YAC1B,cAAc,CAAC,IAAI,CAAC,IAAI,CAAC,OAAO,CAAC,QAAQ,CAAC,CAAC,CAAA;SAC5C;QACD,IAAI,KAAK,EAAE;YACT,cAAc,CAAC,IAAI,CAAC,SAAS,KAAK,EAAE,CAAC,CAAA;SACtC;QACD,IAAI,CAAC,aAAa,EAAE;YAClB,cAAc,CAAC,IAAI,CAAC,iBAAiB,CAAC,CAAA;SACvC;QACD,IAAI,CAAC,OAAO,CAAC,QAAQ,CAAC,GAAG,cAAc,CAAC,IAAI,CAAC,GAAG,CAAC,CAAA;QAEjD,IAAI,KAAK,CAAC,OAAO,CAAC,MAAM,CAAC,EAAE;YACzB,MAAM,OAAO,GAAG,MAAM,CAAC,MAAM,CAAC,CAAC,GAAG,EAAE,CAAC,EAAE,EAAE,CAAC,GAAG,CAAC,MAAM,CAAC,MAAM,CAAC,IAAI,CAAC,CAAC,CAAC,CAAC,EAAE,EAAc,CAAC,CAAA;YACrF,IAAI,OAAO,CAAC,MAAM,GAAG,CAAC,EAAE;gBACtB,MAAM,aAAa,GAAG,CAAC,GAAG,IAAI,GAAG,CAAC,OAAO,CAAC,CAAC,CAAC,GAAG,CAAC,CAAC,MAAM,EAAE,EAAE,CAAC,IAAI,MAAM,GAAG,CAAC,CAAA;gBAC1E,IAAI,CAAC,GAAG,CAAC,YAAY,CAAC,GAAG,CAAC,SAAS,EAAE,aAAa,CAAC,IAAI,CAAC,GAAG,CAAC,CAAC,CAAA;aAC9D;SACF;QAED,OAAO,IAAI,sBAAsB,CAAC;YAChC,MAAM;YACN,GAAG,EAAE,IAAI,CAAC,GAAG;YACb,OAAO,EAAE,IAAI,CAAC,OAAO;YACrB,MAAM,EAAE,IAAI,CAAC,MAAM;YACnB,IAAI,EAAE,MAAM;YACZ,KAAK,EAAE,IAAI,CAAC,KAAK;YACjB,UAAU,EAAE,KAAK;SACmB,CAAC,CAAA;IACzC,CAAC;IAED;;;;;;;;;;;;;;;;;;;;OAoBG;IACH,MAAM,CACJ,MAAW,EACX,EACE,KAAK,MAGH,EAAE;QAEN,MAAM,MAAM,GAAG,OAAO,CAAA;QACtB,MAAM,cAAc,GAAG,EAAE,CAAA;QACzB,IAAI,IAAI,CAAC,OAAO,CAAC,QAAQ,CAAC,EAAE;YAC1B,cAAc,CAAC,IAAI,CAAC,IAAI,CAAC,OAAO,CAAC,QAAQ,CAAC,CAAC,CAAA;SAC5C;QACD,IAAI,KAAK,EAAE;YACT,cAAc,CAAC,IAAI,CAAC,SAAS,KAAK,EAAE,CAAC,CAAA;SACtC;QACD,IAAI,CAAC,OAAO,CAAC,QAAQ,CAAC,GAAG,cAAc,CAAC,IAAI,CAAC,GAAG,CAAC,CAAA;QAEjD,OAAO,IAAI,sBAAsB,CAAC;YAChC,MAAM;YACN,GAAG,EAAE,IAAI,CAAC,GAAG;YACb,OAAO,EAAE,IAAI,CAAC,OAAO;YACrB,MAAM,EAAE,IAAI,CAAC,MAAM;YACnB,IAAI,EAAE,MAAM;YACZ,KAAK,EAAE,IAAI,CAAC,KAAK;YACjB,UAAU,EAAE,KAAK;SACmB,CAAC,CAAA;IACzC,CAAC;IAED;;;;;;;;;;;;;;;;;;OAkBG;IACH,MAAM,CAAC,EACL,KAAK,MAGH,EAAE;QACJ,MAAM,MAAM,GAAG,QAAQ,CAAA;QACvB,MAAM,cAAc,GAAG,EAAE,CAAA;QACzB,IAAI,KAAK,EAAE;YACT,cAAc,CAAC,IAAI,CAAC,SAAS,KAAK,EAAE,CAAC,CAAA;SACtC;QACD,IAAI,IAAI,CAAC,OAAO,CAAC,QAAQ,CAAC,EAAE;YAC1B,cAAc,CAAC,OAAO,CAAC,IAAI,CAAC,OAAO,CAAC,QAAQ,CAAC,CAAC,CAAA;SAC/C;QACD,IAAI,CAAC,OAAO,CAAC,QAAQ,CAAC,GAAG,cAAc,CAAC,IAAI,CAAC,GAAG,CAAC,CAAA;QAEjD,OAAO,IAAI,sBAAsB,CAAC;YAChC,MAAM;YACN,GAAG,EAAE,IAAI,CAAC,GAAG;YACb,OAAO,EAAE,IAAI,CAAC,OAAO;YACrB,MAAM,EAAE,IAAI,CAAC,MAAM;YACnB,KAAK,EAAE,IAAI,CAAC,KAAK;YACjB,UAAU,EAAE,KAAK;SACmB,CAAC,CAAA;IACzC,CAAC;CACF"}
+\ No newline at end of file
+diff --git a/dist/esm/PostgrestTransformBuilder.d.ts b/dist/esm/PostgrestTransformBuilder.d.ts
+new file mode 100644
+index 0000000000000000000000000000000000000000..e2d1e3efc9cbd8a77a5b7459bb251b30bbb9e869
+--- /dev/null
++++ b/dist/esm/PostgrestTransformBuilder.d.ts
+@@ -0,0 +1,148 @@
++import PostgrestBuilder from './PostgrestBuilder';
++import { GetResult } from './select-query-parser/result';
++import { GenericSchema } from './types';
++export default class PostgrestTransformBuilder<Schema extends GenericSchema, Row extends Record<string, unknown>, Result, RelationName = unknown, Relationships = unknown> extends PostgrestBuilder<Result> {
++    /**
++     * Perform a SELECT on the query result.
++     *
++     * By default, `.insert()`, `.update()`, `.upsert()`, and `.delete()` do not
++     * return modified rows. By calling this method, modified rows are returned in
++     * `data`.
++     *
++     * @param columns - The columns to retrieve, separated by commas
++     */
++    select<Query extends string = '*', NewResultOne = GetResult<Schema, Row, RelationName, Relationships, Query>>(columns?: Query): PostgrestTransformBuilder<Schema, Row, NewResultOne[], RelationName, Relationships>;
++    order<ColumnName extends string & keyof Row>(column: ColumnName, options?: {
++        ascending?: boolean;
++        nullsFirst?: boolean;
++        referencedTable?: undefined;
++    }): this;
++    order(column: string, options?: {
++        ascending?: boolean;
++        nullsFirst?: boolean;
++        referencedTable?: string;
++    }): this;
++    /**
++     * @deprecated Use `options.referencedTable` instead of `options.foreignTable`
++     */
++    order<ColumnName extends string & keyof Row>(column: ColumnName, options?: {
++        ascending?: boolean;
++        nullsFirst?: boolean;
++        foreignTable?: undefined;
++    }): this;
++    /**
++     * @deprecated Use `options.referencedTable` instead of `options.foreignTable`
++     */
++    order(column: string, options?: {
++        ascending?: boolean;
++        nullsFirst?: boolean;
++        foreignTable?: string;
++    }): this;
++    /**
++     * Limit the query result by `count`.
++     *
++     * @param count - The maximum number of rows to return
++     * @param options - Named parameters
++     * @param options.referencedTable - Set this to limit rows of referenced
++     * tables instead of the parent table
++     * @param options.foreignTable - Deprecated, use `options.referencedTable`
++     * instead
++     */
++    limit(count: number, { foreignTable, referencedTable, }?: {
++        foreignTable?: string;
++        referencedTable?: string;
++    }): this;
++    /**
++     * Limit the query result by starting at an offset `from` and ending at the offset `to`.
++     * Only records within this range are returned.
++     * This respects the query order and if there is no order clause the range could behave unexpectedly.
++     * The `from` and `to` values are 0-based and inclusive: `range(1, 3)` will include the second, third
++     * and fourth rows of the query.
++     *
++     * @param from - The starting index from which to limit the result
++     * @param to - The last index to which to limit the result
++     * @param options - Named parameters
++     * @param options.referencedTable - Set this to limit rows of referenced
++     * tables instead of the parent table
++     * @param options.foreignTable - Deprecated, use `options.referencedTable`
++     * instead
++     */
++    range(from: number, to: number, { foreignTable, referencedTable, }?: {
++        foreignTable?: string;
++        referencedTable?: string;
++    }): this;
++    /**
++     * Set the AbortSignal for the fetch request.
++     *
++     * @param signal - The AbortSignal to use for the fetch request
++     */
++    abortSignal(signal: AbortSignal): this;
++    /**
++     * Return `data` as a single object instead of an array of objects.
++     *
++     * Query result must be one row (e.g. using `.limit(1)`), otherwise this
++     * returns an error.
++     */
++    single<ResultOne = Result extends (infer ResultOne)[] ? ResultOne : never>(): PostgrestBuilder<ResultOne>;
++    /**
++     * Return `data` as a single object instead of an array of objects.
++     *
++     * Query result must be zero or one row (e.g. using `.limit(1)`), otherwise
++     * this returns an error.
++     */
++    maybeSingle<ResultOne = Result extends (infer ResultOne)[] ? ResultOne : never>(): PostgrestBuilder<ResultOne | null>;
++    /**
++     * Return `data` as a string in CSV format.
++     */
++    csv(): PostgrestBuilder<string>;
++    /**
++     * Return `data` as an object in [GeoJSON](https://geojson.org) format.
++     */
++    geojson(): PostgrestBuilder<Record<string, unknown>>;
++    /**
++     * Return `data` as the EXPLAIN plan for the query.
++     *
++     * You need to enable the
++     * [db_plan_enabled](https://supabase.com/docs/guides/database/debugging-performance#enabling-explain)
++     * setting before using this method.
++     *
++     * @param options - Named parameters
++     *
++     * @param options.analyze - If `true`, the query will be executed and the
++     * actual run time will be returned
++     *
++     * @param options.verbose - If `true`, the query identifier will be returned
++     * and `data` will include the output columns of the query
++     *
++     * @param options.settings - If `true`, include information on configuration
++     * parameters that affect query planning
++     *
++     * @param options.buffers - If `true`, include information on buffer usage
++     *
++     * @param options.wal - If `true`, include information on WAL record generation
++     *
++     * @param options.format - The format of the output, can be `"text"` (default)
++     * or `"json"`
++     */
++    explain({ analyze, verbose, settings, buffers, wal, format, }?: {
++        analyze?: boolean;
++        verbose?: boolean;
++        settings?: boolean;
++        buffers?: boolean;
++        wal?: boolean;
++        format?: 'json' | 'text';
++    }): PostgrestBuilder<Record<string, unknown>[]> | PostgrestBuilder<string>;
++    /**
++     * Rollback the query.
++     *
++     * `data` will still be returned, but the query is not committed.
++     */
++    rollback(): this;
++    /**
++     * Override the type of the returned `data`.
++     *
++     * @typeParam NewResult - The new result type to override with
++     */
++    returns<NewResult>(): PostgrestTransformBuilder<Schema, Row, NewResult, RelationName, Relationships>;
++}
++//# sourceMappingURL=PostgrestTransformBuilder.d.ts.map
+\ No newline at end of file
+diff --git a/dist/esm/PostgrestTransformBuilder.d.ts.map b/dist/esm/PostgrestTransformBuilder.d.ts.map
+new file mode 100644
+index 0000000000000000000000000000000000000000..0bb039b3c2d442f839f0dd6492c008a61b8265b9
+--- /dev/null
++++ b/dist/esm/PostgrestTransformBuilder.d.ts.map
+@@ -0,0 +1 @@
++{"version":3,"file":"PostgrestTransformBuilder.d.ts","sourceRoot":"","sources":["../../src/PostgrestTransformBuilder.ts"],"names":[],"mappings":"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"}
+\ No newline at end of file
+diff --git a/dist/esm/PostgrestTransformBuilder.js b/dist/esm/PostgrestTransformBuilder.js
+new file mode 100644
+index 0000000000000000000000000000000000000000..2ea6bef8b5962a975ed9e581cbe36ed6fa60d66e
+--- /dev/null
++++ b/dist/esm/PostgrestTransformBuilder.js
+@@ -0,0 +1,215 @@
++import PostgrestBuilder from './PostgrestBuilder';
++export default class PostgrestTransformBuilder extends PostgrestBuilder {
++    /**
++     * Perform a SELECT on the query result.
++     *
++     * By default, `.insert()`, `.update()`, `.upsert()`, and `.delete()` do not
++     * return modified rows. By calling this method, modified rows are returned in
++     * `data`.
++     *
++     * @param columns - The columns to retrieve, separated by commas
++     */
++    select(columns) {
++        // Remove whitespaces except when quoted
++        let quoted = false;
++        const cleanedColumns = (columns !== null && columns !== void 0 ? columns : '*')
++            .split('')
++            .map((c) => {
++            if (/\s/.test(c) && !quoted) {
++                return '';
++            }
++            if (c === '"') {
++                quoted = !quoted;
++            }
++            return c;
++        })
++            .join('');
++        this.url.searchParams.set('select', cleanedColumns);
++        if (this.headers['Prefer']) {
++            this.headers['Prefer'] += ',';
++        }
++        this.headers['Prefer'] += 'return=representation';
++        return this;
++    }
++    /**
++     * Order the query result by `column`.
++     *
++     * You can call this method multiple times to order by multiple columns.
++     *
++     * You can order referenced tables, but it only affects the ordering of the
++     * parent table if you use `!inner` in the query.
++     *
++     * @param column - The column to order by
++     * @param options - Named parameters
++     * @param options.ascending - If `true`, the result will be in ascending order
++     * @param options.nullsFirst - If `true`, `null`s appear first. If `false`,
++     * `null`s appear last.
++     * @param options.referencedTable - Set this to order a referenced table by
++     * its columns
++     * @param options.foreignTable - Deprecated, use `options.referencedTable`
++     * instead
++     */
++    order(column, { ascending = true, nullsFirst, foreignTable, referencedTable = foreignTable, } = {}) {
++        const key = referencedTable ? `${referencedTable}.order` : 'order';
++        const existingOrder = this.url.searchParams.get(key);
++        this.url.searchParams.set(key, `${existingOrder ? `${existingOrder},` : ''}${column}.${ascending ? 'asc' : 'desc'}${nullsFirst === undefined ? '' : nullsFirst ? '.nullsfirst' : '.nullslast'}`);
++        return this;
++    }
++    /**
++     * Limit the query result by `count`.
++     *
++     * @param count - The maximum number of rows to return
++     * @param options - Named parameters
++     * @param options.referencedTable - Set this to limit rows of referenced
++     * tables instead of the parent table
++     * @param options.foreignTable - Deprecated, use `options.referencedTable`
++     * instead
++     */
++    limit(count, { foreignTable, referencedTable = foreignTable, } = {}) {
++        const key = typeof referencedTable === 'undefined' ? 'limit' : `${referencedTable}.limit`;
++        this.url.searchParams.set(key, `${count}`);
++        return this;
++    }
++    /**
++     * Limit the query result by starting at an offset `from` and ending at the offset `to`.
++     * Only records within this range are returned.
++     * This respects the query order and if there is no order clause the range could behave unexpectedly.
++     * The `from` and `to` values are 0-based and inclusive: `range(1, 3)` will include the second, third
++     * and fourth rows of the query.
++     *
++     * @param from - The starting index from which to limit the result
++     * @param to - The last index to which to limit the result
++     * @param options - Named parameters
++     * @param options.referencedTable - Set this to limit rows of referenced
++     * tables instead of the parent table
++     * @param options.foreignTable - Deprecated, use `options.referencedTable`
++     * instead
++     */
++    range(from, to, { foreignTable, referencedTable = foreignTable, } = {}) {
++        const keyOffset = typeof referencedTable === 'undefined' ? 'offset' : `${referencedTable}.offset`;
++        const keyLimit = typeof referencedTable === 'undefined' ? 'limit' : `${referencedTable}.limit`;
++        this.url.searchParams.set(keyOffset, `${from}`);
++        // Range is inclusive, so add 1
++        this.url.searchParams.set(keyLimit, `${to - from + 1}`);
++        return this;
++    }
++    /**
++     * Set the AbortSignal for the fetch request.
++     *
++     * @param signal - The AbortSignal to use for the fetch request
++     */
++    abortSignal(signal) {
++        this.signal = signal;
++        return this;
++    }
++    /**
++     * Return `data` as a single object instead of an array of objects.
++     *
++     * Query result must be one row (e.g. using `.limit(1)`), otherwise this
++     * returns an error.
++     */
++    single() {
++        this.headers['Accept'] = 'application/vnd.pgrst.object+json';
++        return this;
++    }
++    /**
++     * Return `data` as a single object instead of an array of objects.
++     *
++     * Query result must be zero or one row (e.g. using `.limit(1)`), otherwise
++     * this returns an error.
++     */
++    maybeSingle() {
++        // Temporary partial fix for https://github.com/supabase/postgrest-js/issues/361
++        // Issue persists e.g. for `.insert([...]).select().maybeSingle()`
++        if (this.method === 'GET') {
++            this.headers['Accept'] = 'application/json';
++        }
++        else {
++            this.headers['Accept'] = 'application/vnd.pgrst.object+json';
++        }
++        this.isMaybeSingle = true;
++        return this;
++    }
++    /**
++     * Return `data` as a string in CSV format.
++     */
++    csv() {
++        this.headers['Accept'] = 'text/csv';
++        return this;
++    }
++    /**
++     * Return `data` as an object in [GeoJSON](https://geojson.org) format.
++     */
++    geojson() {
++        this.headers['Accept'] = 'application/geo+json';
++        return this;
++    }
++    /**
++     * Return `data` as the EXPLAIN plan for the query.
++     *
++     * You need to enable the
++     * [db_plan_enabled](https://supabase.com/docs/guides/database/debugging-performance#enabling-explain)
++     * setting before using this method.
++     *
++     * @param options - Named parameters
++     *
++     * @param options.analyze - If `true`, the query will be executed and the
++     * actual run time will be returned
++     *
++     * @param options.verbose - If `true`, the query identifier will be returned
++     * and `data` will include the output columns of the query
++     *
++     * @param options.settings - If `true`, include information on configuration
++     * parameters that affect query planning
++     *
++     * @param options.buffers - If `true`, include information on buffer usage
++     *
++     * @param options.wal - If `true`, include information on WAL record generation
++     *
++     * @param options.format - The format of the output, can be `"text"` (default)
++     * or `"json"`
++     */
++    explain({ analyze = false, verbose = false, settings = false, buffers = false, wal = false, format = 'text', } = {}) {
++        var _a;
++        const options = [
++            analyze ? 'analyze' : null,
++            verbose ? 'verbose' : null,
++            settings ? 'settings' : null,
++            buffers ? 'buffers' : null,
++            wal ? 'wal' : null,
++        ]
++            .filter(Boolean)
++            .join('|');
++        // An Accept header can carry multiple media types but postgrest-js always sends one
++        const forMediatype = (_a = this.headers['Accept']) !== null && _a !== void 0 ? _a : 'application/json';
++        this.headers['Accept'] = `application/vnd.pgrst.plan+${format}; for="${forMediatype}"; options=${options};`;
++        if (format === 'json')
++            return this;
++        else
++            return this;
++    }
++    /**
++     * Rollback the query.
++     *
++     * `data` will still be returned, but the query is not committed.
++     */
++    rollback() {
++        var _a;
++        if (((_a = this.headers['Prefer']) !== null && _a !== void 0 ? _a : '').trim().length > 0) {
++            this.headers['Prefer'] += ',tx=rollback';
++        }
++        else {
++            this.headers['Prefer'] = 'tx=rollback';
++        }
++        return this;
++    }
++    /**
++     * Override the type of the returned `data`.
++     *
++     * @typeParam NewResult - The new result type to override with
++     */
++    returns() {
++        return this;
++    }
++}
++//# sourceMappingURL=PostgrestTransformBuilder.js.map
+\ No newline at end of file
+diff --git a/dist/esm/PostgrestTransformBuilder.js.map b/dist/esm/PostgrestTransformBuilder.js.map
+new file mode 100644
+index 0000000000000000000000000000000000000000..1936404895d63eb170ca778b4380529cf99e6a9e
+--- /dev/null
++++ b/dist/esm/PostgrestTransformBuilder.js.map
+@@ -0,0 +1 @@
++{"version":3,"file":"PostgrestTransformBuilder.js","sourceRoot":"","sources":["../../src/PostgrestTransformBuilder.ts"],"names":[],"mappings":"AAAA,OAAO,gBAAgB,MAAM,oBAAoB,CAAA;AAIjD,MAAM,CAAC,OAAO,OAAO,yBAMnB,SAAQ,gBAAwB;IAChC;;;;;;;;OAQG;IACH,MAAM,CAIJ,OAAe;QAEf,wCAAwC;QACxC,IAAI,MAAM,GAAG,KAAK,CAAA;QAClB,MAAM,cAAc,GAAG,CAAC,OAAO,aAAP,OAAO,cAAP,OAAO,GAAI,GAAG,CAAC;aACpC,KAAK,CAAC,EAAE,CAAC;aACT,GAAG,CAAC,CAAC,CAAC,EAAE,EAAE;YACT,IAAI,IAAI,CAAC,IAAI,CAAC,CAAC,CAAC,IAAI,CAAC,MAAM,EAAE;gBAC3B,OAAO,EAAE,CAAA;aACV;YACD,IAAI,CAAC,KAAK,GAAG,EAAE;gBACb,MAAM,GAAG,CAAC,MAAM,CAAA;aACjB;YACD,OAAO,CAAC,CAAA;QACV,CAAC,CAAC;aACD,IAAI,CAAC,EAAE,CAAC,CAAA;QACX,IAAI,CAAC,GAAG,CAAC,YAAY,CAAC,GAAG,CAAC,QAAQ,EAAE,cAAc,CAAC,CAAA;QACnD,IAAI,IAAI,CAAC,OAAO,CAAC,QAAQ,CAAC,EAAE;YAC1B,IAAI,CAAC,OAAO,CAAC,QAAQ,CAAC,IAAI,GAAG,CAAA;SAC9B;QACD,IAAI,CAAC,OAAO,CAAC,QAAQ,CAAC,IAAI,uBAAuB,CAAA;QACjD,OAAO,IAMN,CAAA;IACH,CAAC;IAwBD;;;;;;;;;;;;;;;;;OAiBG;IACH,KAAK,CACH,MAAc,EACd,EACE,SAAS,GAAG,IAAI,EAChB,UAAU,EACV,YAAY,EACZ,eAAe,GAAG,YAAY,MAM5B,EAAE;QAEN,MAAM,GAAG,GAAG,eAAe,CAAC,CAAC,CAAC,GAAG,eAAe,QAAQ,CAAC,CAAC,CAAC,OAAO,CAAA;QAClE,MAAM,aAAa,GAAG,IAAI,CAAC,GAAG,CAAC,YAAY,CAAC,GAAG,CAAC,GAAG,CAAC,CAAA;QAEpD,IAAI,CAAC,GAAG,CAAC,YAAY,CAAC,GAAG,CACvB,GAAG,EACH,GAAG,aAAa,CAAC,CAAC,CAAC,GAAG,aAAa,GAAG,CAAC,CAAC,CAAC,EAAE,GAAG,MAAM,IAAI,SAAS,CAAC,CAAC,CAAC,KAAK,CAAC,CAAC,CAAC,MAAM,GAChF,UAAU,KAAK,SAAS,CAAC,CAAC,CAAC,EAAE,CAAC,CAAC,CAAC,UAAU,CAAC,CAAC,CAAC,aAAa,CAAC,CAAC,CAAC,YAC/D,EAAE,CACH,CAAA;QACD,OAAO,IAAI,CAAA;IACb,CAAC;IAED;;;;;;;;;OASG;IACH,KAAK,CACH,KAAa,EACb,EACE,YAAY,EACZ,eAAe,GAAG,YAAY,MACyB,EAAE;QAE3D,MAAM,GAAG,GAAG,OAAO,eAAe,KAAK,WAAW,CAAC,CAAC,CAAC,OAAO,CAAC,CAAC,CAAC,GAAG,eAAe,QAAQ,CAAA;QACzF,IAAI,CAAC,GAAG,CAAC,YAAY,CAAC,GAAG,CAAC,GAAG,EAAE,GAAG,KAAK,EAAE,CAAC,CAAA;QAC1C,OAAO,IAAI,CAAA;IACb,CAAC;IAED;;;;;;;;;;;;;;OAcG;IACH,KAAK,CACH,IAAY,EACZ,EAAU,EACV,EACE,YAAY,EACZ,eAAe,GAAG,YAAY,MACyB,EAAE;QAE3D,MAAM,SAAS,GACb,OAAO,eAAe,KAAK,WAAW,CAAC,CAAC,CAAC,QAAQ,CAAC,CAAC,CAAC,GAAG,eAAe,SAAS,CAAA;QACjF,MAAM,QAAQ,GAAG,OAAO,eAAe,KAAK,WAAW,CAAC,CAAC,CAAC,OAAO,CAAC,CAAC,CAAC,GAAG,eAAe,QAAQ,CAAA;QAC9F,IAAI,CAAC,GAAG,CAAC,YAAY,CAAC,GAAG,CAAC,SAAS,EAAE,GAAG,IAAI,EAAE,CAAC,CAAA;QAC/C,+BAA+B;QAC/B,IAAI,CAAC,GAAG,CAAC,YAAY,CAAC,GAAG,CAAC,QAAQ,EAAE,GAAG,EAAE,GAAG,IAAI,GAAG,CAAC,EAAE,CAAC,CAAA;QACvD,OAAO,IAAI,CAAA;IACb,CAAC;IAED;;;;OAIG;IACH,WAAW,CAAC,MAAmB;QAC7B,IAAI,CAAC,MAAM,GAAG,MAAM,CAAA;QACpB,OAAO,IAAI,CAAA;IACb,CAAC;IAED;;;;;OAKG;IACH,MAAM;QAGJ,IAAI,CAAC,OAAO,CAAC,QAAQ,CAAC,GAAG,mCAAmC,CAAA;QAC5D,OAAO,IAAmC,CAAA;IAC5C,CAAC;IAED;;;;;OAKG;IACH,WAAW;QAGT,gFAAgF;QAChF,kEAAkE;QAClE,IAAI,IAAI,CAAC,MAAM,KAAK,KAAK,EAAE;YACzB,IAAI,CAAC,OAAO,CAAC,QAAQ,CAAC,GAAG,kBAAkB,CAAA;SAC5C;aAAM;YACL,IAAI,CAAC,OAAO,CAAC,QAAQ,CAAC,GAAG,mCAAmC,CAAA;SAC7D;QACD,IAAI,CAAC,aAAa,GAAG,IAAI,CAAA;QACzB,OAAO,IAA0C,CAAA;IACnD,CAAC;IAED;;OAEG;IACH,GAAG;QACD,IAAI,CAAC,OAAO,CAAC,QAAQ,CAAC,GAAG,UAAU,CAAA;QACnC,OAAO,IAAgC,CAAA;IACzC,CAAC;IAED;;OAEG;IACH,OAAO;QACL,IAAI,CAAC,OAAO,CAAC,QAAQ,CAAC,GAAG,sBAAsB,CAAA;QAC/C,OAAO,IAAiD,CAAA;IAC1D,CAAC;IAED;;;;;;;;;;;;;;;;;;;;;;;;OAwBG;IACH,OAAO,CAAC,EACN,OAAO,GAAG,KAAK,EACf,OAAO,GAAG,KAAK,EACf,QAAQ,GAAG,KAAK,EAChB,OAAO,GAAG,KAAK,EACf,GAAG,GAAG,KAAK,EACX,MAAM,GAAG,MAAM,MAQb,EAAE;;QACJ,MAAM,OAAO,GAAG;YACd,OAAO,CAAC,CAAC,CAAC,SAAS,CAAC,CAAC,CAAC,IAAI;YAC1B,OAAO,CAAC,CAAC,CAAC,SAAS,CAAC,CAAC,CAAC,IAAI;YAC1B,QAAQ,CAAC,CAAC,CAAC,UAAU,CAAC,CAAC,CAAC,IAAI;YAC5B,OAAO,CAAC,CAAC,CAAC,SAAS,CAAC,CAAC,CAAC,IAAI;YAC1B,GAAG,CAAC,CAAC,CAAC,KAAK,CAAC,CAAC,CAAC,IAAI;SACnB;aACE,MAAM,CAAC,OAAO,CAAC;aACf,IAAI,CAAC,GAAG,CAAC,CAAA;QACZ,oFAAoF;QACpF,MAAM,YAAY,GAAG,MAAA,IAAI,CAAC,OAAO,CAAC,QAAQ,CAAC,mCAAI,kBAAkB,CAAA;QACjE,IAAI,CAAC,OAAO,CACV,QAAQ,CACT,GAAG,8BAA8B,MAAM,UAAU,YAAY,cAAc,OAAO,GAAG,CAAA;QACtF,IAAI,MAAM,KAAK,MAAM;YAAE,OAAO,IAAmD,CAAA;;YAC5E,OAAO,IAAgC,CAAA;IAC9C,CAAC;IAED;;;;OAIG;IACH,QAAQ;;QACN,IAAI,CAAC,MAAA,IAAI,CAAC,OAAO,CAAC,QAAQ,CAAC,mCAAI,EAAE,CAAC,CAAC,IAAI,EAAE,CAAC,MAAM,GAAG,CAAC,EAAE;YACpD,IAAI,CAAC,OAAO,CAAC,QAAQ,CAAC,IAAI,cAAc,CAAA;SACzC;aAAM;YACL,IAAI,CAAC,OAAO,CAAC,QAAQ,CAAC,GAAG,aAAa,CAAA;SACvC;QACD,OAAO,IAAI,CAAA;IACb,CAAC;IAED;;;;OAIG;IACH,OAAO;QAOL,OAAO,IAMN,CAAA;IACH,CAAC;CACF"}
+\ No newline at end of file
+diff --git a/dist/esm/constants.d.ts b/dist/esm/constants.d.ts
+new file mode 100644
+index 0000000000000000000000000000000000000000..12eb5624177c314d2ba01263e1993d7cdaf83f7d
+--- /dev/null
++++ b/dist/esm/constants.d.ts
+@@ -0,0 +1,4 @@
++export declare const DEFAULT_HEADERS: {
++    'X-Client-Info': string;
++};
++//# sourceMappingURL=constants.d.ts.map
+\ No newline at end of file
+diff --git a/dist/esm/constants.d.ts.map b/dist/esm/constants.d.ts.map
+new file mode 100644
+index 0000000000000000000000000000000000000000..68e5791aa8b84c857c87f2750b06e6e9665a177f
+--- /dev/null
++++ b/dist/esm/constants.d.ts.map
+@@ -0,0 +1 @@
++{"version":3,"file":"constants.d.ts","sourceRoot":"","sources":["../../src/constants.ts"],"names":[],"mappings":"AACA,eAAO,MAAM,eAAe;;CAAiD,CAAA"}
+\ No newline at end of file
+diff --git a/dist/esm/constants.js b/dist/esm/constants.js
+new file mode 100644
+index 0000000000000000000000000000000000000000..2dd1bb942623e8424d719eb372fe2b0d6544b630
+--- /dev/null
++++ b/dist/esm/constants.js
+@@ -0,0 +1,3 @@
++import { version } from './version';
++export const DEFAULT_HEADERS = { 'X-Client-Info': `postgrest-js/${version}` };
++//# sourceMappingURL=constants.js.map
+\ No newline at end of file
+diff --git a/dist/esm/constants.js.map b/dist/esm/constants.js.map
+new file mode 100644
+index 0000000000000000000000000000000000000000..beb92b0d29255c52c4303b1d27009fcbc60cb2cb
+--- /dev/null
++++ b/dist/esm/constants.js.map
+@@ -0,0 +1 @@
++{"version":3,"file":"constants.js","sourceRoot":"","sources":["../../src/constants.ts"],"names":[],"mappings":"AAAA,OAAO,EAAE,OAAO,EAAE,MAAM,WAAW,CAAA;AACnC,MAAM,CAAC,MAAM,eAAe,GAAG,EAAE,eAAe,EAAE,gBAAgB,OAAO,EAAE,EAAE,CAAA"}
+\ No newline at end of file
+diff --git a/dist/esm/index.d.ts b/dist/esm/index.d.ts
+new file mode 100644
+index 0000000000000000000000000000000000000000..b89082311ebb3e735262b5631301141813a56209
+--- /dev/null
++++ b/dist/esm/index.d.ts
+@@ -0,0 +1,18 @@
++import PostgrestClient from './PostgrestClient';
++import PostgrestQueryBuilder from './PostgrestQueryBuilder';
++import PostgrestFilterBuilder from './PostgrestFilterBuilder';
++import PostgrestTransformBuilder from './PostgrestTransformBuilder';
++import PostgrestBuilder from './PostgrestBuilder';
++import PostgrestError from './PostgrestError';
++export { PostgrestClient, PostgrestQueryBuilder, PostgrestFilterBuilder, PostgrestTransformBuilder, PostgrestBuilder, PostgrestError, };
++declare const _default: {
++    PostgrestClient: typeof PostgrestClient;
++    PostgrestQueryBuilder: typeof PostgrestQueryBuilder;
++    PostgrestFilterBuilder: typeof PostgrestFilterBuilder;
++    PostgrestTransformBuilder: typeof PostgrestTransformBuilder;
++    PostgrestBuilder: typeof PostgrestBuilder;
++    PostgrestError: typeof PostgrestError;
++};
++export default _default;
++export type { PostgrestResponse, PostgrestResponseFailure, PostgrestResponseSuccess, PostgrestSingleResponse, PostgrestMaybeSingleResponse, } from './types';
++//# sourceMappingURL=index.d.ts.map
+\ No newline at end of file
+diff --git a/dist/esm/index.d.ts.map b/dist/esm/index.d.ts.map
+new file mode 100644
+index 0000000000000000000000000000000000000000..4e28d2f8fe200a0b67a561dfe5f5423d2ee4a0fb
+--- /dev/null
++++ b/dist/esm/index.d.ts.map
+@@ -0,0 +1 @@
++{"version":3,"file":"index.d.ts","sourceRoot":"","sources":["../../src/index.ts"],"names":[],"mappings":"AACA,OAAO,eAAe,MAAM,mBAAmB,CAAA;AAC/C,OAAO,qBAAqB,MAAM,yBAAyB,CAAA;AAC3D,OAAO,sBAAsB,MAAM,0BAA0B,CAAA;AAC7D,OAAO,yBAAyB,MAAM,6BAA6B,CAAA;AACnE,OAAO,gBAAgB,MAAM,oBAAoB,CAAA;AACjD,OAAO,cAAc,MAAM,kBAAkB,CAAA;AAE7C,OAAO,EACL,eAAe,EACf,qBAAqB,EACrB,sBAAsB,EACtB,yBAAyB,EACzB,gBAAgB,EAChB,cAAc,GACf,CAAA;;;;;;;;;AACD,wBAOC;AACD,YAAY,EACV,iBAAiB,EACjB,wBAAwB,EACxB,wBAAwB,EACxB,uBAAuB,EACvB,4BAA4B,GAC7B,MAAM,SAAS,CAAA"}
+\ No newline at end of file
+diff --git a/dist/esm/index.js b/dist/esm/index.js
+new file mode 100644
+index 0000000000000000000000000000000000000000..aafe9832b2ec38ee8b5bec65f268052288ef8a28
+--- /dev/null
++++ b/dist/esm/index.js
+@@ -0,0 +1,17 @@
++// Always update wrapper.mjs when updating this file.
++import PostgrestClient from './PostgrestClient';
++import PostgrestQueryBuilder from './PostgrestQueryBuilder';
++import PostgrestFilterBuilder from './PostgrestFilterBuilder';
++import PostgrestTransformBuilder from './PostgrestTransformBuilder';
++import PostgrestBuilder from './PostgrestBuilder';
++import PostgrestError from './PostgrestError';
++export { PostgrestClient, PostgrestQueryBuilder, PostgrestFilterBuilder, PostgrestTransformBuilder, PostgrestBuilder, PostgrestError, };
++export default {
++    PostgrestClient,
++    PostgrestQueryBuilder,
++    PostgrestFilterBuilder,
++    PostgrestTransformBuilder,
++    PostgrestBuilder,
++    PostgrestError,
++};
++//# sourceMappingURL=index.js.map
+\ No newline at end of file
+diff --git a/dist/esm/index.js.map b/dist/esm/index.js.map
+new file mode 100644
+index 0000000000000000000000000000000000000000..617ae929bbf57afe19e0fd4a0c8abe4412c5c169
+--- /dev/null
++++ b/dist/esm/index.js.map
+@@ -0,0 +1 @@
++{"version":3,"file":"index.js","sourceRoot":"","sources":["../../src/index.ts"],"names":[],"mappings":"AAAA,qDAAqD;AACrD,OAAO,eAAe,MAAM,mBAAmB,CAAA;AAC/C,OAAO,qBAAqB,MAAM,yBAAyB,CAAA;AAC3D,OAAO,sBAAsB,MAAM,0BAA0B,CAAA;AAC7D,OAAO,yBAAyB,MAAM,6BAA6B,CAAA;AACnE,OAAO,gBAAgB,MAAM,oBAAoB,CAAA;AACjD,OAAO,cAAc,MAAM,kBAAkB,CAAA;AAE7C,OAAO,EACL,eAAe,EACf,qBAAqB,EACrB,sBAAsB,EACtB,yBAAyB,EACzB,gBAAgB,EAChB,cAAc,GACf,CAAA;AACD,eAAe;IACb,eAAe;IACf,qBAAqB;IACrB,sBAAsB;IACtB,yBAAyB;IACzB,gBAAgB;IAChB,cAAc;CACf,CAAA"}
+\ No newline at end of file
+diff --git a/dist/esm/types.d.ts b/dist/esm/types.d.ts
+new file mode 100644
+index 0000000000000000000000000000000000000000..93f441c587d20de72600db8981539455aed0900a
+--- /dev/null
++++ b/dist/esm/types.d.ts
+@@ -0,0 +1,69 @@
++import PostgrestError from './PostgrestError';
++export declare type Fetch = typeof fetch;
++/**
++ * Response format
++ *
++ * {@link https://github.com/supabase/supabase-js/issues/32}
++ */
++interface PostgrestResponseBase {
++    status: number;
++    statusText: string;
++}
++export interface PostgrestResponseSuccess<T> extends PostgrestResponseBase {
++    error: null;
++    data: T;
++    count: number | null;
++}
++export interface PostgrestResponseFailure extends PostgrestResponseBase {
++    error: PostgrestError;
++    data: null;
++    count: null;
++}
++export declare type PostgrestSingleResponse<T> = PostgrestResponseSuccess<T> | PostgrestResponseFailure;
++export declare type PostgrestMaybeSingleResponse<T> = PostgrestSingleResponse<T | null>;
++export declare type PostgrestResponse<T> = PostgrestSingleResponse<T[]>;
++export declare type GenericRelationship = {
++    foreignKeyName: string;
++    columns: string[];
++    isOneToOne?: boolean;
++    referencedRelation: string;
++    referencedColumns: string[];
++};
++export declare type GenericTable = {
++    Row: Record<string, unknown>;
++    Insert: Record<string, unknown>;
++    Update: Record<string, unknown>;
++    Relationships: GenericRelationship[];
++};
++export declare type GenericUpdatableView = {
++    Row: Record<string, unknown>;
++    Insert: Record<string, unknown>;
++    Update: Record<string, unknown>;
++    Relationships: GenericRelationship[];
++};
++export declare type GenericNonUpdatableView = {
++    Row: Record<string, unknown>;
++    Relationships: GenericRelationship[];
++};
++export declare type GenericView = GenericUpdatableView | GenericNonUpdatableView;
++export declare type GenericFunction = {
++    Args: Record<string, unknown>;
++    Returns: unknown;
++};
++export declare type GenericSchema = {
++    Tables: Record<string, GenericTable>;
++    Views: Record<string, GenericView>;
++    Functions: Record<string, GenericFunction>;
++};
++export declare type Prettify<T> = {
++    [K in keyof T]: T[K];
++} & {};
++export declare type SimplifyDeep<Type, ExcludeType = never> = ConditionalSimplifyDeep<Type, ExcludeType | NonRecursiveType | Set<unknown> | Map<unknown, unknown>, object>;
++declare type ConditionalSimplifyDeep<Type, ExcludeType = never, IncludeType = unknown> = Type extends ExcludeType ? Type : Type extends IncludeType ? {
++    [TypeKey in keyof Type]: ConditionalSimplifyDeep<Type[TypeKey], ExcludeType, IncludeType>;
++} : Type;
++declare type NonRecursiveType = BuiltIns | Function | (new (...arguments_: any[]) => unknown);
++declare type BuiltIns = Primitive | void | Date | RegExp;
++declare type Primitive = null | undefined | string | number | boolean | symbol | bigint;
++export {};
++//# sourceMappingURL=types.d.ts.map
+\ No newline at end of file
+diff --git a/dist/esm/types.d.ts.map b/dist/esm/types.d.ts.map
+new file mode 100644
+index 0000000000000000000000000000000000000000..21453d38e2d45fb899c2b33f0f530f2aa1382d95
+--- /dev/null
++++ b/dist/esm/types.d.ts.map
+@@ -0,0 +1 @@
++{"version":3,"file":"types.d.ts","sourceRoot":"","sources":["../../src/types.ts"],"names":[],"mappings":"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"}
+\ No newline at end of file
+diff --git a/dist/esm/types.js b/dist/esm/types.js
+new file mode 100644
+index 0000000000000000000000000000000000000000..718fd38ae40c67ea23b242517cf9919f602c5a3e
+--- /dev/null
++++ b/dist/esm/types.js
+@@ -0,0 +1,2 @@
++export {};
++//# sourceMappingURL=types.js.map
+\ No newline at end of file
+diff --git a/dist/esm/types.js.map b/dist/esm/types.js.map
+new file mode 100644
+index 0000000000000000000000000000000000000000..7b5fff867a5a8de2324d2c0521b7c2292da35535
+--- /dev/null
++++ b/dist/esm/types.js.map
+@@ -0,0 +1 @@
++{"version":3,"file":"types.js","sourceRoot":"","sources":["../../src/types.ts"],"names":[],"mappings":""}
+\ No newline at end of file
+diff --git a/dist/esm/version.d.ts b/dist/esm/version.d.ts
+new file mode 100644
+index 0000000000000000000000000000000000000000..dc7d708ece9358f477c311a082607942aaa034fe
+--- /dev/null
++++ b/dist/esm/version.d.ts
+@@ -0,0 +1,2 @@
++export declare const version = "0.0.0-automated";
++//# sourceMappingURL=version.d.ts.map
+\ No newline at end of file
+diff --git a/dist/esm/version.d.ts.map b/dist/esm/version.d.ts.map
+new file mode 100644
+index 0000000000000000000000000000000000000000..1f88a4614070a0c6dc8725d6b98c51de1bdca64a
+--- /dev/null
++++ b/dist/esm/version.d.ts.map
+@@ -0,0 +1 @@
++{"version":3,"file":"version.d.ts","sourceRoot":"","sources":["../../src/version.ts"],"names":[],"mappings":"AAAA,eAAO,MAAM,OAAO,oBAAoB,CAAA"}
+\ No newline at end of file
+diff --git a/dist/esm/version.js b/dist/esm/version.js
+new file mode 100644
+index 0000000000000000000000000000000000000000..140b46afd2f08a6ee5abfe63021d10087fa3808b
+--- /dev/null
++++ b/dist/esm/version.js
+@@ -0,0 +1,2 @@
++export const version = '0.0.0-automated';
++//# sourceMappingURL=version.js.map
+\ No newline at end of file
+diff --git a/dist/esm/version.js.map b/dist/esm/version.js.map
+new file mode 100644
+index 0000000000000000000000000000000000000000..c32bfe48699d3b0936cf4f570d8e29cf5b6ce592
+--- /dev/null
++++ b/dist/esm/version.js.map
+@@ -0,0 +1 @@
++{"version":3,"file":"version.js","sourceRoot":"","sources":["../../src/version.ts"],"names":[],"mappings":"AAAA,MAAM,CAAC,MAAM,OAAO,GAAG,iBAAiB,CAAA"}
+\ No newline at end of file
+diff --git a/dist/esm/wrapper.mjs b/dist/esm/wrapper.mjs
+deleted file mode 100644
+index 55629686f039b4797e232de06bf5cbbf52b1700e..0000000000000000000000000000000000000000
+diff --git a/package.json b/package.json
+index 68c60f3b53d68768ab4dcbaa3c1725a99d90eae4..ad0c0efb0904b29841f4df241ef1841555d38d6f 100644
+--- a/package.json
++++ b/package.json
+@@ -15,11 +15,11 @@
+     "src"
+   ],
+   "main": "dist/cjs/index.js",
+-  "module": "dist/esm/wrapper.mjs",
++  "module": "dist/esm/index.js",
+   "exports": {
+     "import": {
+-      "types": "./dist/cjs/index.d.ts",
+-      "default": "./dist/esm/wrapper.mjs"
++      "types": "./dist/esm/index.d.ts",
++      "default": "./dist/esm/index.js"
+     },
+     "require": {
+       "types": "./dist/cjs/index.d.ts",
