@@ -40,7 +40,7 @@ public class SpaceController : MonoBehaviour
 
     private void TestOnStart()
     {
-        LoadStarsAsync(0, 0, 2, response => BuildStars(response.stars));
+        // LoadStarsAsync(0, 0, 2, response => BuildStars(response.stars));
     }
 
     private void BuildStars(Star[] stars)

@@ -40,10 +40,7 @@ public class PlayerController : MonoBehaviour
 
     void InitConfig()
     {
-        webcamTexture = new()
-        {
-            requestedFPS = 15
-        };
+        webcamTexture = new();
         webcamTexture.Play();
         StartCoroutine(GetInput());
     }
