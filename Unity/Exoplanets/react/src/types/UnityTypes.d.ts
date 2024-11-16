@@ -1,6 +1,6 @@
 //
 // Types in assemblies: Assembly-CSharp
-// Generated 15/11/2024 17:20:57
+// Generated 15/11/2024 22:35:47
 //
 /* eslint-disable */
 
@@ -150,6 +150,77 @@ export declare class WebcamDisplayController {
   ToString(): string;
   GetType(): System.Type;
 }
+export declare class LoadEnv {
+  constructor();
+  destroyCancellationToken: System.Threading.CancellationToken;
+  useGUILayout: boolean;
+  runInEditMode: boolean;
+  enabled: boolean;
+  isActiveAndEnabled: boolean;
+  transform: UnityEngine.Transform;
+  gameObject: UnityEngine.GameObject;
+  tag: string;
+  rigidbody: UnityEngine.Component;
+  rigidbody2D: UnityEngine.Component;
+  camera: UnityEngine.Component;
+  light: UnityEngine.Component;
+  animation: UnityEngine.Component;
+  constantForce: UnityEngine.Component;
+  renderer: UnityEngine.Component;
+  audio: UnityEngine.Component;
+  networkView: UnityEngine.Component;
+  collider: UnityEngine.Component;
+  collider2D: UnityEngine.Component;
+  hingeJoint: UnityEngine.Component;
+  particleSystem: UnityEngine.Component;
+  name: string;
+  hideFlags: UnityEngine.HideFlags;
+  IsInvoking(): boolean;
+  CancelInvoke(): void;
+  Invoke(methodName: string, time: number): void;
+  InvokeRepeating(methodName: string, time: number, repeatRate: number): void;
+  CancelInvoke(methodName: string): void;
+  IsInvoking(methodName: string): boolean;
+  StartCoroutine(methodName: string): UnityEngine.Coroutine;
+  StartCoroutine(methodName: string, value: any): UnityEngine.Coroutine;
+  StartCoroutine(routine: System.Collections.IEnumerator): UnityEngine.Coroutine;
+  StartCoroutine_Auto(routine: System.Collections.IEnumerator): UnityEngine.Coroutine;
+  StopCoroutine(routine: System.Collections.IEnumerator): void;
+  StopCoroutine(routine: UnityEngine.Coroutine): void;
+  StopCoroutine(methodName: string): void;
+  StopAllCoroutines(): void;
+  GetComponent(type: System.Type): UnityEngine.Component;
+  GetComponent(type: string): UnityEngine.Component;
+  GetComponentInChildren(t: System.Type, includeInactive: boolean): UnityEngine.Component;
+  GetComponentInChildren(t: System.Type): UnityEngine.Component;
+  GetComponentsInChildren(t: System.Type, includeInactive: boolean): UnityEngine.Component[];
+  GetComponentsInChildren(t: System.Type): UnityEngine.Component[];
+  GetComponentInParent(t: System.Type, includeInactive: boolean): UnityEngine.Component;
+  GetComponentInParent(t: System.Type): UnityEngine.Component;
+  GetComponentsInParent(t: System.Type, includeInactive: boolean): UnityEngine.Component[];
+  GetComponentsInParent(t: System.Type): UnityEngine.Component[];
+  GetComponents(type: System.Type): UnityEngine.Component[];
+  GetComponents(type: System.Type, results: UnityEngine.Component[]): void;
+  GetComponentIndex(): number;
+  CompareTag(tag: string): boolean;
+  SendMessageUpwards(methodName: string, value: any, options: UnityEngine.SendMessageOptions): void;
+  SendMessageUpwards(methodName: string, value: any): void;
+  SendMessageUpwards(methodName: string): void;
+  SendMessageUpwards(methodName: string, options: UnityEngine.SendMessageOptions): void;
+  SendMessage(methodName: string, value: any): void;
+  SendMessage(methodName: string): void;
+  SendMessage(methodName: string, value: any, options: UnityEngine.SendMessageOptions): void;
+  SendMessage(methodName: string, options: UnityEngine.SendMessageOptions): void;
+  BroadcastMessage(methodName: string, parameter: any, options: UnityEngine.SendMessageOptions): void;
+  BroadcastMessage(methodName: string, parameter: any): void;
+  BroadcastMessage(methodName: string): void;
+  BroadcastMessage(methodName: string, options: UnityEngine.SendMessageOptions): void;
+  GetInstanceID(): number;
+  GetHashCode(): number;
+  Equals(other: any): boolean;
+  ToString(): string;
+  GetType(): System.Type;
+}
 export declare class LocalServer {
   constructor();
   destroyCancellationToken: System.Threading.CancellationToken;
@@ -175,7 +246,7 @@ export declare class LocalServer {
   particleSystem: UnityEngine.Component;
   name: string;
   hideFlags: UnityEngine.HideFlags;
-  StartServer(): void;
+  StartServer(handleCode: any): void;
   IsInvoking(): boolean;
   CancelInvoke(): void;
   Invoke(methodName: string, time: number): void;

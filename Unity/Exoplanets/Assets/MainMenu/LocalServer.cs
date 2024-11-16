@@ -1,14 +1,23 @@
 using System;
 using System.Net;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class LocalServer : MonoBehaviour
 {
     private HttpListener _httpListener;
-
     private bool _serverActive;
 
-    public void StartServer()
+    object _handleCode;
+
+    string codeReceived;
+
+    void Start()
+    {
+        this.codeReceived = "";
+    }
+
+    public void StartServer(object handleCode)
     {
         if (!_serverActive)
         {
@@ -18,6 +27,7 @@ public class LocalServer : MonoBehaviour
             _httpListener.BeginGetContext(new AsyncCallback(OnRequestReceive), _httpListener);
             _serverActive = true;
             Debug.Log("Servidor HTTP local iniciado en http://localhost:7463/callback");
+            this._handleCode = handleCode;
         }
     }
 
@@ -30,8 +40,9 @@ public class LocalServer : MonoBehaviour
         var response = context.Response;
         Debug.Log(request.QueryString);
 
-        string code = request.QueryString["code"];
-        Debug.Log("Código recibido: " + code);
+        string c = request.QueryString["code"];
+        Debug.Log("Código recibido: " + c);
+        this.codeReceived = c;
 
         string responseString = "<html><body><b>Autenticación completada, puedes cerrar esta ventana.</b></body></html>";
         byte[] buffer = System.Text.Encoding.UTF8.GetBytes(responseString);
@@ -39,5 +50,26 @@ public class LocalServer : MonoBehaviour
         response.OutputStream.Write(buffer, 0, buffer.Length);
         response.OutputStream.Close();
 
+    }
+
+    void Update()
+    {
+        if (this.codeReceived.Length > 0)
+        {
+            if (_handleCode != null)
+            {
+                Debug.Log("HandleCode will execute");
+                var callback = ReactUnity.Helpers.Callback.From(_handleCode);
+                callback.Call(this.codeReceived);
+                Debug.Log("HandleCode has been executed");
+                this.codeReceived = "";
+
+            }
+            else
+            {
+                Debug.Log("HandleCode is null   ");
+            }
+
+        }
     }
 }

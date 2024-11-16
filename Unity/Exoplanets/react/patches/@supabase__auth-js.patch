@@ -1,0 +1,15 @@
+diff --git a/dist/module/lib/helpers.js b/dist/module/lib/helpers.js
+index 41cc1737b94d5ee326c0abe7c848f42bc9302425..868c5d52e80641925de5a8e9dc031ea3fb8149f5 100644
+--- a/dist/module/lib/helpers.js
++++ b/dist/module/lib/helpers.js
+@@ -65,8 +65,9 @@ export function parseParametersFromURL(href) {
+             // hash is not a query string
+         }
+     }
++    const params = new URLSearchParams(url.search);
+     // search parameters take precedence over hash parameters
+-    url.searchParams.forEach((value, key) => {
++    params.forEach((value, key) => {
+         result[key] = value;
+     });
+     return result;

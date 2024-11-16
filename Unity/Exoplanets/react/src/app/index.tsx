@@ -1,6 +1,8 @@
-import { render } from '@reactunity/renderer';
+import 'url-search-params-polyfill';
+import './pollyfills';
 import './globals.css';
 import '@i18n/i18n';
+import { render } from '@reactunity/renderer';
 import { MemoryRouter } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import AstrosSlider from '@components/astros/AstrosSlider';

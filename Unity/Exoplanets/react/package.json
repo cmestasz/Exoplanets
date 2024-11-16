@@ -42,7 +42,8 @@
   },
   "pnpm": {
     "patchedDependencies": {
-      "@supabase/postgrest-js@1.16.3": "patches/@supabase__postgrest-js@1.16.3.patch"
+      "@supabase/postgrest-js@1.16.3": "patches/@supabase__postgrest-js@1.16.3.patch",
+      "@supabase/auth-js": "patches/@supabase__auth-js.patch"
     }
   }
 }
