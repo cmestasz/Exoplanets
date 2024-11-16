@@ -1,20 +1,21 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Networking;
 using UnityEngine.Rendering;
 using UnityEngine.Rendering.Universal;
+using static Animations;
 
 public class SpaceController : MonoBehaviour
 {
     [SerializeField] private GameObject[] starPrefabs;
     [SerializeField] private GameObject constellationConnectionPrefab;
-    [SerializeField] private float starsPositionRange, starsScaleMin, starsScaleMax, amountOfStars;
     [SerializeField] private GameObject postProcessing;
     public static SpaceController Instance { get; private set; }
     public ConstellationBuilder ConstellationBuilder { get; private set; }
     public Transform StarsParent { get; private set; }
     public Transform PlanetsParent { get; private set; }
-    public string CurrentReference { get; private set; }
+    public SpaceCoord CurrentReference { get; private set; }
     private int StarId { get; set; } = 0;
     private ColorAdjustments ColorAdjustments { get; set; }
 
@@ -62,48 +63,107 @@ public class SpaceController : MonoBehaviour
         }
     }
 
-    private void LoadStarsAsync(float ra, float dec, float dist, System.Action<SurroundingsResponse> callback)
+    private string LoadStarsPosAsync(float ra, float dec, float dist, System.Action<SurroundingsPosResponse> callback)
     {
-        SurroundingsRequest request = new()
+        SurroundingsPosRequest request = new()
         {
             ra = ra,
             dec = dec,
             dist = dist
         };
-        StartCoroutine(APIConnector.Post<SurroundingsRequest, SurroundingsResponse>("load_surroundings", request, callback));
+        string status = null;
+        StartCoroutine(APIConnector.Post("load_surroundings", request, callback, error => status = error));
+        return status;
     }
 
-    public void WarpTo(SpaceCoord pos)
+    private string LoadStarsIdAsync(string id, System.Action<SurroundingsIdResponse> callback)
     {
-        StartCoroutine(WarpToAnim(pos));
-    }
-
-    private IEnumerator WarpToAnim(SpaceCoord pos)
-    {
-        float exposure = 0;
-        while (exposure < 20)
+        SurroundingsIdRequest request = new()
         {
-            exposure += 0.25f;
-            ColorAdjustments.postExposure.value = exposure;
-            yield return null;
-        }
-        ClearStars();
-        Star[] stars = null;
-        LoadStarsAsync(pos.ra, pos.dec, pos.dist, response => stars = response.stars);
-        Constellation[] constellations = null;
-        LoadConstellationsAsync(response => constellations = response.constellations);
-        yield return new WaitUntil(() => stars != null && constellations != null);
+            id = id
+        };
+        string status = null;
+        StartCoroutine(APIConnector.Post("load_surroundings", request, callback, error => status = error));
+        return status;
+    }
 
+    public void WarpToPos(SpaceCoord pos)
+    {
+        StartCoroutine(WarpToAnim(pos, null));
+    }
+
+    public void WarpToId(string id)
+    {
+        StartCoroutine(WarpToAnim(null, id));
+    }
+
+    private IEnumerator WarpToAnim(SpaceCoord pos, string id)
+    {
+        yield return WarpFadeIn(ColorAdjustments);
+
+        Star[] stars = null;
+        Constellation[] constellations = null;
+        string name = null;
+        float ra = 0, dec = 0, dist = 0;
+
+        string error = null;
+        if (pos != null)
+        {
+            error = LoadStarsPosAsync(pos.ra, pos.dec, pos.dist, response =>
+            {
+                stars = response.stars;
+            });
+            ra = pos.ra;
+            dec = pos.dec;
+            dist = pos.dist;
+        }
+        else if (id != null)
+        {
+            error = LoadStarsIdAsync(id, response =>
+            {
+                stars = response.stars;
+                name = response.name;
+                ra = response.ra;
+                dec = response.dec;
+                dist = response.dist;
+            });
+        }
+
+        yield return new WaitUntil(() => stars != null || error != null);
+        if (error != null)
+        {
+            if (error == "invalid")
+                DialogueController.Instance.ShowDialogue("warp_invalid");
+            else
+                DialogueController.Instance.ShowDialogue("warp_fail");
+
+            yield return WarpFadeOut(ColorAdjustments);
+            yield break;
+        }
+
+        CurrentReference = new SpaceCoord(ra, dec, dist);
+        error = null;
+        error = LoadConstellationsAsync(response => constellations = response.constellations);
+        yield return new WaitUntil(() => constellations != null || error != null);
+        if (error != null)
+        {
+            DialogueController.Instance.ShowDialogue("warp_fail");
+            yield return WarpFadeOut(ColorAdjustments);
+            yield break;
+        }
+
+        ClearStars();
         BuildStars(stars);
         BuildConstellations(constellations);
 
-        while (exposure > 0)
-        {
-            exposure -= 0.25f;
-            ColorAdjustments.postExposure.value = exposure;
-            yield return null;
-        }
+        yield return WarpFadeOut(ColorAdjustments);
+        DialogueController.Instance.ShowDialogue("warp");
+        if (pos != null)
+            DialogueController.Instance.ShowDialogue("warp_posonly");
+        else if (name == null)
+            DialogueController.Instance.ShowDialogue("warp_noname");
     }
+
 
     private void ClearStars()
     {
@@ -113,14 +173,15 @@ public class SpaceController : MonoBehaviour
         }
     }
 
-    public void LoadConstellationsAsync(System.Action<ConstellationsResponse> callback)
+    public string LoadConstellationsAsync(System.Action<ConstellationsResponse> callback)
     {
-        Debug.Log($"We should now be loading constellations for the exoplanet reference {CurrentReference}");
+        Debug.Log($"We should now be loading constellations for {CurrentReference}");
         ConstellationsResponse response = new()
         {
             constellations = new Constellation[1]
         };
         callback(response);
+        return null;
     }
 
     public void AddConstellationConnection(StarController star1, StarController star2)

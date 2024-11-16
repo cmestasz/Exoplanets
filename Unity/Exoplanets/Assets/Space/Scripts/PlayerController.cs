@@ -155,7 +155,7 @@ public class PlayerController : MonoBehaviour
         }
         if (Input.GetKeyDown(WARP))
         {
-            SpaceController.Instance.WarpTo(UIInteractor.Instance.GetWarpPosition());
+            SpaceController.Instance.WarpToPos(UIInteractor.Instance.GetWarpPosition());
         }
 
         if (Physics.Raycast(transform.position, transform.forward, out RaycastHit hit2)
