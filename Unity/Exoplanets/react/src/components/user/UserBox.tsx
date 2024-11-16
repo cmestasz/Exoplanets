@@ -1,17 +1,21 @@
 import { useTranslation } from 'react-i18next';
 import { Text } from '@components/ui/Text';
-import { useState } from 'react';
+import { useContext, useState } from 'react';
+import { supabase } from '@lib/supabase';
+import { AlertContext } from '@components/alerts/Alert';
 import HeaderUserBox from './HeaderUserBox';
 
 interface UserBoxProps {
   username: string;
   photo?: string;
+  onSignOut: () => void;
 }
 
 export default function UserBox({
-  username, photo,
+  username, photo, onSignOut,
 }: UserBoxProps) {
   const { t } = useTranslation();
+  const showAlert = useContext(AlertContext);
   const [opened, setOpened] = useState<boolean>(false);
   const handleProfile = () => {
     // router.push('/profile');
@@ -20,11 +24,19 @@ export default function UserBox({
     setOpened(false);
   };
   const handleLogout = () => {
-    console.log('Cerró sesión');
+    supabase.auth.signOut().then(({ error }) => {
+      if (error) {
+        console.error(error);
+        showAlert({ message: 'No se pudo cerrar sesión', type: 'error' });
+      } else {
+        onSignOut();
+        console.log('Cerró sesión');
+      }
+    });
     setOpened(false);
   };
   return (
-    <view className="relative w-fit max-w-48 flex-grow-0">
+    <view className="relative w-fit max-w-52 flex-grow-0">
       <HeaderUserBox
         username={username}
         photo={photo}

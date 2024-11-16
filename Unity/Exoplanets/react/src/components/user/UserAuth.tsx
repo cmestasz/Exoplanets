@@ -1,6 +1,8 @@
 import { useTranslation } from 'react-i18next';
 import { Text } from '@components/ui/Text';
-import { useContext, useEffect, useState } from 'react';
+import {
+  useCallback, useContext, useEffect, useState,
+} from 'react';
 import { supabase } from '@lib/supabase';
 import AsyncData from '@mytypes/AsyncData';
 import User from '@mytypes/User';
@@ -14,30 +16,33 @@ export default function UserAuth() {
   const globals = useGlobals().LocalServer as LocalServer;
   const [userFetched, setUserFetched] = useState<AsyncData<User>>('loading');
   const showAlert = useContext(AlertContext);
+  const onSignOut = useCallback(() => {
+    setUserFetched(null);
+  }, []);
   const getUser = async () => {
     const { data: { user }, error } = await supabase.auth.getUser();
     if (error) {
-      console.error(error);
+      console.log(error);
       setUserFetched(null);
       return;
     }
-    const { data, error: err } = await supabase.from('users').select().eq('id', user.id).single();
+    console.log('Before: postgrest', user.email);
+    const { data, error: err } = await supabase.from('users').select().eq('id', user.id).maybeSingle();
 
     if (err) {
-      console.error(err);
+      console.error('Send by supabase', err.message);
       setUserFetched(null);
       return;
     }
+    console.log('After postgrest: ', data);
 
     setUserFetched(data);
   };
   const handleCode = (code: string) => {
-    console.log('Calling code', code);
-    supabase.auth.exchangeCodeForSession(code).then(({ data, error }) => {
-      console.log('Data', data);
-      console.error('Error', error);
+    supabase.auth.exchangeCodeForSession(code).then(({ data }) => {
+      console.log('user handle Code', data.user.email);
       getUser().catch((r) => {
-        console.error(r);
+        console.log('Error thowed by me: ', r);
         setUserFetched(null);
       });
     });
@@ -56,7 +61,7 @@ export default function UserAuth() {
   };
   useEffect(() => {
     getUser().catch((r) => {
-      console.error(r);
+      console.log('Error thowed by me: ', r);
       setUserFetched(null);
     });
   }, []);
@@ -77,6 +82,6 @@ export default function UserAuth() {
     );
   }
   return (
-    <UserBox username={userFetched.username} photo={userFetched.avatar} />
+    <UserBox username={userFetched.username} photo={userFetched.avatar} onSignOut={onSignOut} />
   );
 }

@@ -43,7 +43,6 @@ function App() {
           <UserAuth />
           {isVisible && <Alert alertOptions={alertOptions} hideAlert={hideAlert} />}
 
-          <h2 className="text-white">ods</h2>
           <AstrosSlider astros={astros} />
           <Input
             name={t('components.user.login')}
