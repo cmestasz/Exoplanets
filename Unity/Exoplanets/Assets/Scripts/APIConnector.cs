@@ -30,6 +30,7 @@ public class APIConnector
         if (request.result != UnityWebRequest.Result.Success)
         {
             Debug.LogError(request.error);
+            string error = request.error != null ? request.error : request.responseCode.ToString();
             errorCallback?.Invoke(request.error);
         }
         else

@@ -63,6 +63,11 @@ public class SpaceController : MonoBehaviour
         }
     }
 
+    private void BuildExoplanet()
+    {
+        // idk pick a random model and put it in 0,0,0
+    }
+
     private string LoadStarsPosAsync(float ra, float dec, float dist, System.Action<SurroundingsPosResponse> callback)
     {
         SurroundingsPosRequest request = new()
@@ -83,7 +88,7 @@ public class SpaceController : MonoBehaviour
             id = id
         };
         string status = null;
-        StartCoroutine(APIConnector.Post("load_surroundings", request, callback, error => status = error));
+        StartCoroutine(APIConnector.Post("load_surroundings_by_id", request, callback, error => status = error));
         return status;
     }
 
@@ -155,13 +160,14 @@ public class SpaceController : MonoBehaviour
         ClearStars();
         BuildStars(stars);
         BuildConstellations(constellations);
+        if (id != null)
+            BuildExoplanet();
 
         yield return WarpFadeOut(ColorAdjustments);
         DialogueController.Instance.ShowDialogue("warp");
+        UIInteractor.Instance.ShowTitle(name);
         if (pos != null)
             DialogueController.Instance.ShowDialogue("warp_posonly");
-        else if (name == null)
-            DialogueController.Instance.ShowDialogue("warp_noname");
     }
 
 

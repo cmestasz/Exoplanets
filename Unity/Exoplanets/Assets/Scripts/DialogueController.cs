@@ -6,9 +6,9 @@ using UnityEngine;
 public class DialogueController : MonoBehaviour
 {
     public static DialogueController Instance { get; private set; }
-    private const float writeDelay = 0.05f;
-    private const float fadeSpeed = 255;
-    private const float postDelayPerCharacter = 0.1f;
+    private const float WRITE_DELAY = 0.05f;
+    private const float FADE_SPEED = 255;
+    private const float POST_DELAY_PER_CHARACTER = 0.1f;
     private TMP_Text textBox;
     private Queue<string> dialogueQueue = new();
 
@@ -43,13 +43,13 @@ public class DialogueController : MonoBehaviour
             for (int i = 0; i < text.Length; i++)
             {
                 textBox.text += text[i];
-                yield return new WaitForSeconds(writeDelay);
+                yield return new WaitForSeconds(WRITE_DELAY);
             }
-            yield return new WaitForSeconds(postDelayPerCharacter * text.Length);
+            yield return new WaitForSeconds(POST_DELAY_PER_CHARACTER * text.Length);
             float alpha = 255;
             while (alpha > 0)
             {
-                alpha -= fadeSpeed * Time.deltaTime;
+                alpha -= FADE_SPEED * Time.deltaTime;
                 textBox.color = new Color32(255, 255, 255, (byte)alpha);
                 yield return null;
             }

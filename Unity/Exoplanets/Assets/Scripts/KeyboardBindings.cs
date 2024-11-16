@@ -11,6 +11,7 @@ public static class KeyboardBindings
     public static KeyCode ADD_TO_CONSTELLATION = KeyCode.Space;
     public static KeyCode TOGGLE_INPUT = KeyCode.E;
     public static KeyCode SPEED_UP = KeyCode.LeftShift;
-    public static KeyCode WARP = KeyCode.Q;
+    public static KeyCode WARP_POS = KeyCode.P;
+    public static KeyCode WARP_ID = KeyCode.I;
     public static KeyCode GET_INFO = KeyCode.I;
 }

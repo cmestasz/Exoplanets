@@ -12,7 +12,5 @@ public static class Dialogues
         { "en_warp_invalid", "That position does not exist." },
         { "es_warp_fail", "Algo salio mal." },
         { "en_warp_fail", "Something went wrong." },
-        { "es_warp_noname", "Parece que no hay un nombre comun para este exoplaneta, asi que tendremos que usar su ID." },
-        { "en_warp_noname", "It seems there is no common name for this exoplanet, so we will have to use its ID." }
     };
 }
