@@ -22,7 +22,7 @@ public class APIConnector
         }
     }
 
-    public static IEnumerator Post<Request, Response>(string endpoint, Request data, System.Action<Response> callback)
+    public static IEnumerator Post<Request, Response>(string endpoint, Request data, System.Action<Response> callback, System.Action<string> errorCallback = null)
     {
         using UnityWebRequest request = UnityWebRequest.Post(API_URL + endpoint, JsonUtility.ToJson(data), "application/json");
         yield return request.SendWebRequest();
@@ -30,6 +30,8 @@ public class APIConnector
         if (request.result != UnityWebRequest.Result.Success)
         {
             Debug.LogError(request.error);
+            string error = request.error != null ? request.error : request.responseCode.ToString();
+            errorCallback?.Invoke(request.error);
         }
         else
         {

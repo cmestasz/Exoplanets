@@ -8,7 +8,7 @@ public class SerializableConstellation
     public SerializableStar[] ConnectionsL { get; private set; }
     public SerializableStar[] ConnectionsR { get; private set; }
 
-    public SerializableConstellation(Constellation constellation)
+    public SerializableConstellation(ConstellationOld constellation)
     {
         Id = constellation.Id;
         ConnectionsL = new SerializableStar[constellation.Connections.Count];

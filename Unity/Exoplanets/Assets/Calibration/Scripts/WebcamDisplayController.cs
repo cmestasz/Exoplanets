@@ -16,7 +16,7 @@ public class WebcamDisplayController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        WebcamTexture = new WebCamTexture();
+        WebcamTexture = new();
         GetComponent<Renderer>().material.mainTexture = WebcamTexture;
         WebcamTexture.Play();
 
