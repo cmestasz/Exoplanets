@@ -1,3 +1,5 @@
+import React from 'react';
+
 export type TextBaseProps = {
   invertedStyle?: boolean;
   className?: string;

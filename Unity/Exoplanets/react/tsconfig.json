@@ -37,5 +37,8 @@
     "./src",
     "tailwind.config.js",
     "webpack.config.js"
+  ],
+  "exclude": [
+    "node_modules"
   ]
 }
