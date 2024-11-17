@@ -1,22 +1,38 @@
+using System.Collections;
 using TMPro;
 using UnityEngine;
+using static Animations;
 
 public class UIInteractor : MonoBehaviour
 {
-    [SerializeField] private TMP_InputField constellationNameInput;
-    [SerializeField] private TMP_Text infoText;
-    [SerializeField] private TMP_InputField warpToRA, warpToDEC, warpToPARALLAX;
+    private TMP_Text infoText, titleText;
+    private TMP_InputField warpToRA, warpToDEC, warpToDIST, warpToID;
+    private const float TITLE_TIME = 2, TITLE_DELAY = 2;
     public static UIInteractor Instance { get; private set; }
 
-
-    void Awake()
+    private void Awake()
     {
         Instance = this;
     }
 
+    private void Start()
+    {
+        InitVariables();
+    }
+
+    private void InitVariables()
+    {
+        infoText = transform.Find("InfoText").GetComponent<TMP_Text>();
+        titleText = transform.Find("TitleText").GetComponent<TMP_Text>();
+        warpToRA = transform.Find("WarpToRA").GetComponent<TMP_InputField>();
+        warpToDEC = transform.Find("WarpToDEC").GetComponent<TMP_InputField>();
+        warpToDIST = transform.Find("WarpToDIST").GetComponent<TMP_InputField>();
+        warpToID = transform.Find("WarpToID").GetComponent<TMP_InputField>();
+    }
+
     public string GetConstellationName()
     {
-        return constellationNameInput.text;
+        return "nuh uh";
     }
 
     public void SetInfoText(string text)
@@ -28,7 +44,26 @@ public class UIInteractor : MonoBehaviour
     {
         float ra = float.Parse(warpToRA.text);
         float dec = float.Parse(warpToDEC.text);
-        float parallax = float.Parse(warpToPARALLAX.text);
-        return new SpaceCoord(ra, dec, parallax);
+        float dist = float.Parse(warpToDIST.text);
+        return new SpaceCoord(ra, dec, dist);
     }
+
+    public string GetWarpId()
+    {
+        return warpToID.text;
+    }
+
+    public void ShowTitle(string title)
+    {
+        StartCoroutine(ShowTitleAnim(title));
+    }
+
+    private IEnumerator ShowTitleAnim(string title)
+    {
+        titleText.text = title;
+        yield return new WaitForSeconds(TITLE_DELAY);
+        yield return TitleFadeIn(titleText);
+        yield return new WaitForSeconds(TITLE_TIME);
+        yield return TitleFadeOut(titleText);
+    }   
 }

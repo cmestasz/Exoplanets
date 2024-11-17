@@ -40,10 +40,7 @@ public class PlayerController : MonoBehaviour
 
     void InitConfig()
     {
-        webcamTexture = new()
-        {
-            requestedFPS = 15
-        };
+        webcamTexture = new();
         webcamTexture.Play();
         StartCoroutine(GetInput());
     }
@@ -156,11 +153,14 @@ public class PlayerController : MonoBehaviour
         {
             SpaceController.Instance.SaveConstellation(UIInteractor.Instance.GetConstellationName());
         }
-        if (Input.GetKeyDown(WARP))
+        if (Input.GetKeyDown(WARP_POS))
         {
-            SpaceController.Instance.WarpTo(UIInteractor.Instance.GetWarpPosition());
+            SpaceController.Instance.WarpToPos(UIInteractor.Instance.GetWarpPosition());
         }
-
+        if (Input.GetKeyDown(WARP_ID))
+        {
+            SpaceController.Instance.WarpToId(UIInteractor.Instance.GetWarpId());
+        }
         if (Physics.Raycast(transform.position, transform.forward, out RaycastHit hit2)
             && hit2.collider.TryGetComponent<IHasInfo>(out var hasInfo)
             && Input.GetKeyDown(GET_INFO))
