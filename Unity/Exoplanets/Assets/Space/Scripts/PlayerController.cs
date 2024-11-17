@@ -47,11 +47,13 @@ public class PlayerController : MonoBehaviour
 
     private IEnumerator GetInput()
     {
-        Texture2D texture = new(webcamTexture.width, webcamTexture.height);
+        Color32[] colors = new Color32[webcamTexture.width * webcamTexture.height];
+        Debug.Log(webcamTexture.graphicsFormat);
         while (true)
         {
-            texture.SetPixels32(webcamTexture.GetPixels32());
-            byte[] bytes = texture.EncodeToJPG(50);
+            yield return new WaitUntil(() => webcamInputActive);
+            webcamTexture.GetPixels32(colors);
+            byte[] bytes = ImageConversion.EncodeArrayToJPG(colors, UnityEngine.Experimental.Rendering.GraphicsFormat.R8G8B8A8_SRGB, (uint)webcamTexture.width, (uint)webcamTexture.height, 0, 50);
 
             yield return
                 APIConnector.PostBytes<InputResponse>("get_action_by_image", bytes, response =>
@@ -59,7 +61,6 @@ public class PlayerController : MonoBehaviour
                     currentAction = response.action;
                 });
             yield return new WaitForSeconds(updateDelay);
-            yield return new WaitUntil(() => webcamInputActive);
         }
     }
 
