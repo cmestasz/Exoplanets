@@ -23,10 +23,10 @@ export default function UserAuth() {
   const getUser = useCallback(async (userGetted?: User, withAlert?: boolean) => {
     if (!userGetted) {
       const { data: { user }, error } = await supabase.auth.getUser();
-      if (error) {
+      if (error || !user) {
         console.log('Auth error: ', error);
         if (withAlert) showAlert({ message: t('components.user.get-user-error'), type: 'error' });
-        setUserFetched(null);
+        setUserFetched('error');
         return;
       }
       userGetted = user;
@@ -35,7 +35,7 @@ export default function UserAuth() {
     if (err) {
       console.error('Send by supabase', err.message);
       if (withAlert) showAlert({ message: t('components.user.get-user-error'), type: 'error' });
-      setUserFetched(null);
+      setUserFetched('error');
       return;
     }
 
@@ -71,7 +71,7 @@ export default function UserAuth() {
     getUser().catch((r) => {
       if (isMounted) {
         console.log('Error thowed by me: ', r);
-        setUserFetched(null);
+        setUserFetched('error');
       }
     });
     return () => { isMounted = false; };
