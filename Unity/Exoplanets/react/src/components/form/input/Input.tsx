@@ -3,7 +3,6 @@ import {
   useContext, useEffect, useRef, useState,
 } from 'react';
 import { useTranslation } from 'react-i18next';
-import { AlertOptions } from '@components/alerts/types';
 import { UGUIElements } from '@reactunity/renderer/ugui';
 import { ReactUnity } from '@reactunity/renderer';
 import { AlertContext } from '@components/alerts/Alert';
@@ -26,13 +25,6 @@ export default function Input({
   const [stateInput, setStateInput] = useState<'normal' | 'editing' | 'sending'>('normal');
   const [savedValue/* setSavedValue */] = useState<string>(defaultValue);
   const inputRef = useRef<ReactUnity.UGUI.InputComponent>(null);
-  const handleShowAlert = ({ message, type, duration }: AlertOptions) => {
-    showAlert({
-      message,
-      type,
-      duration,
-    });
-  };
   const handleEdit = () => {
     setStateInput('editing');
   };
@@ -51,7 +43,7 @@ export default function Input({
         // handleShowAlert({ message: SUCCESS_UPLOADING, type: 'success' });
         // De otra manera
         setStateInput('editing');
-        handleShowAlert({ message: ERROR_UPLOADING, type: 'error' });
+        showAlert({ message: ERROR_UPLOADING, type: 'error' });
       }
     }, 500);
   };

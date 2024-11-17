@@ -50,7 +50,7 @@ export default function UserAuth() {
     supabase.auth.signInWithOAuth({ provider: 'google', options: { redirectTo: 'http://localhost:7463/callback', skipBrowserRedirect: true } }).then(({ data, error }) => {
       if (error) {
         console.error(error);
-        showAlert({ message: 'No se pudo autenticar, inténtalo de nuevo más tarde', type: 'error' });
+        showAlert({ message: t('components.user.login-error'), type: 'error' });
         return;
       }
       globals.SetHandleCode(handleCode);
