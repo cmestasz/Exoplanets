@@ -5,44 +5,52 @@ import {
 } from 'react';
 import { supabase } from '@lib/supabase';
 import AsyncData from '@mytypes/AsyncData';
-import User from '@mytypes/User';
+import UserAPI from '@mytypes/User';
 import { AlertContext } from '@components/alerts/Alert';
 import { useGlobals } from '@reactunity/renderer';
 import { LocalServer } from '@mytypes/UnityTypes';
+import { User } from '@supabase/supabase-js';
 import UserBox from './UserBox';
 
 export default function UserAuth() {
   const { t } = useTranslation();
   const globals = useGlobals().LocalServer as LocalServer;
-  const [userFetched, setUserFetched] = useState<AsyncData<User>>('loading');
+  const [userFetched, setUserFetched] = useState<AsyncData<UserAPI>>('loading');
   const showAlert = useContext(AlertContext);
-  const onSignOut = useCallback(() => {
-    setUserFetched(null);
-  }, []);
-  const getUser = async () => {
-    const { data: { user }, error } = await supabase.auth.getUser();
-    if (error) {
-      console.log('Auth error: ', error);
-      setUserFetched(null);
-      return;
+  const onSignOut = () => {
+    setUserFetched('error');
+  };
+  const getUser = useCallback(async (userGetted?: User, withAlert?: boolean) => {
+    if (!userGetted) {
+      const { data: { user }, error } = await supabase.auth.getUser();
+      if (error) {
+        console.log('Auth error: ', error);
+        if (withAlert) showAlert({ message: t('components.user.get-user-error'), type: 'error' });
+        setUserFetched(null);
+        return;
+      }
+      userGetted = user;
     }
-    console.log('Before: postgrest', user.email);
-    const { data, error: err } = await supabase.from('users').select().eq('id', user.id).maybeSingle();
+    const { data, error: err } = await supabase.from('users').select().eq('id', userGetted.id).maybeSingle();
     if (err) {
       console.error('Send by supabase', err.message);
+      if (withAlert) showAlert({ message: t('components.user.get-user-error'), type: 'error' });
       setUserFetched(null);
       return;
     }
-    console.log('After postgrest: ', data);
 
     setUserFetched(data);
-  };
+  }, [showAlert, t]);
   const handleCode = (code: string) => {
-    supabase.auth.exchangeCodeForSession(code).then(({ data }) => {
-      console.log('user handle Code', data.user.email);
-      getUser().catch((r) => {
+    supabase.auth.exchangeCodeForSession(code).then(({ data, error }) => {
+      if (error) {
+        console.log(error);
+        showAlert({ message: t('components.user.get-user-error') });
+        return;
+      }
+      getUser(data.user).catch((r) => {
         console.log('Error thowed by me: ', r);
-        setUserFetched(null);
+        setUserFetched('error');
       });
     });
   };
@@ -50,7 +58,7 @@ export default function UserAuth() {
     supabase.auth.signInWithOAuth({ provider: 'google', options: { redirectTo: 'http://localhost:7463/callback', skipBrowserRedirect: true } }).then(({ data, error }) => {
       if (error) {
         console.error(error);
-        showAlert({ message: 'No se pudo autenticar, inténtalo de nuevo más tarde', type: 'error' });
+        showAlert({ message: t('components.user.login-error'), type: 'error' });
         return;
       }
       globals.SetHandleCode(handleCode);
@@ -59,13 +67,17 @@ export default function UserAuth() {
     console.log('sign in');
   };
   useEffect(() => {
+    let isMounted = true;
     getUser().catch((r) => {
-      console.log('Error thowed by me: ', r);
-      setUserFetched(null);
+      if (isMounted) {
+        console.log('Error thowed by me: ', r);
+        setUserFetched(null);
+      }
     });
-  }, []);
+    return () => { isMounted = false; };
+  }, [getUser]);
   if (userFetched === 'loading') return null;
-  if (userFetched === null) {
+  if (userFetched === 'error') {
     return (
       <Text
         size="lg"

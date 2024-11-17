@@ -1,4 +1,4 @@
-export default interface User {
+export default interface UserAPI {
   avatar: string | null
   created_at: string
   email: string

@@ -13,9 +13,12 @@
     },
     "user": {
       "login": "Iniciar sesión o registrarse",
+      "login-error": "La autenticación ha fallado, inténtalo de nuevo más tarde",
       "profile": "Perfil",
       "profileImage": "Imagen de perfil",
-      "logout": "Cerrar Sesión"
+      "logout": "Cerrar Sesión",
+      "logout-error": "No se pudo cerrar sesión, inténtalo más tarde",
+      "get-user-error": "No se pudo concretar la autenticación"
     }
   }
 }

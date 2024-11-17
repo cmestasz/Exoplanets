@@ -13,9 +13,12 @@
     },
     "user": {
       "login": "Sign in or Sign up",
+      "login-error": "Authentication failed, please try again later",
       "profileImage": "Profile Image",
       "profile": "Profile",
-      "logout": "Sign out"
+      "logout": "Sign out",
+      "logout-error": "Could not log out, try again later",
+      "get-user-error": "Authentication could not be completed"
     }
   }
 }

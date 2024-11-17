@@ -27,7 +27,7 @@ export default function UserBox({
     supabase.auth.signOut().then(({ error }) => {
       if (error) {
         console.error(error);
-        showAlert({ message: 'No se pudo cerrar sesión', type: 'error' });
+        showAlert({ message: t('components.user.logout-error'), type: 'error' });
       } else {
         onSignOut();
         console.log('Cerró sesión');

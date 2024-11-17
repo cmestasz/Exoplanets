@@ -1,3 +1,3 @@
-type AsyncData<T> = 'loading' | null | T;
+type AsyncData<T> = 'loading' | 'error' | T;
 
 export default AsyncData;
