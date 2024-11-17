@@ -78,8 +78,6 @@ crashlytics-build.properties
 
 .venv/
 .__pycache__/
-
-# env
 .env
 
 # patchs
