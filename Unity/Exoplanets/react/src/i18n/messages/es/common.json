@@ -17,7 +17,8 @@
       "profile": "Perfil",
       "profileImage": "Imagen de perfil",
       "logout": "Cerrar Sesión",
-      "logout-error": "No se pudo cerrar sesión, inténtalo más tarde"
+      "logout-error": "No se pudo cerrar sesión, inténtalo más tarde",
+      "get-user-error": "No se pudo concretar la autenticación"
     }
   }
 }
