@@ -14,14 +14,12 @@ public class PlayerController : MonoBehaviour
     private bool InputActive { get; set; }
     private WebCamTexture webcamTexture;
     private string currentAction;
-    private Communicator communicator = new();
 
     // Start is called before the first frame update
     void Start()
     {
         InitVariables();
         InitConfig();
-        communicator.Link(1024, "test");
     }
 
     // Update is called once per frame
@@ -49,12 +47,6 @@ public class PlayerController : MonoBehaviour
 
     private IEnumerator GetInput()
     {
-        byte[] data = new byte[1024];
-        yield return communicator.Read("test", data, 1, 1023);
-        Debug.Log(data);
-        byte[] data2 = System.Convert.FromBase64String("Hello from C#");
-        communicator.Write("test", data2, 1, data2.Length);
-
         Color32[] colors = new Color32[webcamTexture.width * webcamTexture.height];
         Debug.Log(webcamTexture.graphicsFormat);
         while (true)
