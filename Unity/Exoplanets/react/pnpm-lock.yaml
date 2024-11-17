@@ -5,11 +5,8 @@ settings:
   excludeLinksFromLockfile: false
 
 patchedDependencies:
-  '@supabase/auth-js':
-    hash: 32iasdgfgcu2zxm5h4trdc4ete
-    path: patches/@supabase__auth-js.patch
   '@supabase/postgrest-js@1.16.3':
-    hash: hufuwjoajfbj3usyzypooaexhe
+    hash: cturmbqwgfwzpjt2y7nm65r23e
     path: patches/@supabase__postgrest-js@1.16.3.patch
 
 importers:
@@ -22,9 +19,6 @@ importers:
       '@reactunity/renderer':
         specifier: ^0.18.1
         version: 0.18.1(react@18.3.1)
-      '@supabase/postgrest-js':
-        specifier: ^1.17.5
-        version: 1.17.5
       '@supabase/supabase-js':
         specifier: ^2.46.1
         version: 2.46.1
@@ -1152,9 +1146,6 @@ packages:
 
   '@supabase/postgrest-js@1.16.3':
     resolution: {integrity: sha512-HI6dsbW68AKlOPofUjDTaosiDBCtW4XAm0D18pPwxoW3zKOE2Ru13Z69Wuys9fd6iTpfDViNco5sgrtnP0666A==}
-
-  '@supabase/postgrest-js@1.17.5':
-    resolution: {integrity: sha512-dq04qmKQoz5vH/sfBYvYJSyaNcYzdEkhl01qCFHhmr1c0CwLyVVOpUbfO+viUCBqvA04XrIwzSSp2oR+nBY9+Q==}
 
   '@supabase/realtime-js@2.10.7':
     resolution: {integrity: sha512-OLI0hiSAqQSqRpGMTUwoIWo51eUivSYlaNBgxsXZE7PSoWh12wPRdVt0psUMaUzEonSB85K21wGc7W5jHnT6uA==}
@@ -6155,7 +6146,7 @@ snapshots:
     dependencies:
       '@sinonjs/commons': 3.0.1
 
-  '@supabase/auth-js@2.65.1(patch_hash=32iasdgfgcu2zxm5h4trdc4ete)':
+  '@supabase/auth-js@2.65.1':
     dependencies:
       '@supabase/node-fetch': 2.6.15
 
@@ -6167,11 +6158,7 @@ snapshots:
     dependencies:
       whatwg-url: 5.0.0
 
-  '@supabase/postgrest-js@1.16.3(patch_hash=hufuwjoajfbj3usyzypooaexhe)':
-    dependencies:
-      '@supabase/node-fetch': 2.6.15
-
-  '@supabase/postgrest-js@1.17.5':
+  '@supabase/postgrest-js@1.16.3(patch_hash=cturmbqwgfwzpjt2y7nm65r23e)':
     dependencies:
       '@supabase/node-fetch': 2.6.15
 
@@ -6191,10 +6178,10 @@ snapshots:
 
   '@supabase/supabase-js@2.46.1':
     dependencies:
-      '@supabase/auth-js': 2.65.1(patch_hash=32iasdgfgcu2zxm5h4trdc4ete)
+      '@supabase/auth-js': 2.65.1
       '@supabase/functions-js': 2.4.3
       '@supabase/node-fetch': 2.6.15
-      '@supabase/postgrest-js': 1.16.3(patch_hash=hufuwjoajfbj3usyzypooaexhe)
+      '@supabase/postgrest-js': 1.16.3(patch_hash=cturmbqwgfwzpjt2y7nm65r23e)
       '@supabase/realtime-js': 2.10.7
       '@supabase/storage-js': 2.7.1
     transitivePeerDependencies:

@@ -12,7 +12,6 @@
   "dependencies": {
     "@reactunity/previewer": "^0.18.0",
     "@reactunity/renderer": "^0.18.1",
-    "@supabase/postgrest-js": "^1.17.5",
     "@supabase/supabase-js": "^2.46.1",
     "clsx": "^2.1.1",
     "i18next": "^23.16.4",
@@ -42,8 +41,7 @@
   },
   "pnpm": {
     "patchedDependencies": {
-      "@supabase/postgrest-js@1.16.3": "patches/@supabase__postgrest-js@1.16.3.patch",
-      "@supabase/auth-js": "patches/@supabase__auth-js.patch"
+      "@supabase/postgrest-js@1.16.3": "patches/@supabase__postgrest-js@1.16.3.patch"
     }
   }
 }

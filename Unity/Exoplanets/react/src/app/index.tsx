@@ -1,5 +1,4 @@
-import 'url-search-params-polyfill';
-import './pollyfills';
+import './polyfills';
 import './globals.css';
 import '@i18n/i18n';
 import { render } from '@reactunity/renderer';
@@ -16,6 +15,13 @@ import UserAuth from '@components/user/UserAuth';
 import { Text } from '@components/ui/Text';
 import AppRoutes from './routes';
 
+// const url = new URL('http://localhost:3000?code=dfdfds&jk=dsdsadsa');
+// const searchParams = new URLSearchParams(url.searchParams.toString());
+// console.log('Search params: ', searchParams.toString());
+// searchParams.forEach((value) => console.log(value));
+const se = new URLSearchParams({ hola: 'cd', fsdsf: 'fdsfds' });
+se.append('xd', 'fd');
+console.log(se.toString());
 function App() {
   const { t } = useTranslation();
   const {

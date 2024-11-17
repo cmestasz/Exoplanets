@@ -22,13 +22,12 @@ export default function UserAuth() {
   const getUser = async () => {
     const { data: { user }, error } = await supabase.auth.getUser();
     if (error) {
-      console.log(error);
+      console.log('Auth error: ', error);
       setUserFetched(null);
       return;
     }
     console.log('Before: postgrest', user.email);
     const { data, error: err } = await supabase.from('users').select().eq('id', user.id).maybeSingle();
-
     if (err) {
       console.error('Send by supabase', err.message);
       setUserFetched(null);
