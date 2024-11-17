@@ -46,9 +46,6 @@ importers:
       tailwind-merge:
         specifier: ^2.5.4
         version: 2.5.4
-      url-search-params-polyfill:
-        specifier: ^8.2.5
-        version: 8.2.5
     devDependencies:
       '@reactunity/scripts':
         specifier: ^0.18.4
@@ -4579,9 +4576,6 @@ packages:
     peerDependenciesMeta:
       file-loader:
         optional: true
-
-  url-search-params-polyfill@8.2.5:
-    resolution: {integrity: sha512-FOEojW4XReTmtZOB7xqSHmJZhrNTmClhBriwLTmle4iA7bwuCo6ldSfbtsFSb8bTf3E0a3XpfonAdaur9vqq8A==}
 
   use-sync-external-store@1.2.2:
     resolution: {integrity: sha512-PElTlVMwpblvbNqQ82d2n6RjStvdSoNe9FG28kNfz3WiXilJm4DdNkEzRhCZuIDwY8U08WVihhGR5iRqAwfDiw==}
@@ -10182,8 +10176,6 @@ snapshots:
       webpack: 5.96.1
     optionalDependencies:
       file-loader: 6.2.0(webpack@5.96.1)
-
-  url-search-params-polyfill@8.2.5: {}
 
   use-sync-external-store@1.2.2(react@18.3.1):
     dependencies:
