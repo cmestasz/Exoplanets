@@ -1,13 +1,14 @@
 import { DEFAULT_COLOR, INVERTED_COLOR } from '@styles/colors';
 import clsx from 'clsx';
 import { twMerge } from 'tailwind-merge';
+import React from 'react';
 import {
   AsButton, AsLink, OnlyText, TextBaseProps,
 } from './types';
 
-export function Text(props: TextBaseProps & OnlyText): JSX.Element;
-export function Text(props: TextBaseProps & AsButton): JSX.Element;
-export function Text(props: TextBaseProps & AsLink): JSX.Element;
+export function Text(props: TextBaseProps & OnlyText): React.JSX.Element;
+export function Text(props: TextBaseProps & AsButton): React.JSX.Element;
+export function Text(props: TextBaseProps & AsLink): React.JSX.Element;
 
 export function Text(props: TextBaseProps & (AsButton | AsLink | OnlyText)): JSX.Element {
   const {
@@ -18,11 +19,11 @@ export function Text(props: TextBaseProps & (AsButton | AsLink | OnlyText)): JSX
     clsx({
       [INVERTED_COLOR]: invertedStyle,
       [DEFAULT_COLOR]: !invertedStyle,
-      'max-h-6 text-xs': size === 'xs',
-      'max-h-7 text-sm': size === 'sm',
-      'max-h-8 text-base': size === 'base',
-      'max-h-9 text-lg': size === 'lg',
-      'max-h-10 text-xl': size === 'xl',
+      'max-h-8 text-xs': size === 'xs',
+      'max-h-9 text-sm': size === 'sm',
+      'max-h-10 text-base': size === 'base',
+      'max-h-11 text-lg': size === 'lg',
+      'max-h-12 text-xl': size === 'xl',
     }),
     'disabled:text-primary disabled:cursor-default',
     className,

@@ -1,9 +1,11 @@
 export default interface User {
-  username: string;
-  email: string;
-  names: string;
-  lastNames: string;
-  photo: string;
+  avatar: string | null
+  created_at: string
+  email: string
+  first_name: string | null
+  id: string
+  last_name: string | null
+  username: string | null
 }
 
 export interface UserBoxOptions {

@@ -1,7 +1,7 @@
 {
   "dependencies": {
     "com.reactunity.core": {
-      "version": "0.19.4",
+      "version": "0.19.9",
       "depth": 0,
       "source": "registry",
       "dependencies": {
@@ -42,7 +42,7 @@
     },
     "com.unity.editorcoroutines": {
       "version": "1.0.0",
-      "depth": 1,
+      "depth": 0,
       "source": "registry",
       "dependencies": {},
       "url": "https://packages.unity.com"
@@ -182,7 +182,7 @@
       }
     },
     "com.unity.vectorgraphics": {
-      "version": "2.0.0-preview.24",
+      "version": "2.0.0-preview.25",
       "depth": 0,
       "source": "registry",
       "dependencies": {
@@ -209,6 +209,13 @@
         "com.unity.modules.jsonserialize": "1.0.0"
       },
       "url": "https://packages.unity.com"
+    },
+    "xyz.candycoded.env": {
+      "version": "https://github.com/CandyCoded/env.git#v1.1.0",
+      "depth": 0,
+      "source": "git",
+      "dependencies": {},
+      "hash": "c6951bc02488dbe99f48509a9e289ee73c74acda"
     },
     "com.unity.modules.ai": {
       "version": "1.0.0",

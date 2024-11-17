@@ -4,6 +4,7 @@ module.exports = (env, originalConfig) => ({
   ...originalConfig,
   resolve: {
     ...originalConfig.resolve,
+    mainFields: ['browser', 'module', 'main'],
     alias: {
       ...(originalConfig.resolve.alias || {}),
       '@i18n': path.resolve(__dirname, 'src/i18n'),

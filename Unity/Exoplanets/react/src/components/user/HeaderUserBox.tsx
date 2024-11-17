@@ -20,11 +20,12 @@ export default function HeaderUserBox({
       className={clsx('w-full', {
         'hover:text-primary text-primary': opened,
       })}
-      size="lg"
+      size="xl"
     >
       {
         photo ? (
           <image
+            className="h-full"
             src={photo}
           />
         ) : (
@@ -33,7 +34,9 @@ export default function HeaderUserBox({
           </icon>
         )
       }
-      {username}
+      <span className="h-full flex flex-row flex-auto overflow-hidden whitespace-nowrap text-clip">
+        {username}
+      </span>
       <icon
         className={twMerge(
           'transition-transform m-duration-400 m-ease-in m-delay-100 duration-400 delay-100 ease-in',

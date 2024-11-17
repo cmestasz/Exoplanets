@@ -79,3 +79,6 @@ build/
 # For zero installs:
 # !.yarn/cache
 # !.pnp.*
+
+#patchs
+postgrest-js/

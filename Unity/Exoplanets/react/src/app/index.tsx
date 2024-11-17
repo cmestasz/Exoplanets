@@ -1,6 +1,7 @@
-import { render } from '@reactunity/renderer';
+import './polyfills';
 import './globals.css';
 import '@i18n/i18n';
+import { render } from '@reactunity/renderer';
 import { MemoryRouter } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import AstrosSlider from '@components/astros/AstrosSlider';
@@ -14,6 +15,13 @@ import UserAuth from '@components/user/UserAuth';
 import { Text } from '@components/ui/Text';
 import AppRoutes from './routes';
 
+// const url = new URL('http://localhost:3000?code=dfdfds&jk=dsdsadsa');
+// const searchParams = new URLSearchParams(url.searchParams.toString());
+// console.log('Search params: ', searchParams.toString());
+// searchParams.forEach((value) => console.log(value));
+const se = new URLSearchParams({ hola: 'cd', fsdsf: 'fdsfds' });
+se.append('xd', 'fd');
+console.log(se.toString());
 function App() {
   const { t } = useTranslation();
   const {
@@ -41,7 +49,6 @@ function App() {
           <UserAuth />
           {isVisible && <Alert alertOptions={alertOptions} hideAlert={hideAlert} />}
 
-          <h2 className="text-white">ods</h2>
           <AstrosSlider astros={astros} />
           <Input
             name={t('components.user.login')}

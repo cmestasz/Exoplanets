@@ -204,6 +204,8 @@ GameObject:
   - component: {fileID: 635399861}
   - component: {fileID: 635399860}
   - component: {fileID: 635399859}
+  - component: {fileID: 635399864}
+  - component: {fileID: 635399865}
   m_Layer: 5
   m_Name: React Canvas
   m_TagString: Untagged
@@ -235,7 +237,9 @@ MonoBehaviour:
     DevServer: http://localhost:3005
   EngineType: 0
   globals:
-    Entries: []
+    Entries:
+    - Key: LocalServer
+      Value: {fileID: 635399864}
   AdvancedOptions:
     Pooling: 1
     MediaUpdateInterval: 0.5
@@ -334,6 +338,30 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
+--- !u!114 &635399864
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 635399858}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 16e9c7afd3d7fe01ba4548efa418c89a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &635399865
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 635399858}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8bd590029ae250172bacf57c8133c2fa, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1516718325
 GameObject:
   m_ObjectHideFlags: 0
