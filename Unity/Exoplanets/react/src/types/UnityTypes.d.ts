@@ -1,6 +1,6 @@
 //
 // Types in assemblies: Assembly-CSharp
-// Generated 15/11/2024 22:35:47
+// Generated 16/11/2024 21:26:21
 //
 /* eslint-disable */
 
@@ -246,7 +246,7 @@ export declare class LocalServer {
   particleSystem: UnityEngine.Component;
   name: string;
   hideFlags: UnityEngine.HideFlags;
-  StartServer(handleCode: any): void;
+  SetHandleCode(handleCode: any): void;
   IsInvoking(): boolean;
   CancelInvoke(): void;
   Invoke(methodName: string, time: number): void;

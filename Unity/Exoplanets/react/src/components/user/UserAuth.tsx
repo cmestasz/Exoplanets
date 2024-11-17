@@ -54,7 +54,7 @@ export default function UserAuth() {
         showAlert({ message: 'No se pudo autenticar, inténtalo de nuevo más tarde', type: 'error' });
         return;
       }
-      globals.StartServer(handleCode);
+      globals.SetHandleCode(handleCode);
       Interop.UnityEngine.Application.OpenURL(data.url);
     });
     console.log('sign in');

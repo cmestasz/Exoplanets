@@ -1,12 +1,10 @@
 using System;
 using System.Net;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class LocalServer : MonoBehaviour
 {
     private HttpListener _httpListener;
-    private bool _serverActive;
 
     object _handleCode;
 
@@ -15,20 +13,16 @@ public class LocalServer : MonoBehaviour
     void Start()
     {
         this.codeReceived = "";
+        _httpListener = new HttpListener();
+        _httpListener.Prefixes.Add("http://localhost:7463/callback/");
+        _httpListener.Start();
+        _httpListener.BeginGetContext(new AsyncCallback(OnRequestReceive), _httpListener);
+        Debug.Log("Servidor HTTP local iniciado en http://localhost:7463/callback");
     }
 
-    public void StartServer(object handleCode)
+    public void SetHandleCode(object handleCode)
     {
-        if (!_serverActive)
-        {
-            _httpListener = new HttpListener();
-            _httpListener.Prefixes.Add("http://localhost:7463/callback/");
-            _httpListener.Start();
-            _httpListener.BeginGetContext(new AsyncCallback(OnRequestReceive), _httpListener);
-            _serverActive = true;
-            Debug.Log("Servidor HTTP local iniciado en http://localhost:7463/callback");
-            this._handleCode = handleCode;
-        }
+        this._handleCode = handleCode;
     }
 
     private void OnRequestReceive(IAsyncResult result)
@@ -58,10 +52,8 @@ public class LocalServer : MonoBehaviour
         {
             if (_handleCode != null)
             {
-                Debug.Log("HandleCode will execute");
                 var callback = ReactUnity.Helpers.Callback.From(_handleCode);
                 callback.Call(this.codeReceived);
-                Debug.Log("HandleCode has been executed");
                 this.codeReceived = "";
 
             }
