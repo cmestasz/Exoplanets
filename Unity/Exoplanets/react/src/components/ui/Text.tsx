@@ -15,7 +15,7 @@ export function Text(props: TextBaseProps & (AsButton | AsLink | OnlyText)): JSX
     invertedStyle, size, children, className,
   } = props;
   const resultClass = twMerge(
-    'cursor-pointer flex flex-row gap-2 items-center w-fit p-2 font-exo',
+    'cursor-pointer flex flex-row gap-[0.35rem] items-center w-fit p-2 font-exo',
     clsx({
       [INVERTED_COLOR]: invertedStyle,
       [DEFAULT_COLOR]: !invertedStyle,

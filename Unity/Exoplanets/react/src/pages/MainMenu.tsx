@@ -14,8 +14,8 @@ export default function MainMenu() {
   ], []);
   return (
     <view
-      className="flex flex-col p-5"
-      style={{ minHeight: '100vh' }}
+      className="flex flex-col"
+      style={{ minHeight: '100vh', padding: '0.75rem' }}
     >
       <div
         className="flex flex-row items-center justify-end"
@@ -25,13 +25,23 @@ export default function MainMenu() {
         <SelectLanguage />
       </div>
       <div
-        className="flex flex-col gap-4 flex-auto justify-center"
+        className="flex flex-col flex-auto justify-center"
+        style={{ gap: '2.5rem' }}
       >
         <div
-          className="flex flex-col gap-2"
+          className="flex flex-col gap-1 items-center"
         >
-          <h1>Exoplanets</h1>
-          <h2>Descubre el universo cercano</h2>
+          <h1
+            className="text-primary"
+            style={{ fontFamily: 'Orbitron', fontSize: '3.5rem' }}
+          >
+            Exoplanets
+          </h1>
+          <h2
+            className="font-exo text-secondary text-xl"
+          >
+            Descubre el universo cercano
+          </h2>
         </div>
         <div
           className="flex flex-row items-center justify-center"
@@ -48,10 +58,31 @@ export default function MainMenu() {
         <div
           className="flex flex-row gap-2"
         >
-          <Text>Acerca de</Text>
-          <Text>Ayuda</Text>
+          <Text
+            invertedStyle
+            asButton
+            onClick={() => nav('about')}
+          >
+            <icon>info</icon>
+            Acerca de
+          </Text>
+          <Text
+            invertedStyle
+            asButton
+            onClick={() => nav('help')}
+          >
+            <icon>help</icon>
+            Ayuda
+          </Text>
         </div>
-        <Text>Repositorio</Text>
+        <Text
+          invertedStyle
+          asLink
+          url="https://github.com/cmestasz/Exoplanets"
+        >
+          <icon>github</icon>
+          Repositorio
+        </Text>
       </div>
     </view>
   );
