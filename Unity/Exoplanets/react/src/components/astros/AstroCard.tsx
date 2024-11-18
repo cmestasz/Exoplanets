@@ -4,21 +4,21 @@ import { twMerge } from 'tailwind-merge';
 import { useState } from 'react';
 import clsx from 'clsx';
 
-export interface AstroCardProps<T extends Astro> {
-  astro: T;
+export interface AstroCardProps {
+  astro: Pick<Astro, 'imageUrl' | 'name'>;
   invertedStyle?: boolean;
   onClick: () => void;
   className?: string;
   onDoubleClick?: () => void;
-  handExHover: (isHov: boolean) => void;
+  handExHover?: (isHov: boolean) => void;
   size?: 'normal' | 'small';
 }
 
-export default function AstroCard<T extends Astro>({
+export default function AstroCard({
   astro, onClick, invertedStyle, className, onDoubleClick, handExHover, size = 'normal',
-}: AstroCardProps<T>) {
+}: AstroCardProps) {
   const [isHover, setIsHover] = useState<boolean>(false);
-  const buttonBaseStyle = 'relative font-exo flex flex-col items-center gap-3 p-16 border-primary hover:border-secondary transition-all duration-200 hover:ease-out border-2 rounded-2xl ease-in-out active:scale-[0.98] active:ease-out';
+  const buttonBaseStyle = 'relative font-exo flex flex-col items-center gap-3 p-10 border-primary hover:border-secondary transition-all duration-200 hover:ease-out border-2 rounded-2xl ease-in-out active:scale-[0.98] active:ease-out';
   const buttonSizeStyle = size === 'normal' ? 'size-56' : 'size-48';
   const buttonColorStyle = invertedStyle ? INVERTED_COLOR : DEFAULT_COLOR;
   const handleHover = (ishover: boolean) => {
@@ -42,8 +42,8 @@ export default function AstroCard<T extends Astro>({
         className={clsx(
           'aspect-square rounded-full overflow-clip',
           {
-            'w-40': size === 'normal',
-            'w-28': size === 'small',
+            'w-44 text-lg': size === 'normal',
+            'w-28 text-sm': size === 'small',
           },
         )}
       >
