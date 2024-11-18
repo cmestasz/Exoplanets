@@ -18,9 +18,9 @@ export default function AstroCard({
   astro, onClick, invertedStyle, className, onDoubleClick, handExHover, size = 'normal',
 }: AstroCardProps) {
   const [isHover, setIsHover] = useState<boolean>(false);
-  const buttonBaseStyle = 'relative font-exo flex flex-col items-center gap-3 p-10 border-primary hover:border-secondary transition-all duration-200 hover:ease-out border-2 rounded-2xl ease-in-out active:scale-[0.98] active:ease-out';
+  const buttonBaseStyle = 'relative font-exo flex flex-col items-center gap-3 p-10 transition-all duration-200 hover:ease-out border-2 rounded-2xl ease-in-out active:scale-[0.98] active:ease-out';
   const buttonSizeStyle = size === 'normal' ? 'size-56' : 'size-48';
-  const buttonColorStyle = invertedStyle ? INVERTED_COLOR : DEFAULT_COLOR;
+  const buttonColorStyle = invertedStyle ? `${INVERTED_COLOR} border-secondary hover:border-primary` : `${DEFAULT_COLOR} border-primary hover:border-secondary`;
   const handleHover = (ishover: boolean) => {
     setIsHover(ishover);
     handExHover(ishover);
@@ -60,7 +60,13 @@ export default function AstroCard({
         isHover && (
           <icon
             key="externalLinkCard"
-            className="absolute top-1 right-1 duration-300 transition-all enter:opacity-0 enter:trans-x-4 enter:-trans-y-4 enter:state-duration-0 state-duration-500 text-secondary trans-0 leave:trans-x-4 leave:-trans-y-4 leave:opacity-0 leave:text-primary m-duration-500 m-ease-out"
+            className={clsx(
+              'absolute top-1 right-1 duration-300 transition-all enter:opacity-0 enter:trans-x-4 enter:-trans-y-4 enter:state-duration-0 state-duration-500 trans-0 leave:trans-x-4 leave:-trans-y-4 leave:opacity-0 m-duration-500 m-ease-out',
+              {
+                'text-secondary leave:text-primary': !invertedStyle,
+                'text-primary leave:text-secondary': invertedStyle,
+              },
+            )}
           >
             open_in_new
           </icon>

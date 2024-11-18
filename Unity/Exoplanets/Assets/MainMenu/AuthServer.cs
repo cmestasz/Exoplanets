@@ -175,7 +175,7 @@ public class AuthServer : MonoBehaviour
         </div>
         <div class=""icon-container"">
         <i class=""fa-regular fa-envelope icon-s""></i>
-        <a href=""emailto:lgsc21211@gmail.com"">{_email}</a>
+        <a href=""mailto:lgsc21211@gmail.com"">{_email}</a>
         </div>
     </div>
 </body>

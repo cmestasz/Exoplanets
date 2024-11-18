@@ -34,5 +34,13 @@
         "email": "Envíanos un email"
       }
     }
+  },
+  "pages": {
+     "subtitle": "Descubre el universo cercano",
+     "exoplanets-option": "Exoplanetas",
+     "stars-option": "Estrellas",
+     "about": "Acerca de",
+     "help": "Ayuda",
+     "repo": "Repositorio"
   }
 }

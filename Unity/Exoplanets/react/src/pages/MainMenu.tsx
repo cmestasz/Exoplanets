@@ -4,14 +4,17 @@ import { Text } from '@components/ui/Text';
 import UserAuth from '@components/user/UserAuth';
 import { Astro } from '@mytypes/Astro';
 import { useMemo } from 'react';
+import { useTranslation } from 'react-i18next';
+import { FaGithub } from 'react-icons/fa6';
 import { useNavigate } from 'react-router';
 
 export default function MainMenu() {
   const nav = useNavigate();
+  const { t } = useTranslation();
   const astros = useMemo<Pick<Astro, 'imageUrl' | 'name'>[]>(() => [
-    { imageUrl: '/img/kepler.jpeg', name: 'Exoplanetas' },
-    { imageUrl: '/img/proximaCentauri.jpeg', name: 'Estrellas' },
-  ], []);
+    { imageUrl: '/img/kepler.jpeg', name: t('pages.exoplanets-option') as string },
+    { imageUrl: '/img/proximaCentauri.jpeg', name: t('pages.stars-option') as string },
+  ], [t]);
   return (
     <view
       className="flex flex-col"
@@ -40,15 +43,15 @@ export default function MainMenu() {
           <h2
             className="font-exo text-secondary text-xl"
           >
-            Descubre el universo cercano
+            {t('pages.subtitle')}
           </h2>
         </div>
         <div
           className="flex flex-row items-center justify-center"
           style={{ gap: '3rem' }}
         >
-          <AstroCard astro={astros[0]} onClick={() => nav('exoplanets')} />
-          <AstroCard astro={astros[1]} onClick={() => nav('stars')} />
+          <AstroCard invertedStyle astro={astros[0]} onClick={() => nav('exoplanets')} />
+          <AstroCard invertedStyle astro={astros[1]} onClick={() => nav('stars')} />
         </div>
       </div>
       <div
@@ -64,7 +67,7 @@ export default function MainMenu() {
             onClick={() => nav('about')}
           >
             <icon>info</icon>
-            Acerca de
+            {t('pages.about')}
           </Text>
           <Text
             invertedStyle
@@ -72,7 +75,7 @@ export default function MainMenu() {
             onClick={() => nav('help')}
           >
             <icon>help</icon>
-            Ayuda
+            {t('pages.help')}
           </Text>
         </div>
         <Text
@@ -80,8 +83,10 @@ export default function MainMenu() {
           asLink
           url="https://github.com/cmestasz/Exoplanets"
         >
-          <icon>github</icon>
-          Repositorio
+          <FaGithub
+            style={{ fill: 'inherit' }}
+          />
+          {t('pages.repo')}
         </Text>
       </div>
     </view>
