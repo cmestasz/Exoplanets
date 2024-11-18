@@ -1,6 +1,6 @@
 //
 // Types in assemblies: Assembly-CSharp
-// Generated 16/11/2024 21:26:21
+// Generated 17/11/2024 23:49:13
 //
 /* eslint-disable */
 
@@ -150,7 +150,7 @@ export declare class WebcamDisplayController {
   ToString(): string;
   GetType(): System.Type;
 }
-export declare class LoadEnv {
+export declare class AuthServer {
   constructor();
   destroyCancellationToken: System.Threading.CancellationToken;
   useGUILayout: boolean;
@@ -175,6 +175,7 @@ export declare class LoadEnv {
   particleSystem: UnityEngine.Component;
   name: string;
   hideFlags: UnityEngine.HideFlags;
+  SetHandleCode(handleCode: any, titlePage: string, titlePageError: string, mainMessage: string, mainMessageError: string, subMessage: string, subMessageError: string, repo: string, email: string): void;
   IsInvoking(): boolean;
   CancelInvoke(): void;
   Invoke(methodName: string, time: number): void;
@@ -221,7 +222,7 @@ export declare class LoadEnv {
   ToString(): string;
   GetType(): System.Type;
 }
-export declare class LocalServer {
+export declare class LoadEnv {
   constructor();
   destroyCancellationToken: System.Threading.CancellationToken;
   useGUILayout: boolean;
@@ -246,7 +247,6 @@ export declare class LocalServer {
   particleSystem: UnityEngine.Component;
   name: string;
   hideFlags: UnityEngine.HideFlags;
-  SetHandleCode(handleCode: any): void;
   IsInvoking(): boolean;
   CancelInvoke(): void;
   Invoke(methodName: string, time: number): void;
@@ -372,6 +372,80 @@ export declare class APIConnector {
   GetType(): System.Type;
   ToString(): string;
 }
+export declare class DialogueController {
+  constructor();
+  static Instance: DialogueController;
+  destroyCancellationToken: System.Threading.CancellationToken;
+  useGUILayout: boolean;
+  runInEditMode: boolean;
+  enabled: boolean;
+  isActiveAndEnabled: boolean;
+  transform: UnityEngine.Transform;
+  gameObject: UnityEngine.GameObject;
+  tag: string;
+  rigidbody: UnityEngine.Component;
+  rigidbody2D: UnityEngine.Component;
+  camera: UnityEngine.Component;
+  light: UnityEngine.Component;
+  animation: UnityEngine.Component;
+  constantForce: UnityEngine.Component;
+  renderer: UnityEngine.Component;
+  audio: UnityEngine.Component;
+  networkView: UnityEngine.Component;
+  collider: UnityEngine.Component;
+  collider2D: UnityEngine.Component;
+  hingeJoint: UnityEngine.Component;
+  particleSystem: UnityEngine.Component;
+  name: string;
+  hideFlags: UnityEngine.HideFlags;
+  ShowDialogue(key: string): void;
+  WriteText(text: string): void;
+  IsInvoking(): boolean;
+  CancelInvoke(): void;
+  Invoke(methodName: string, time: number): void;
+  InvokeRepeating(methodName: string, time: number, repeatRate: number): void;
+  CancelInvoke(methodName: string): void;
+  IsInvoking(methodName: string): boolean;
+  StartCoroutine(methodName: string): UnityEngine.Coroutine;
+  StartCoroutine(methodName: string, value: any): UnityEngine.Coroutine;
+  StartCoroutine(routine: System.Collections.IEnumerator): UnityEngine.Coroutine;
+  StartCoroutine_Auto(routine: System.Collections.IEnumerator): UnityEngine.Coroutine;
+  StopCoroutine(routine: System.Collections.IEnumerator): void;
+  StopCoroutine(routine: UnityEngine.Coroutine): void;
+  StopCoroutine(methodName: string): void;
+  StopAllCoroutines(): void;
+  GetComponent(type: System.Type): UnityEngine.Component;
+  GetComponent(type: string): UnityEngine.Component;
+  GetComponentInChildren(t: System.Type, includeInactive: boolean): UnityEngine.Component;
+  GetComponentInChildren(t: System.Type): UnityEngine.Component;
+  GetComponentsInChildren(t: System.Type, includeInactive: boolean): UnityEngine.Component[];
+  GetComponentsInChildren(t: System.Type): UnityEngine.Component[];
+  GetComponentInParent(t: System.Type, includeInactive: boolean): UnityEngine.Component;
+  GetComponentInParent(t: System.Type): UnityEngine.Component;
+  GetComponentsInParent(t: System.Type, includeInactive: boolean): UnityEngine.Component[];
+  GetComponentsInParent(t: System.Type): UnityEngine.Component[];
+  GetComponents(type: System.Type): UnityEngine.Component[];
+  GetComponents(type: System.Type, results: UnityEngine.Component[]): void;
+  GetComponentIndex(): number;
+  CompareTag(tag: string): boolean;
+  SendMessageUpwards(methodName: string, value: any, options: UnityEngine.SendMessageOptions): void;
+  SendMessageUpwards(methodName: string, value: any): void;
+  SendMessageUpwards(methodName: string): void;
+  SendMessageUpwards(methodName: string, options: UnityEngine.SendMessageOptions): void;
+  SendMessage(methodName: string, value: any): void;
+  SendMessage(methodName: string): void;
+  SendMessage(methodName: string, value: any, options: UnityEngine.SendMessageOptions): void;
+  SendMessage(methodName: string, options: UnityEngine.SendMessageOptions): void;
+  BroadcastMessage(methodName: string, parameter: any, options: UnityEngine.SendMessageOptions): void;
+  BroadcastMessage(methodName: string, parameter: any): void;
+  BroadcastMessage(methodName: string): void;
+  BroadcastMessage(methodName: string, options: UnityEngine.SendMessageOptions): void;
+  GetInstanceID(): number;
+  GetHashCode(): number;
+  Equals(other: any): boolean;
+  ToString(): string;
+  GetType(): System.Type;
+}
 export declare class KeyboardBindings {
   static FORWARD: UnityEngine.KeyCode;
   static BACKWARD: UnityEngine.KeyCode;
@@ -382,7 +456,8 @@ export declare class KeyboardBindings {
   static ADD_TO_CONSTELLATION: UnityEngine.KeyCode;
   static TOGGLE_INPUT: UnityEngine.KeyCode;
   static SPEED_UP: UnityEngine.KeyCode;
-  static WARP: UnityEngine.KeyCode;
+  static WARP_POS: UnityEngine.KeyCode;
+  static WARP_ID: UnityEngine.KeyCode;
   static GET_INFO: UnityEngine.KeyCode;
   Equals(obj: any): boolean;
   GetHashCode(): number;
@@ -391,6 +466,7 @@ export declare class KeyboardBindings {
 }
 export declare class SettingsManager {
   constructor();
+  static Language: string;
   destroyCancellationToken: System.Threading.CancellationToken;
   useGUILayout: boolean;
   runInEditMode: boolean;
@@ -463,23 +539,19 @@ export declare class SettingsManager {
   ToString(): string;
   GetType(): System.Type;
 }
-export declare class Constants {
+export declare class Animations {
   constructor();
+  static WarpFadeIn(colorAdjustments: UnityEngine.Rendering.Universal.ColorAdjustments): System.Collections.IEnumerator;
+  static WarpFadeOut(colorAdjustments: UnityEngine.Rendering.Universal.ColorAdjustments): System.Collections.IEnumerator;
+  static TitleFadeIn(titleText: TMPro.TMP_Text): System.Collections.IEnumerator;
+  static TitleFadeOut(titleText: TMPro.TMP_Text): System.Collections.IEnumerator;
   Equals(obj: any): boolean;
   GetHashCode(): number;
   GetType(): System.Type;
   ToString(): string;
 }
-export declare class Constellation {
+export declare class Constants {
   constructor();
-  Id: string;
-  IsSaved: boolean;
-  Connections: System.Collections.Generic.HashSet<System.Tuple<StarController, StarController>>;
-  static Constellations: System.Collections.Generic.Dictionary;
-  static CreateConstellation(): Constellation;
-  static PermanentSaveAll(): void;
-  AddConnection(star1: StarController, star2: StarController): void;
-  Save(id: string): void;
   Equals(obj: any): boolean;
   GetHashCode(): number;
   GetType(): System.Type;
@@ -490,10 +562,32 @@ export declare class ConstellationBuilder {
   ConnectionsParent: UnityEngine.Transform;
   ConstellationConnectionPrefab: UnityEngine.GameObject;
   ConstellationLines: UnityEngine.LineRenderer[];
-  CurrentConstellation: Constellation;
+  CurrentConstellation: ConstellationOld;
   AddConnection(star1: StarController, star2: StarController): void;
   ClearConnections(): void;
   SaveConstellation(id: string): void;
+  Equals(obj: any): boolean;
+  GetHashCode(): number;
+  GetType(): System.Type;
+  ToString(): string;
+}
+export declare class ConstellationOld {
+  constructor();
+  Id: string;
+  IsSaved: boolean;
+  Connections: System.Collections.Generic.HashSet<System.Tuple<StarController, StarController>>;
+  static Constellations: System.Collections.Generic.Dictionary;
+  static CreateConstellation(): ConstellationOld;
+  static PermanentSaveAll(): void;
+  AddConnection(star1: StarController, star2: StarController): void;
+  Save(id: string): void;
+  Equals(obj: any): boolean;
+  GetHashCode(): number;
+  GetType(): System.Type;
+  ToString(): string;
+}
+export declare class Dialogues {
+  static DIALOGUES: System.Collections.Generic.Dictionary;
   Equals(obj: any): boolean;
   GetHashCode(): number;
   GetType(): System.Type;
@@ -524,12 +618,31 @@ export declare class Exoplanet {
   GetType(): System.Type;
   ToString(): string;
 }
+export declare class StarPair {
+  constructor();
+  star1: Star;
+  star2: Star;
+  Equals(obj: any): boolean;
+  GetHashCode(): number;
+  GetType(): System.Type;
+  ToString(): string;
+}
+export declare class Constellation {
+  constructor();
+  reference: string;
+  name: string;
+  connections: StarPair[];
+  Equals(obj: any): boolean;
+  GetHashCode(): number;
+  GetType(): System.Type;
+  ToString(): string;
+}
 export declare class SpaceCoord {
   constructor();
-  constructor(ra: number, dec: number, parallax: number);
+  constructor(ra: number, dec: number, dist: number);
   ra: number;
   dec: number;
-  parallax: number;
+  dist: number;
   ToString(): string;
   Equals(obj: any): boolean;
   GetHashCode(): number;
@@ -685,19 +798,55 @@ export declare class PlayerController {
   ToString(): string;
   GetType(): System.Type;
 }
-export declare class SurroundingsRequest {
+export declare class SurroundingsPosRequest {
   constructor();
   ra: number;
   dec: number;
-  parallax: number;
+  dist: number;
   Equals(obj: any): boolean;
   GetHashCode(): number;
   GetType(): System.Type;
   ToString(): string;
 }
-export declare class SurroundingsResponse {
+export declare class SurroundingsIdRequest {
+  constructor();
+  id: string;
+  Equals(obj: any): boolean;
+  GetHashCode(): number;
+  GetType(): System.Type;
+  ToString(): string;
+}
+export declare class SurroundingsPosResponse {
   constructor();
   stars: Star[];
+  Equals(obj: any): boolean;
+  GetHashCode(): number;
+  GetType(): System.Type;
+  ToString(): string;
+}
+export declare class SurroundingsIdResponse {
+  constructor();
+  stars: Star[];
+  name: string;
+  ra: number;
+  dec: number;
+  dist: number;
+  Equals(obj: any): boolean;
+  GetHashCode(): number;
+  GetType(): System.Type;
+  ToString(): string;
+}
+export declare class ConstellationsRequest {
+  constructor();
+  reference: string;
+  Equals(obj: any): boolean;
+  GetHashCode(): number;
+  GetType(): System.Type;
+  ToString(): string;
+}
+export declare class ConstellationsResponse {
+  constructor();
+  constellations: Constellation[];
   Equals(obj: any): boolean;
   GetHashCode(): number;
   GetType(): System.Type;
@@ -728,7 +877,7 @@ export declare class InputResponse {
   ToString(): string;
 }
 export declare class SerializableConstellation {
-  constructor(constellation: Constellation);
+  constructor(constellation: ConstellationOld);
   Id: string;
   ConnectionsL: SerializableStar[];
   ConnectionsR: SerializableStar[];
@@ -754,7 +903,7 @@ export declare class SpaceController {
   ConstellationBuilder: ConstellationBuilder;
   StarsParent: UnityEngine.Transform;
   PlanetsParent: UnityEngine.Transform;
-  CurrentRelativePosition: SpaceCoord;
+  CurrentReference: SpaceCoord;
   destroyCancellationToken: System.Threading.CancellationToken;
   useGUILayout: boolean;
   runInEditMode: boolean;
@@ -778,8 +927,9 @@ export declare class SpaceController {
   particleSystem: UnityEngine.Component;
   name: string;
   hideFlags: UnityEngine.HideFlags;
-  WarpTo(pos: SpaceCoord): void;
-  LoadConstellations(): void;
+  WarpToPos(pos: SpaceCoord): void;
+  WarpToId(id: string): void;
+  LoadConstellationsAsync(callback: ((obj: ConstellationsResponse) => void)): string;
   AddConstellationConnection(star1: StarController, star2: StarController): void;
   SaveConstellation(name: string): void;
   IsInvoking(): boolean;
@@ -933,6 +1083,8 @@ export declare class UIInteractor {
   GetConstellationName(): string;
   SetInfoText(text: string): void;
   GetWarpPosition(): SpaceCoord;
+  GetWarpId(): string;
+  ShowTitle(title: string): void;
   IsInvoking(): boolean;
   CancelInvoke(): void;
   Invoke(methodName: string, time: number): void;
@@ -980,7 +1132,6 @@ export declare class UIInteractor {
   GetType(): System.Type;
 }
 export declare class Utils {
-  constructor();
   Equals(obj: any): boolean;
   GetHashCode(): number;
   GetType(): System.Type;

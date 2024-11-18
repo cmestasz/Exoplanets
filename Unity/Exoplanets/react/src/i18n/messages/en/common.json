@@ -18,7 +18,21 @@
       "profile": "Profile",
       "logout": "Sign out",
       "logout-error": "Could not log out, try again later",
-      "get-user-error": "Authentication could not be completed"
+      "get-user-error": "Authentication could not be completed",
+      "auth-page": {
+        "error": {
+          "title": "Authentication Error - Exoplanets",
+          "main-message": "Authentication Error",
+          "sub-message": "Oops! An error occurred. Please try again or report the error. Visit our repository or send us an email."
+        },
+        "success": {
+          "title": "Authentication Completed - Exoplanets",
+          "main-message": "Authentication Completed",
+          "sub-message": "Thank you for joining Exoplanets. For questions, suggestions or bug reports please visit our repository or send us an email."
+        },
+        "repo": "Repository",
+        "email": "Send us an email"
+      }
     }
   }
 }

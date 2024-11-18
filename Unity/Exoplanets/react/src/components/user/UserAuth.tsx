@@ -8,13 +8,13 @@ import AsyncData from '@mytypes/AsyncData';
 import UserAPI from '@mytypes/User';
 import { AlertContext } from '@components/alerts/Alert';
 import { useGlobals } from '@reactunity/renderer';
-import { LocalServer } from '@mytypes/UnityTypes';
+import { AuthServer } from '@mytypes/UnityTypes';
 import { User } from '@supabase/supabase-js';
 import UserBox from './UserBox';
 
 export default function UserAuth() {
   const { t } = useTranslation();
-  const globals = useGlobals().LocalServer as LocalServer;
+  const globals = useGlobals().AuthServer as AuthServer;
   const [userFetched, setUserFetched] = useState<AsyncData<UserAPI>>('loading');
   const showAlert = useContext(AlertContext);
   const onSignOut = () => {
@@ -61,9 +61,29 @@ export default function UserAuth() {
         showAlert({ message: t('components.user.login-error'), type: 'error' });
         return;
       }
-      globals.SetHandleCode(handleCode);
+      const d = {
+        titlePage: t('components.user.auth-page.success.title') as string,
+        titlePageError: t('components.user.auth-page.error.title') as string,
+        mainMessage: t('components.user.auth-page.success.main-message') as string,
+        mainMessageError: t('components.user.auth-page.error.main-message') as string,
+        subMessage: t('components.user.auth-page.success.sub-message') as string,
+        subMessageError: t('components.user.auth-page.error.sub-message') as string,
+        repo: t('components.user.auth-page.repo') as string,
+        email: t('components.user.auth-page.email') as string,
+      };
+      globals.SetHandleCode(
+        handleCode,
+        d.titlePage,
+        d.titlePageError,
+        d.mainMessage,
+        d.mainMessageError,
+        d.subMessage,
+        d.subMessageError,
+        d.repo,
+        d.email,
+      );
       Interop.UnityEngine.Application.OpenURL(data.url);
-    });
+    }).catch((e) => console.log('Redirección no completada: ', e));
     console.log('sign in');
   };
   useEffect(() => {
