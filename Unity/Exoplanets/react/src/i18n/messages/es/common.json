@@ -18,7 +18,21 @@
       "profileImage": "Imagen de perfil",
       "logout": "Cerrar Sesión",
       "logout-error": "No se pudo cerrar sesión, inténtalo más tarde",
-      "get-user-error": "No se pudo concretar la autenticación"
+      "get-user-error": "No se pudo concretar la autenticación",
+      "auth-page": {
+        "error": {
+          "title": "Error de Autenticación - Exoplanets",
+          "main-message": "Error de Autenticación",
+          "sub-message": "Ups! Ocurrió un error. Inténtalo de nuevo o reporta el error. Visita nuestro repositorio o envíanos un email"
+        },
+        "success": {
+          "title": "Autenticación Completada - Exoplanets",
+          "main-message": "Autenticación Completada",
+          "sub-message": "Gracias por unirte a Exoplanets. Para dudas, sugerencias o reporte de errores visita nuestro repositorio o envíanos un email"
+        },
+        "repo": "Repositorio",
+        "email": "Envíanos un email"
+      }
     }
   }
 }
