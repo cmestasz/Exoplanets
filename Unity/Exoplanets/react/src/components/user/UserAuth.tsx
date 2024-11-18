@@ -61,7 +61,7 @@ export default function UserAuth() {
         showAlert({ message: t('components.user.login-error'), type: 'error' });
         return;
       }
-      const dict: Record<string, string> = {
+      const d = {
         titlePage: t('components.user.auth-page.success.title') as string,
         titlePageError: t('components.user.auth-page.error.title') as string,
         mainMessage: t('components.user.auth-page.success.main-message') as string,
@@ -71,7 +71,17 @@ export default function UserAuth() {
         repo: t('components.user.auth-page.repo') as string,
         email: t('components.user.auth-page.email') as string,
       };
-      globals.SetHandleCode(handleCode, dict);
+      globals.SetHandleCode(
+        handleCode,
+        d.titlePage,
+        d.titlePageError,
+        d.mainMessage,
+        d.mainMessageError,
+        d.subMessage,
+        d.subMessageError,
+        d.repo,
+        d.email,
+      );
       Interop.UnityEngine.Application.OpenURL(data.url);
     }).catch((e) => console.log('Redirección no completada: ', e));
     console.log('sign in');

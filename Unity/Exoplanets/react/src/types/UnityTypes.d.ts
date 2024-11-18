@@ -1,6 +1,6 @@
 //
 // Types in assemblies: Assembly-CSharp
-// Generated 17/11/2024 22:57:05
+// Generated 17/11/2024 23:49:13
 //
 /* eslint-disable */
 
@@ -175,7 +175,7 @@ export declare class AuthServer {
   particleSystem: UnityEngine.Component;
   name: string;
   hideFlags: UnityEngine.HideFlags;
-  SetHandleCode(handleCode: any, dict: Record<string, string>): void;
+  SetHandleCode(handleCode: any, titlePage: string, titlePageError: string, mainMessage: string, mainMessageError: string, subMessage: string, subMessageError: string, repo: string, email: string): void;
   IsInvoking(): boolean;
   CancelInvoke(): void;
   Invoke(methodName: string, time: number): void;

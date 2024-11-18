@@ -11,9 +11,24 @@ public class AuthServer : MonoBehaviour
 
     private string _codeReceived;
 
-    private bool _error;
+    private string _titlePage;
 
-    private Dictionary<string, string> _dict;
+    private string _titlePageError;
+
+    private string _mainMessage;
+
+    private string _mainMessageError;
+
+
+    private string _subMessage;
+
+    private string _subMessageError;
+
+    private string _repo;
+
+    private string _email;
+
+    private bool _error;
 
     void Start()
     {
@@ -26,10 +41,17 @@ public class AuthServer : MonoBehaviour
         Debug.Log("Servidor HTTP local iniciado en http://localhost:7463/callback");
     }
 
-    public void SetHandleCode(object handleCode, Dictionary<string, string> dict)
+    public void SetHandleCode(object handleCode, string titlePage, string titlePageError, string mainMessage, string mainMessageError, string subMessage, string subMessageError, string repo, string email)
     {
         _handleCode = handleCode;
-        _dict = dict;
+        _titlePage = titlePage;
+        _titlePageError = titlePageError;
+        _mainMessage = mainMessage;
+        _mainMessageError = mainMessageError;
+        _subMessage = subMessage;
+        _subMessageError = subMessageError;
+        _repo = repo;
+        _email = email;
     }
 
     private void OnRequestReceive(IAsyncResult result)
@@ -60,7 +82,7 @@ public class AuthServer : MonoBehaviour
     <link
       href=""https://fonts.googleapis.com/css2?family=Audiowide&family=Exo+2:ital,wght@0,100..900;1,100..900&family=Orbitron:wght@400..900&display=swap""
       rel=""stylesheet"">
-    <title>{(_error ? _dict["titlePageError"] : _dict["titlePage"])}</title>
+    <title>{(_error ? _titlePageError : _titlePage)}</title>
 </head>
 <style>
     * {{
@@ -144,16 +166,16 @@ public class AuthServer : MonoBehaviour
 </style>
 
 <body>
-    <h1>{(_error ? _dict["mainMessageError"] : _dict["mainMessage"])}</h1>
-    <h3>{(_error ? _dict["subMessageError"] : _dict["subMessage"])}</h3>
+    <h1>{(_error ? _mainMessageError : _mainMessage)}</h1>
+    <h3>{(_error ? _subMessageError : _subMessage)}</h3>
     <div class=""links"">
         <div class=""icon-container"">
         <i class=""fa-brands fa-github icon-s""></i>
-        <a href=""https://github.com/cmestasz/Exoplanets"">{_dict["repo"]}</a>
+        <a href=""https://github.com/cmestasz/Exoplanets"">{_repo}</a>
         </div>
         <div class=""icon-container"">
         <i class=""fa-regular fa-envelope icon-s""></i>
-        <a href=""emailto:lgsc21211@gmail.com"">{_dict["email"]}</a>
+        <a href=""emailto:lgsc21211@gmail.com"">{_email}</a>
         </div>
     </div>
 </body>
@@ -172,7 +194,6 @@ public class AuthServer : MonoBehaviour
         {
             if (_handleCode != null && !_error)
             {
-                Debug.Log("Se llamarpa a handleCode");
                 var callback = ReactUnity.Helpers.Callback.From(_handleCode);
                 callback.Call(_codeReceived);
                 _codeReceived = "";

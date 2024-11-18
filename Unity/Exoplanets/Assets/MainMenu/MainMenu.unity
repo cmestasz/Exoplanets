@@ -239,7 +239,7 @@ MonoBehaviour:
   globals:
     Entries:
     - Key: AuthServer
-      Value: {fileID: 11500000, guid: 16e9c7afd3d7fe01ba4548efa418c89a, type: 3}
+      Value: {fileID: 635399866}
   AdvancedOptions:
     Pooling: 1
     MediaUpdateInterval: 0.5
