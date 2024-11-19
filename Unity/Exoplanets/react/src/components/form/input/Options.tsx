@@ -8,24 +8,24 @@ export default function Options({
 }: OptionsProps) {
   return (
     <div
-      className="flex flex-row gap-1"
+      className="flex flex-row gap-5"
     >
       <button
         onClick={handleSending}
-        className="text-green border-[1px] rounded-sm border-transparent hover:border-green transition-colors hover:bg-green-dark cursor-pointer aspect-square"
+        className="text-green border-[1.5px] rounded-sm border-transparent hover:border-green transition-colors hover:bg-green-dark cursor-pointer aspect-square"
       >
         <icon
-          className="text-green"
+          className="text-green text-6xl"
         >
           check
         </icon>
       </button>
       <button
         onClick={handleCancel}
-        className="text-red border-[1px] rounded-sm border-transparent hover:border-red transition-colors hover:bg-red-dark cursor-pointer aspect-square"
+        className="text-red border-[1.5px] rounded-sm border-transparent hover:border-red transition-colors hover:bg-red-dark cursor-pointer aspect-square"
       >
         <icon
-          className="text-red"
+          className="text-red text-6xl"
         >
           close
         </icon>

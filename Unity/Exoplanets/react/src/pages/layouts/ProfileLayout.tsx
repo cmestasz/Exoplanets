@@ -26,7 +26,7 @@ export default function ProfileLayout() {
         className="flex flex-col gap-6 flex-auto"
       >
         <header
-          className="flex flex-row text-6xl text-primary leading-10 p-4 font-orbitron border-2 border-primary rounded-lg items-center justify-center"
+          className="flex flex-row text-7xl text-primary leading-[3.5rem] p-4 font-orbitron border-2 border-primary rounded-lg items-center justify-center"
         >
           {t(`pages.profile.layout.${route}.header`)}
         </header>

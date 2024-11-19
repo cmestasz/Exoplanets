@@ -1,15 +1,13 @@
-import { useNavigate } from 'react-router-dom';
+import Input from '@components/form/input/Input';
+import { useTranslation } from 'react-i18next';
 
 export default function AccountProfile() {
-  const navigate = useNavigate();
-
+  const { t } = useTranslation();
   return (
     <div
       className="flex flex-col"
     >
-      <h1>Mi Cuenta</h1>
-      <button onClick={() => navigate(-1)}>Retroceder</button>
-      <button onClick={() => navigate('')}>Volver al Inicio</button>
+      <Input name="username" label={t('pages.profile.account.username.label')} placeholder={t('pages.profile.account.username.placeholder')} />
     </div>
   );
 }

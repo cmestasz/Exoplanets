@@ -63,7 +63,7 @@ export default function Input({
       inputRef.current.Focus();
     }
   }, [stateInput]);
-  const baseStyle = 'flex flex-col gap-2 justify-center w-fit p-3';
+  const baseStyle = 'flex flex-col gap-4 justify-center w-fit p-3';
   return (
     <div
       className={baseStyle}
@@ -72,19 +72,19 @@ export default function Input({
         <label
           // eslint-disable-next-line react/no-unknown-property
           for={name}
-          className="font-audiowide text-primary text-xl"
+          className="font-audiowide text-primary cursor-default text-5xl leading-8"
         >
           {label}
         </label>
       )}
       <div
-        className="text-secondary flex flex-row justify-between gap-4 items-center"
+        className="text-secondary flex flex-row justify-between gap-4 items-center text-4xl"
       >
         <input
           name={name}
           ref={inputRef}
           onFocus={handleEdit}
-          className="bg-transparent cursor-text focus:outline-none focus:border-b-2 border-b-transparent focus:border-b-primary transition-colors font-exo text-lg flex-grow rounded-none"
+          className="bg-transparent cursor-text focus:outline-none focus:border-b-2 border-b-transparent focus:border-b-primary transition-colors font-exo flex-grow rounded-none pb-1 placeholder:text-quaternary"
           {...props}
         />
         {
@@ -104,7 +104,7 @@ export default function Input({
           stateInput === 'normal' && (
             <icon
               onClick={handleEdit}
-              className={`${INVERTED_COLOR} cursor-pointer`}
+              className={`${INVERTED_COLOR} cursor-pointer text-6xl`}
             >
               edit
             </icon>

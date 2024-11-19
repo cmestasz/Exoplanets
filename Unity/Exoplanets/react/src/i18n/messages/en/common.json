@@ -72,6 +72,21 @@
           "header": "Help"
         },
         "back": "Back"
+      },
+      "account": {
+        "username": {
+          "label": "Username",
+          "placeholder": "Identify yourself with the universe"
+        },
+        "name": {
+          "label": "Name",
+          "placeholder": "What is your name?"
+        },
+        "last-name": {
+          "label": "Last Name",
+          "placeholder": "What is your last name?"
+        },
+        "email": "Email"
       }
     }
   }

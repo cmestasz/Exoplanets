@@ -32,6 +32,7 @@ module.exports = {
         primary: 'var(--primary)',
         secondary: 'var(--secondary)',
         tertiary: 'var(--tertiary)',
+        quaternary: 'var(--quaternary)',
         red: {
           DEFAULT: 'var(--red)',
           dark: 'var(--dark-red)',
