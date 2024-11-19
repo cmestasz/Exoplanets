@@ -13,15 +13,14 @@ export default function MainLayout() {
       className="flex flex-col gap-20 w-screen h-screen px-8 py-5 landscape:px-20"
     >
       <div
-        className={clsx('flex flex-row', {
-          'justify-between': routes.length > 0,
-          'justify-end': routes.length === 0,
+        className={clsx('flex flex-row portrait:flex-col-reverse', {
+          'landscape:justify-between': routes.length > 0,
+          'landscape:justify-end': routes.length === 0,
         })}
       >
         <Navigation routes={routes} />
         <div
-          className="flex flex-row items-center justify-end flex-none gap-9"
-          style={{ justifyContent: 'flex-end' }}
+          className="flex flex-row items-center justify-end portrait:justify-between gap-9"
         >
           <UserAuth />
           <SelectLanguage />

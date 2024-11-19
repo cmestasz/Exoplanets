@@ -14,7 +14,7 @@ export default function Navigation({
   if (routes.length === 0) return null;
   return (
     <nav
-      className="flex flex-row text-3xl items-center gap-2 text-secondary"
+      className="flex flex-row portrait:self-center text-3xl items-center gap-2 text-secondary"
     >
       <Text
         invertedStyle
