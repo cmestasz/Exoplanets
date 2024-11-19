@@ -18,18 +18,22 @@ public class Exoplanet
 }
 
 [System.Serializable]
-public class StarPair
+public class ConstellationStar
 {
-    public Star star1;
-    public Star star2;
+    public int id; //might not be needed
+    public string name;
+    public float x, y, z; // also might not be needed
+    public int[] connectedStars;
 }
 
 [System.Serializable]
 public class Constellation
 {
-    public string reference;
+    public float ra;
+    public float dec;
+    public float dist;
     public string name;
-    public StarPair[] connections;
+    public ConstellationStar[] stars;
 }
 
 // dont use inside other classes, for standarization purposes

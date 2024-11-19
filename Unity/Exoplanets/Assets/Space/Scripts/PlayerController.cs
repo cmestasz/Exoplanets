@@ -8,12 +8,18 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float rotateSpeed;
     [SerializeField] private float updateDelay;
     [SerializeField] private bool webcamInputActive;
+    public static PlayerController Instance { get; private set; }
     public LineRenderer ConnectionLine { get; private set; }
     public StarController CurrentStar { get; private set; }
     public Vector3Int CurrentSector { get; private set; }
     private bool InputActive { get; set; }
     private WebCamTexture webcamTexture;
     private string currentAction;
+
+    private void Awake()
+    {
+        Instance = this;
+    }
 
     // Start is called before the first frame update
     void Start()
@@ -48,7 +54,6 @@ public class PlayerController : MonoBehaviour
     private IEnumerator GetInput()
     {
         Color32[] colors = new Color32[webcamTexture.width * webcamTexture.height];
-        Debug.Log(webcamTexture.graphicsFormat);
         while (true)
         {
             yield return new WaitUntil(() => webcamInputActive);

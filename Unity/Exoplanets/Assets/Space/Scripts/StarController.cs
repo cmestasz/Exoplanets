@@ -18,7 +18,8 @@ public class StarController : MonoBehaviour, IHasInfo
         StarController starController = star.GetComponent<StarController>();
         starController.Id = id;
         stars.Add(id, starController);
+        star.GetComponent<MeshRenderer>().shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off;
         return starController;
     }
-    
+
 }

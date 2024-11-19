@@ -9,12 +9,13 @@ using static Animations;
 public class SpaceController : MonoBehaviour
 {
     [SerializeField] private GameObject[] starPrefabs;
+    [SerializeField] private Material[] planetMaterials;
     [SerializeField] private GameObject constellationConnectionPrefab;
     [SerializeField] private GameObject postProcessing;
     public static SpaceController Instance { get; private set; }
+    public GameObject CurrentPlanet {get; private set;}
     public ConstellationBuilder ConstellationBuilder { get; private set; }
     public Transform StarsParent { get; private set; }
-    public Transform PlanetsParent { get; private set; }
     public SpaceCoord CurrentReference { get; private set; }
     private int StarId { get; set; } = 0;
     private ColorAdjustments ColorAdjustments { get; set; }
@@ -34,8 +35,8 @@ public class SpaceController : MonoBehaviour
     {
         ConstellationBuilder = new(constellationConnectionPrefab, transform.Find("ConstellationConnections"));
         StarsParent = transform.Find("Stars");
-        PlanetsParent = transform.Find("Planets");
         ColorAdjustments = postProcessing.GetComponent<Volume>().profile.components[1] as ColorAdjustments;
+        CurrentPlanet = transform.Find("Planet").gameObject;
     }
 
 
@@ -63,9 +64,13 @@ public class SpaceController : MonoBehaviour
         }
     }
 
-    private void BuildExoplanet()
+    private void BuildExoplanet(bool active)
     {
-        // idk pick a random model and put it in 0,0,0
+        CurrentPlanet.SetActive(active);
+        if (active)
+        {
+            CurrentPlanet.GetComponent<MeshRenderer>().material = planetMaterials[Random.Range(0, planetMaterials.Length)];
+        }
     }
 
     private string LoadStarsPosAsync(float ra, float dec, float dist, System.Action<SurroundingsPosResponse> callback)
@@ -160,8 +165,8 @@ public class SpaceController : MonoBehaviour
         ClearStars();
         BuildStars(stars);
         BuildConstellations(constellations);
-        if (id != null)
-            BuildExoplanet();
+        BuildExoplanet(id != null);
+        PlayerController.Instance.transform.rotation = Quaternion.identity;
 
         yield return WarpFadeOut(ColorAdjustments);
         DialogueController.Instance.ShowDialogue("warp");

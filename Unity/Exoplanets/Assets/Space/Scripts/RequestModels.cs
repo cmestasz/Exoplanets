@@ -13,13 +13,13 @@ public class SurroundingsIdRequest
 }
 
 [System.Serializable]
-public class SurroundingsPosResponse
+public class SurroundingsPosResponse : Errorable
 {
     public Star[] stars;
 }
 
 [System.Serializable]
-public class SurroundingsIdResponse
+public class SurroundingsIdResponse : Errorable
 {
     public Star[] stars;
     public string name;
@@ -29,31 +29,41 @@ public class SurroundingsIdResponse
 }
 
 [System.Serializable]
-public class ConstellationsRequest
+public class AllConstellationsRequest
 {
-    public string reference;
+    public int user_id;
 }
 
 [System.Serializable]
-public class ConstellationsResponse
+public class ConstellationsResponse : Errorable
 {
     public Constellation[] constellations;
 }
 
 [System.Serializable]
-public class ExoplanetsByNameRequest
+public class ActiveConstellationsRequest
 {
+    public int user_id;
+    public float ra;
+    public float dec;
+    public float dist;
+}
+
+[System.Serializable]
+public class CreateConstellationRequest
+{
+    public int user_id;
     public string name;
+    public ConstellationStar[] stars;
 }
 
 [System.Serializable]
-public class ExoplanetsResponse
+public class CreateConstellationResponse : Errorable
 {
-    public Exoplanet[] exoplanets;
 }
 
 [System.Serializable]
-public class InputResponse
+public class InputResponse : Errorable
 {
     public string action;
 }

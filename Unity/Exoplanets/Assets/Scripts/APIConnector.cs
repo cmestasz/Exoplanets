@@ -22,22 +22,23 @@ public class APIConnector
         }
     }
 
-    public static IEnumerator Post<Request, Response>(string endpoint, Request data, System.Action<Response> callback, System.Action<string> errorCallback = null)
+    public static IEnumerator Post<Request, Response>(string endpoint, Request data, System.Action<Response> callback, System.Action<string> errorCallback = null) where Response : Errorable
     {
         using UnityWebRequest request = UnityWebRequest.Post(API_URL + endpoint, JsonUtility.ToJson(data), "application/json");
         yield return request.SendWebRequest();
 
         if (request.result != UnityWebRequest.Result.Success)
         {
-            Debug.LogError(request.error);
-            string error = request.error != null ? request.error : request.responseCode.ToString();
-            errorCallback?.Invoke(request.error);
+            Debug.LogError("actually really really bad error: " + request.error);
         }
         else
         {
             Debug.Log(request.downloadHandler.text);
             Response response = JsonUtility.FromJson<Response>(request.downloadHandler.text);
-            callback(response);
+            if (response.error != null)
+                errorCallback?.Invoke(response.error);
+            else
+                callback(response);
         }
     }
 
