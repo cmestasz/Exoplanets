@@ -2,8 +2,9 @@ import { AlertContext } from '@components/alerts/Alert';
 import { Text } from '@components/ui/Text';
 import { supabase } from '@lib/supabase';
 import { ProfileRoutes, routes } from '@pages/layouts/ProfileLayout';
+import { ReactUnity } from '@reactunity/renderer';
 import clsx from 'clsx';
-import { useContext } from 'react';
+import { useContext, useEffect, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router';
 
@@ -15,6 +16,7 @@ export default function Aside({
   currentRoute,
 }: AsideProps) {
   const { t } = useTranslation();
+  const scrollRef = useRef<ReactUnity.UGUI.ScrollComponent>();
   const nav = useNavigate();
   const showAlert = useContext(AlertContext);
   const handleLogout = () => {
@@ -28,6 +30,12 @@ export default function Aside({
       }
     });
   };
+  useEffect(() => {
+    if (scrollRef.current) {
+      scrollRef.current.HorizontalScrollbar.Thumb.SetProperty('className', 'bg-primary border-secondary border-4 border-solid rounded-full');
+      scrollRef.current.HorizontalScrollbar.SetProperty('className', 'bg-transparent h-2');
+    }
+  }, []);
   return (
     <aside
       className="flex flex-col rounded-lg landscape:py-4 landscape:px-7 landscape:border-2 landscape:border-primary min-w-48 gap-7"
@@ -47,7 +55,8 @@ export default function Aside({
         </h2>
       </div>
       <scroll
-        className="flex flex-col portrait:flex-row flex-auto overflow-hidden gap-5 portrait:border-2 portrait:border-primary"
+        ref={scrollRef}
+        className="flex flex-col portrait:flex-row flex-auto overflow-hidden gap-5 portrait:border-2 portrait:border-primary portrait:py-3 portrait:px-2"
       >
         {
           routes.map((route, i) => (
