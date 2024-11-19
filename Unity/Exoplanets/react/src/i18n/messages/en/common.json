@@ -46,32 +46,32 @@
     "layout": {
       "navigation": {
         "exoplanets": "Exoplanetas",
-        "stars": "Estrellas"
+        "stars": "Stars"
       }
     },
     "profile": {
       "layout": {
         "account": {
-          "menu": "Mi cuenta",
-          "header": "Mi cuenta"
+          "menu": "My account",
+          "header": "My account"
         },
         "constellations": {
-          "menu": "Mis constelaciones",
-          "header": "Mis constelaciones"
+          "menu": "My constellations",
+          "header": "My constellations"
         },
         "options": {
-          "menu": "Opciones",
-          "header": "Opciones"
+          "menu": "Settings",
+          "header": "Settings"
         },
         "about": {
-          "menu": "Acerca de",
-          "header": "Acerca de"
+          "menu": "About",
+          "header": "About"
         },
         "help": {
-          "menu": "Ayuda",
-          "header": "Ayuda"
+          "menu": "Help",
+          "header": "Help"
         },
-        "back": "Volver"
+        "back": "Back"
       }
     }
   }
