@@ -1,7 +1,6 @@
-import { AlertContext } from '@components/alerts/Alert';
 import { Text } from '@components/ui/Text';
-import { supabase } from '@lib/supabase';
-import { ProfileRoutes, routes } from '@pages/layouts/ProfileLayout';
+import { UserContext } from '@components/user/UserContext';
+import { ProfileRoutes, routes } from '@pages/profile/ProfileRoutes';
 import { ReactUnity } from '@reactunity/renderer';
 import clsx from 'clsx';
 import { useContext, useEffect, useRef } from 'react';
@@ -18,18 +17,7 @@ export default function Aside({
   const { t } = useTranslation();
   const scrollRef = useRef<ReactUnity.UGUI.ScrollComponent>();
   const nav = useNavigate();
-  const showAlert = useContext(AlertContext);
-  const handleLogout = () => {
-    supabase.auth.signOut().then(({ error }) => {
-      if (error) {
-        console.error(error);
-        showAlert({ message: t('components.user.logout-error'), type: 'error' });
-      } else {
-        nav(-1);
-        console.log('Cerró sesión');
-      }
-    });
-  };
+  const userAction = useContext(UserContext);
   useEffect(() => {
     if (scrollRef.current) {
       scrollRef.current.HorizontalScrollbar.Thumb.SetProperty('className', 'bg-primary border-secondary border-4 border-solid rounded-full');
@@ -113,7 +101,7 @@ export default function Aside({
           <Text
             invertedStyle
             asButton
-            onClick={handleLogout}
+            onClick={() => userAction.logout('-1')}
             className="text-red hover:text-red-dark"
           >
             <icon

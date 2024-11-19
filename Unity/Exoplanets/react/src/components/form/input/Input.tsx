@@ -19,8 +19,8 @@ export default function Input({
   label, name, send, defaultValue = '', ...props
 }: InputProps) {
   const { t } = useTranslation();
-  const SUCCESS_UPLOADING = t('components.form.input.success-update');
-  const SENDIND_MESSAGE = t('components.form.input.sending');
+  const SUCCESS_UPLOADING = t('components.form.input.success-update') as string;
+  const SENDIND_MESSAGE = t('components.form.input.sending') as string;
   const showAlert = useContext(AlertContext);
   const [stateInput, setStateInput] = useState<'normal' | 'editing' | 'sending'>('normal');
   const [savedValue, setSavedValue] = useState<string>(defaultValue);
@@ -33,14 +33,16 @@ export default function Input({
     if (valueInput === savedValue) {
       return;
     }
+    console.log('Para enviar: ', valueInput);
     setStateInput('sending');
     send(valueInput).then(() => {
       setSavedValue(valueInput);
       setStateInput('normal');
       showAlert({ message: SUCCESS_UPLOADING, type: 'success' });
-    }).catch((message) => {
+    }).catch((message: Error) => {
+      console.log('error ocurrido');
       setStateInput('editing');
-      showAlert({ message, type: 'error' });
+      showAlert({ message: message.message, type: 'error' });
     });
   };
   const handleCancel = () => {

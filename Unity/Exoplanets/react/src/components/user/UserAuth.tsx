@@ -55,8 +55,8 @@ export default function UserAuth() {
     }).catch((e) => console.log('Redirección no completada: ', e));
     console.log('sign in');
   };
-  if (userAction.current === 'loading') return null;
-  if (userAction.current === 'error') {
+  if (userAction.current.state === 'loading') return null;
+  if (userAction.current.state === 'error') {
     return (
       <Text
         asButton
