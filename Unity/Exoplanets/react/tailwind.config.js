@@ -5,6 +5,7 @@ module.exports = {
     './src/components/**/*.{js,jsx,ts,tsx}',
     './src/styles/**/*.{js,jsx,ts,tsx}',
     './src/app/**/*.{js,jsx,ts,tsx}',
+    './src/pages/**/*.{js,jsx,ts,tsx}',
   ],
   theme: {
     translate: {
@@ -92,6 +93,10 @@ module.exports = {
     plugin(({ addVariant }) => {
       addVariant('enter', '&:enter');
       addVariant('leave', '&:leave');
+      addVariant('wsm', '@media (window-width >= 480)');
+      addVariant('wmd', '@media (window-width >= 768)');
+      addVariant('wlg', '@media (window-width >= 1024)');
+      addVariant('wxl', '@media (window-width >= 1280)');
     }),
     plugin(({ addUtilities }) => {
       addUtilities({

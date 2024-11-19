@@ -17,18 +17,19 @@ export default function HeaderSelectLang({
       asButton
       invertedStyle
       onClick={onClick}
-      className={clsx({
+      className={clsx('max-h-32 px-3 py-10 text-3xl gap-5', {
         'hover:text-primary text-primary': opened,
       })}
-      size="lg"
     >
-      <image
+      <img
+        className="flex-auto"
         src={lang.img}
+        alt="Language"
       />
       <span>{lang.disp}</span>
       <icon
         className={twMerge(
-          'transition-transform m-duration-400 m-ease-in m-delay-100 duration-400 delay-100 ease-in',
+          'transition-transform m-duration-400 m-ease-in m-delay-100 duration-400 delay-100 ease-in text-5xl',
           clsx({
             'rotate-180': opened,
           }),
