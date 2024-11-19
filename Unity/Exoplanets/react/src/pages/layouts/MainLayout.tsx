@@ -1,5 +1,5 @@
 import SelectLanguage from '@components/languages/SelectLanguage';
-import Navigation from '@components/navigation/Navigation';
+import Navigation from '@components/layouts/main/Navigation';
 import UserAuth from '@components/user/UserAuth';
 import clsx from 'clsx';
 import { useMemo } from 'react';
