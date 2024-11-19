@@ -1,46 +1,18 @@
 import { useTranslation } from 'react-i18next';
 import { Text } from '@components/ui/Text';
-import {
-  useCallback, useContext, useEffect, useState,
-} from 'react';
+import { useContext } from 'react';
 import { supabase } from '@lib/supabase';
-import AsyncData from '@mytypes/AsyncData';
-import UserAPI from '@mytypes/User';
-import { AlertContext } from '@components/alerts/Alert';
 import { useGlobals } from '@reactunity/renderer';
 import { AuthServer } from '@mytypes/UnityTypes';
-import { User } from '@supabase/supabase-js';
+import { AlertContext } from '@components/alerts/AlertContext';
 import UserBox from './UserBox';
+import { UserContext } from './UserContext';
 
 export default function UserAuth() {
   const { t } = useTranslation();
   const globals = useGlobals().AuthServer as AuthServer;
-  const [userFetched, setUserFetched] = useState<AsyncData<UserAPI>>('loading');
+  const userAction = useContext(UserContext);
   const showAlert = useContext(AlertContext);
-  const onSignOut = () => {
-    setUserFetched('error');
-  };
-  const getUser = useCallback(async (userGetted?: User, withAlert?: boolean) => {
-    if (!userGetted) {
-      const { data: { user }, error } = await supabase.auth.getUser();
-      if (error || !user) {
-        console.log('Auth error: ', error);
-        if (withAlert) showAlert({ message: t('components.user.get-user-error'), type: 'error' });
-        setUserFetched('error');
-        return;
-      }
-      userGetted = user;
-    }
-    const { data, error: err } = await supabase.from('users').select().eq('id', userGetted.id).maybeSingle();
-    if (err) {
-      console.error('Send by supabase', err.message);
-      if (withAlert) showAlert({ message: t('components.user.get-user-error'), type: 'error' });
-      setUserFetched('error');
-      return;
-    }
-
-    setUserFetched(data);
-  }, [showAlert, t]);
   const handleCode = (code: string) => {
     supabase.auth.exchangeCodeForSession(code).then(({ data, error }) => {
       if (error) {
@@ -48,10 +20,7 @@ export default function UserAuth() {
         showAlert({ message: t('components.user.get-user-error') });
         return;
       }
-      getUser(data.user).catch((r) => {
-        console.log('Error thowed by me: ', r);
-        setUserFetched('error');
-      });
+      userAction.fetchUser(data.user);
     });
   };
   const handleLogin = () => {
@@ -86,18 +55,8 @@ export default function UserAuth() {
     }).catch((e) => console.log('Redirección no completada: ', e));
     console.log('sign in');
   };
-  useEffect(() => {
-    let isMounted = true;
-    getUser().catch((r) => {
-      if (isMounted) {
-        console.log('Error thowed by me: ', r);
-        setUserFetched('error');
-      }
-    });
-    return () => { isMounted = false; };
-  }, [getUser]);
-  if (userFetched === 'loading') return null;
-  if (userFetched === 'error') {
+  if (userAction.current === 'loading') return null;
+  if (userAction.current === 'error') {
     return (
       <Text
         asButton
@@ -116,6 +75,6 @@ export default function UserAuth() {
     );
   }
   return (
-    <UserBox username={userFetched.username} photo={userFetched.avatar} onSignOut={onSignOut} />
+    <UserBox />
   );
 }

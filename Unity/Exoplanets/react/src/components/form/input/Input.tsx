@@ -5,25 +5,25 @@ import {
 import { useTranslation } from 'react-i18next';
 import { UGUIElements } from '@reactunity/renderer/ugui';
 import { ReactUnity } from '@reactunity/renderer';
-import { AlertContext } from '@components/alerts/Alert';
+import { AlertContext } from '@components/alerts/AlertContext';
 import Options from './Options';
 
 type InputProps = UGUIElements['input'] & {
   label?: string,
   name: string,
   defaultValue?: string,
+  send: (value: string) => Promise<void>;
 };
 
 export default function Input({
-  label, name, defaultValue = '', ...props
+  label, name, send, defaultValue = '', ...props
 }: InputProps) {
   const { t } = useTranslation();
-  const ERROR_UPLOADING = t('components.form.input.error-update');
-  // const SUCCESS_UPLOADING = t('success-update');
+  const SUCCESS_UPLOADING = t('components.form.input.success-update');
   const SENDIND_MESSAGE = t('components.form.input.sending');
   const showAlert = useContext(AlertContext);
   const [stateInput, setStateInput] = useState<'normal' | 'editing' | 'sending'>('normal');
-  const [savedValue/* setSavedValue */] = useState<string>(defaultValue);
+  const [savedValue, setSavedValue] = useState<string>(defaultValue);
   const inputRef = useRef<ReactUnity.UGUI.InputComponent>(null);
   const handleEdit = () => {
     setStateInput('editing');
@@ -34,18 +34,14 @@ export default function Input({
       return;
     }
     setStateInput('sending');
-    console.log('El valor de la entrada es: ', inputRef.current?.Value);
-    // Simula el envío de datos y esperar respuesta
-    setTimeout(() => {
-      if (inputRef.current) {
-        // Si no hay errores en el envío
-        // setSavedValue(inputRef.current?.value);
-        // handleShowAlert({ message: SUCCESS_UPLOADING, type: 'success' });
-        // De otra manera
-        setStateInput('editing');
-        showAlert({ message: ERROR_UPLOADING, type: 'error' });
-      }
-    }, 500);
+    send(valueInput).then(() => {
+      setSavedValue(valueInput);
+      setStateInput('normal');
+      showAlert({ message: SUCCESS_UPLOADING, type: 'success' });
+    }).catch((message) => {
+      setStateInput('editing');
+      showAlert({ message, type: 'error' });
+    });
   };
   const handleCancel = () => {
     setStateInput('normal');

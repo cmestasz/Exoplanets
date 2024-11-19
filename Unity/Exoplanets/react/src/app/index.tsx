@@ -4,7 +4,8 @@ import '@i18n/i18n';
 import { render } from '@reactunity/renderer';
 import { MemoryRouter } from 'react-router-dom';
 import { useAlert } from '@lib/hooks';
-import Alert, { AlertContext } from '@components/alerts/Alert';
+import Alert from '@components/alerts/Alert';
+import { AlertContext } from '@components/alerts/AlertContext';
 import AppRoutes from './routes';
 
 function App() {
