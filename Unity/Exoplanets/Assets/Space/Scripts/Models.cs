@@ -1,4 +1,11 @@
 [System.Serializable]
+public class Dialogue
+{
+    public float delay;
+    public string text;
+}
+
+[System.Serializable]
 public class Error
 {
     public string detail;

@@ -51,7 +51,7 @@ public class SpaceController : MonoBehaviour
         {
             int prefabIdx = Random.Range(0, starPrefabs.Length);
             Vector3 pos = new(star.x * 15, star.y * 15, star.z * 15);
-            StarController.CreateStar(StarId++.ToString(), starPrefabs[prefabIdx], pos, StarsParent);
+            StarController.CreateStar(star.name, starPrefabs[prefabIdx], pos, StarsParent);
         }
     }
 
