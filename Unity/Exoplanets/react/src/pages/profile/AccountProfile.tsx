@@ -5,7 +5,7 @@ export default function AccountProfile() {
 
   return (
     <div
-      className="flex flex-col flex-auto border-2 border-primary rounded-lg"
+      className="flex flex-col"
     >
       <h1>Mi Cuenta</h1>
       <button onClick={() => navigate(-1)}>Retroceder</button>
