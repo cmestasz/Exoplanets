@@ -55,7 +55,7 @@ export default function Aside({
             <Text
               invertedStyle
               asButton
-              onClick={() => nav(`profile/${route}`)}
+              onClick={() => nav(route.route)}
               disabled={route.route === currentRoute}
             >
               <icon

@@ -9,6 +9,7 @@ import { Route, Routes } from 'react-router-dom';
 import MainLayout from '@pages/layouts/MainLayout';
 import ProfileLayout from '@pages/layouts/ProfileLayout';
 import AccountProfile from '@pages/profile/AccountProfile';
+import Constellations from '@pages/profile/Constellations';
 
 export default function AppRoutes() {
   return (
@@ -25,6 +26,10 @@ export default function AppRoutes() {
       </Route>
       <Route path="profile" element={<ProfileLayout />}>
         <Route path="account" element={<AccountProfile />} />
+        <Route path="constellations" element={<Constellations />} />
+        <Route path="options" element={<AccountProfile />} />
+        <Route path="about" element={<AccountProfile />} />
+        <Route path="help" element={<AccountProfile />} />
       </Route>
       <Route path="max" element={<Maximized />} />
     </Routes>
