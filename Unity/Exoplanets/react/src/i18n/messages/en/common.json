@@ -33,7 +33,8 @@
         "repo": "Repository",
         "email": "Send us an email"
       }
-    }
+    },
+    "navigation": "Home"
   },
   "pages": {
     "subtitle": "Discover the universe nearby",
@@ -41,6 +42,10 @@
     "stars-option": "Stars",
     "about": "About",
     "help": "Help",
-    "repo": "Repository"
- }
+    "repo": "Repository",
+    "navigation": {
+      "exoplanets": "Exoplanets",
+      "stars": "Stars"
+    }
+  }
 }

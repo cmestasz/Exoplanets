@@ -103,13 +103,15 @@ export default function UserAuth() {
         asButton
         invertedStyle
         onClick={handleLogin}
-        className="max-h-32 text-3xl px-3 py-10 gap-3"
+        className="max-h-32 text-3xl px-3 py-10 gap-3 shrink"
       >
         <img
           src="/img/google.png"
           alt="Google login"
         />
-        {t('components.user.login')}
+        <span className="overflow-clip whitespace-nowrap shrink">
+          {t('components.user.login')}
+        </span>
       </Text>
     );
   }

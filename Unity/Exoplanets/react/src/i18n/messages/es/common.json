@@ -33,14 +33,19 @@
         "repo": "Repositorio",
         "email": "Envíanos un email"
       }
-    }
+    },
+    "navigation": "Menú principal"
   },
   "pages": {
-     "subtitle": "Descubre el universo cercano",
-     "exoplanets-option": "Exoplanetas",
-     "stars-option": "Estrellas",
-     "about": "Acerca de",
-     "help": "Ayuda",
-     "repo": "Repositorio"
+    "subtitle": "Descubre el universo cercano",
+    "exoplanets-option": "Exoplanetas",
+    "stars-option": "Estrellas",
+    "about": "Acerca de",
+    "help": "Ayuda",
+    "repo": "Repositorio",
+    "navigation": {
+      "exoplanets": "Exoplanetas",
+      "stars": "Estrellas"
+    }
   }
 }

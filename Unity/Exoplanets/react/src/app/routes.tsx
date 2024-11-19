@@ -7,13 +7,12 @@ import MyProfile from '@pages/MyProfile';
 import SeeStar from '@pages/SeeStar';
 import SeeExoplanet from '@pages/SeeExoplanet';
 import { Route, Routes } from 'react-router-dom';
+import MainLayout from '@pages/layouts/MainLayout';
 
 export default function AppRoutes() {
   return (
-    <div
-      className="w-screen h-screen px-8 py-5 landscape:px-20"
-    >
-      <Routes>
+    <Routes>
+      <Route element={<MainLayout />}>
         <Route path="" element={<MainMenu />} />
         <Route path="exoplanets" element={<Exoplanets />}>
           <Route path=":id" element={<SeeExoplanet />} />
@@ -23,8 +22,8 @@ export default function AppRoutes() {
           <Route path="create" element={<CreateConstellation />} />
         </Route>
         <Route path="profile" element={<MyProfile />} />
-        <Route path="max" element={<Maximized />} />
-      </Routes>
-    </div>
+      </Route>
+      <Route path="max" element={<Maximized />} />
+    </Routes>
   );
 }
