@@ -1,4 +1,10 @@
 [System.Serializable]
+public class Error
+{
+    public string detail;
+}
+
+[System.Serializable]
 public class Star
 {
     public float x;

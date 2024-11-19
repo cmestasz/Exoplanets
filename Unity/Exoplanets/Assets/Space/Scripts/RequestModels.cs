@@ -13,13 +13,13 @@ public class SurroundingsIdRequest
 }
 
 [System.Serializable]
-public class SurroundingsPosResponse : Errorable
+public class SurroundingsPosResponse
 {
     public Star[] stars;
 }
 
 [System.Serializable]
-public class SurroundingsIdResponse : Errorable
+public class SurroundingsIdResponse
 {
     public Star[] stars;
     public string name;
@@ -35,7 +35,7 @@ public class AllConstellationsRequest
 }
 
 [System.Serializable]
-public class ConstellationsResponse : Errorable
+public class ConstellationsResponse
 {
     public Constellation[] constellations;
 }
@@ -58,12 +58,12 @@ public class CreateConstellationRequest
 }
 
 [System.Serializable]
-public class CreateConstellationResponse : Errorable
+public class CreateConstellationResponse
 {
 }
 
 [System.Serializable]
-public class InputResponse : Errorable
+public class InputResponse
 {
     public string action;
 }

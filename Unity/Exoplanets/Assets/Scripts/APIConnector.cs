@@ -6,39 +6,24 @@ public class APIConnector
 {
     const string API_URL = "http://127.0.0.1:8000/";
 
-    public static IEnumerator Get<Response>(string endpoint, System.Action<Response> callback)
-    {
-        using UnityWebRequest request = UnityWebRequest.Get(API_URL + endpoint);
-        yield return request.SendWebRequest();
-
-        if (request.result != UnityWebRequest.Result.Success)
-        {
-            Debug.LogError(request.error);
-        }
-        else
-        {
-            Debug.Log(request.downloadHandler.text);
-            callback(JsonUtility.FromJson<Response>(request.downloadHandler.text));
-        }
-    }
-
-    public static IEnumerator Post<Request, Response>(string endpoint, Request data, System.Action<Response> callback, System.Action<string> errorCallback = null) where Response : Errorable
+    public static IEnumerator Post<Request, Response>(string endpoint, Request data, System.Action<Response> callback, System.Action<string> errorCallback = null)
     {
         using UnityWebRequest request = UnityWebRequest.Post(API_URL + endpoint, JsonUtility.ToJson(data), "application/json");
         yield return request.SendWebRequest();
 
         if (request.result != UnityWebRequest.Result.Success)
         {
-            Debug.LogError("actually really really bad error: " + request.error);
+            Error error = JsonUtility.FromJson<Error>(request.downloadHandler.text);
+            if (error == null)
+                Debug.LogError(request.result);
+            else
+                errorCallback?.Invoke(error.detail);
         }
         else
         {
             Debug.Log(request.downloadHandler.text);
             Response response = JsonUtility.FromJson<Response>(request.downloadHandler.text);
-            if (response.error != null)
-                errorCallback?.Invoke(response.error);
-            else
-                callback(response);
+            callback(response);
         }
     }
 

@@ -13,7 +13,7 @@ public class SpaceController : MonoBehaviour
     [SerializeField] private GameObject constellationConnectionPrefab;
     [SerializeField] private GameObject postProcessing;
     public static SpaceController Instance { get; private set; }
-    public GameObject CurrentPlanet {get; private set;}
+    public GameObject CurrentPlanet { get; private set; }
     public ConstellationBuilder ConstellationBuilder { get; private set; }
     public Transform StarsParent { get; private set; }
     public SpaceCoord CurrentReference { get; private set; }
@@ -73,30 +73,6 @@ public class SpaceController : MonoBehaviour
         }
     }
 
-    private string LoadStarsPosAsync(float ra, float dec, float dist, System.Action<SurroundingsPosResponse> callback)
-    {
-        SurroundingsPosRequest request = new()
-        {
-            ra = ra,
-            dec = dec,
-            dist = dist
-        };
-        string status = null;
-        StartCoroutine(APIConnector.Post("load_surroundings", request, callback, error => status = error));
-        return status;
-    }
-
-    private string LoadStarsIdAsync(string id, System.Action<SurroundingsIdResponse> callback)
-    {
-        SurroundingsIdRequest request = new()
-        {
-            id = id
-        };
-        string status = null;
-        StartCoroutine(APIConnector.Post("load_surroundings_by_id", request, callback, error => status = error));
-        return status;
-    }
-
     public void WarpToPos(SpaceCoord pos)
     {
         StartCoroutine(WarpToAnim(pos, null));
@@ -119,23 +95,42 @@ public class SpaceController : MonoBehaviour
         string error = null;
         if (pos != null)
         {
-            error = LoadStarsPosAsync(pos.ra, pos.dec, pos.dist, response =>
+            SurroundingsPosRequest request = new()
+            {
+                ra = ra,
+                dec = dec,
+                dist = dist,
+            };
+            yield return APIConnector.Post<SurroundingsPosRequest, SurroundingsPosResponse>("load_surroundings", request,
+            response =>
             {
                 stars = response.stars;
-            });
+            }, err =>
+            {
+                error = err;
+            }
+            );
             ra = pos.ra;
             dec = pos.dec;
             dist = pos.dist;
         }
         else if (id != null)
         {
-            error = LoadStarsIdAsync(id, response =>
+            SurroundingsIdRequest request = new()
+            {
+                id = id,
+            };
+            yield return APIConnector.Post<SurroundingsIdRequest, SurroundingsIdResponse>("load_surroundings_by_id", request,
+            response =>
             {
                 stars = response.stars;
                 name = response.name;
                 ra = response.ra;
                 dec = response.dec;
                 dist = response.dist;
+            }, err =>
+            {
+                error = err;
             });
         }
 
@@ -166,6 +161,7 @@ public class SpaceController : MonoBehaviour
         BuildStars(stars);
         BuildConstellations(constellations);
         BuildExoplanet(id != null);
+        PlayerController.Instance.transform.position = new(0, 0, -40);
         PlayerController.Instance.transform.rotation = Quaternion.identity;
 
         yield return WarpFadeOut(ColorAdjustments);
