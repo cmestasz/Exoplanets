@@ -39,7 +39,7 @@ export default function HeaderUserBox({
       </span>
       <icon
         className={twMerge(
-          'transition-transform m-duration-400 m-ease-in m-delay-100 duration-400 delay-100 ease-in flex-auto',
+          'transition-transform m-duration-400 m-ease-in m-delay-100 duration-400 delay-100 text-5xl ease-in flex-auto',
           clsx({
             'rotate-180': opened,
           }),
