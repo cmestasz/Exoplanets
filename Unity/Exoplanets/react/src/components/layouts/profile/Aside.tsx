@@ -23,7 +23,7 @@ export default function Aside({
         console.error(error);
         showAlert({ message: t('components.user.logout-error'), type: 'error' });
       } else {
-        nav('/');
+        nav(-1);
         console.log('Cerró sesión');
       }
     });
@@ -62,7 +62,7 @@ export default function Aside({
               <Text
                 invertedStyle
                 asButton
-                onClick={() => nav(route.route)}
+                onClick={() => nav(route.route, { replace: true })}
                 disabled={route.route === currentRoute}
               >
                 <icon
