@@ -43,9 +43,36 @@
     "about": "About",
     "help": "Help",
     "repo": "Repository",
-    "navigation": {
-      "exoplanets": "Exoplanets",
-      "stars": "Stars"
+    "layout": {
+      "navigation": {
+        "exoplanets": "Exoplanetas",
+        "stars": "Stars"
+      }
+    },
+    "profile": {
+      "layout": {
+        "account": {
+          "menu": "My account",
+          "header": "My account"
+        },
+        "constellations": {
+          "menu": "My constellations",
+          "header": "My constellations"
+        },
+        "options": {
+          "menu": "Settings",
+          "header": "Settings"
+        },
+        "about": {
+          "menu": "About",
+          "header": "About"
+        },
+        "help": {
+          "menu": "Help",
+          "header": "Help"
+        },
+        "back": "Back"
+      }
     }
   }
 }

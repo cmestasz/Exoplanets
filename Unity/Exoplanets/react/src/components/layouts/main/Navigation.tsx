@@ -36,7 +36,7 @@ export default function Navigation({
             >
               {
                 route === 'exoplanets' || route === 'stars'
-                  ? t(`pages.navigation.${route}`)
+                  ? t(`pages.layout.navigation.${route}`)
                   : route
               }
             </Text>

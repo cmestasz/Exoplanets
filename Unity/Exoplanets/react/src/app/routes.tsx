@@ -3,11 +3,13 @@ import CreateConstellation from '@pages/CreateConstellation';
 import Exoplanets from '@pages/Exoplanets';
 import MainMenu from '@pages/MainMenu';
 import Maximized from '@pages/Maximized';
-import MyProfile from '@pages/MyProfile';
 import SeeStar from '@pages/SeeStar';
 import SeeExoplanet from '@pages/SeeExoplanet';
 import { Route, Routes } from 'react-router-dom';
 import MainLayout from '@pages/layouts/MainLayout';
+import ProfileLayout from '@pages/layouts/ProfileLayout';
+import AccountProfile from '@pages/profile/AccountProfile';
+import Constellations from '@pages/profile/Constellations';
 
 export default function AppRoutes() {
   return (
@@ -21,7 +23,13 @@ export default function AppRoutes() {
           <Route path=":id" element={<SeeStar />} />
           <Route path="create" element={<CreateConstellation />} />
         </Route>
-        <Route path="profile" element={<MyProfile />} />
+      </Route>
+      <Route path="profile" element={<ProfileLayout />}>
+        <Route path="account" element={<AccountProfile />} />
+        <Route path="constellations" element={<Constellations />} />
+        <Route path="options" element={<AccountProfile />} />
+        <Route path="about" element={<AccountProfile />} />
+        <Route path="help" element={<AccountProfile />} />
       </Route>
       <Route path="max" element={<Maximized />} />
     </Routes>

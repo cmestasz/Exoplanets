@@ -3,6 +3,7 @@ import { Text } from '@components/ui/Text';
 import { useContext, useState } from 'react';
 import { supabase } from '@lib/supabase';
 import { AlertContext } from '@components/alerts/Alert';
+import { useNavigate } from 'react-router';
 import HeaderUserBox from './HeaderUserBox';
 
 interface UserBoxProps {
@@ -15,12 +16,11 @@ export default function UserBox({
   username, photo, onSignOut,
 }: UserBoxProps) {
   const { t } = useTranslation();
+  const nav = useNavigate();
   const showAlert = useContext(AlertContext);
   const [opened, setOpened] = useState<boolean>(false);
   const handleProfile = () => {
-    // router.push('/profile');
-    // TODO: To profile using reactrouter
-    console.log('To profile');
+    nav('profile/account');
     setOpened(false);
   };
   const handleLogout = () => {

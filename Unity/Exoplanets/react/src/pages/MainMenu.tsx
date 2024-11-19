@@ -49,7 +49,7 @@ export default function MainMenu() {
           <Text
             invertedStyle
             asButton
-            onClick={() => nav('about')}
+            onClick={() => nav('profile/about')}
             className="text-3xl"
           >
             <icon className="text-3xl">info</icon>
@@ -58,7 +58,7 @@ export default function MainMenu() {
           <Text
             invertedStyle
             asButton
-            onClick={() => nav('help')}
+            onClick={() => nav('profile/help')}
             className="text-3xl"
           >
             <icon className="text-3xl">help</icon>
