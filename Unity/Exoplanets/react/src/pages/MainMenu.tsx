@@ -1,7 +1,5 @@
 import AstroCard from '@components/astros/AstroCard';
-import SelectLanguage from '@components/languages/SelectLanguage';
 import { Text } from '@components/ui/Text';
-import UserAuth from '@components/user/UserAuth';
 import { Astro } from '@mytypes/Astro';
 import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -16,16 +14,7 @@ export default function MainMenu() {
     { imageUrl: '/img/proximaCentauri.jpeg', name: t('pages.stars-option') as string },
   ], [t]);
   return (
-    <div
-      className="flex flex-col w-full h-full gap-20"
-    >
-      <div
-        className="flex flex-row items-center justify-end flex-none gap-9"
-        style={{ justifyContent: 'flex-end' }}
-      >
-        <UserAuth />
-        <SelectLanguage />
-      </div>
+    <>
       <div
         className="flex flex-col flex-auto justify-center gap-20"
       >
@@ -88,6 +77,6 @@ export default function MainMenu() {
           {t('pages.repo')}
         </Text>
       </div>
-    </div>
+    </>
   );
 }
