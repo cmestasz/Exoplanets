@@ -31,16 +31,15 @@ export default function Input({
   const handleSending = () => {
     const valueInput = inputRef.current?.Value || '';
     if (valueInput === savedValue) {
+      setStateInput('normal');
       return;
     }
-    console.log('Para enviar: ', valueInput);
     setStateInput('sending');
     send(valueInput).then(() => {
       setSavedValue(valueInput);
       setStateInput('normal');
       showAlert({ message: SUCCESS_UPLOADING, type: 'success' });
     }).catch((message: Error) => {
-      console.log('error ocurrido');
       setStateInput('editing');
       showAlert({ message: message.message, type: 'error' });
     });

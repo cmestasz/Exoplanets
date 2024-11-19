@@ -10,7 +10,6 @@ export default function AccountProfile() {
   const sendName = useCallback(async (name: string) => {
     const { error } = await supabase.from('users').update({ first_name: name }).eq('id', userAction.current.state === 'loaded' && userAction.current.data.id);
     if (error) {
-      console.log(error);
       throw new Error(`${t('components.form.input.error-update')}${error.code}`);
     }
   }, [userAction, t]);
