@@ -36,7 +36,7 @@ export default function UserBox({
     setOpened(false);
   };
   return (
-    <view className="relative w-fit max-w-52 flex-grow-0">
+    <view className="relative w-fit flex-grow-0">
       <HeaderUserBox
         username={username}
         photo={photo}
@@ -46,24 +46,24 @@ export default function UserBox({
       {
         opened && (
           <view
-            className="flex flex-col items-start gap-2 p-2 enter:opacity-0 enter:-trans-y-10 enter:state-duration-0 state-duration-500 transition-all duration-500 m-duration-500 leave:-trans-y-10 leave:opacity-0 absolute top-[105%] left-0 bg-tertiary w-full rounded-md z-[1000]"
+            className="flex flex-col items-start gap-2 p-2 enter:opacity-0 enter:-trans-y-10 enter:state-duration-0 state-duration-500 transition-all duration-500 m-duration-500 leave:-trans-y-10 leave:opacity-0 absolute top-[105%] left-0 bg-tertiary w-full rounded-xl z-[1000] text-3xl"
           >
             <Text
               asButton
               invertedStyle
               onClick={handleProfile}
-              className="w-full justify-start"
+              className="w-full justify-start gap-5"
             >
-              <icon>account_circle</icon>
+              <icon className="text-6xl">account_circle</icon>
               {t('components.user.profile')}
             </Text>
             <Text
               asButton
               invertedStyle
-              className="w-full justify-start"
+              className="w-full justify-start gap-5"
               onClick={handleLogout}
             >
-              <icon>logout</icon>
+              <icon className="text-6xl">logout</icon>
               {t('components.user.logout')}
             </Text>
           </view>

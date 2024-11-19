@@ -100,13 +100,14 @@ export default function UserAuth() {
   if (userFetched === 'error') {
     return (
       <Text
-        size="lg"
         asButton
         invertedStyle
         onClick={handleLogin}
+        className="max-h-32 text-3xl px-3 py-10 gap-3"
       >
-        <image
+        <img
           src="/img/google.png"
+          alt="Google login"
         />
         {t('components.user.login')}
       </Text>

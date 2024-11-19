@@ -17,16 +17,16 @@ export default function HeaderUserBox({
       asButton
       invertedStyle
       onClick={onClick}
-      className={clsx('w-full', {
+      className={clsx('max-h-32 text-3xl px-3 py-8 gap-5', {
         'hover:text-primary text-primary': opened,
       })}
-      size="xl"
     >
       {
         photo ? (
-          <image
-            className="h-full"
+          <img
+            className="flex-auto"
             src={photo}
+            alt="Profile"
           />
         ) : (
           <icon>
@@ -34,12 +34,12 @@ export default function HeaderUserBox({
           </icon>
         )
       }
-      <span className="h-full flex flex-row flex-auto overflow-hidden whitespace-nowrap text-clip">
+      <span className="flex flex-row flex-auto">
         {username}
       </span>
       <icon
         className={twMerge(
-          'transition-transform m-duration-400 m-ease-in m-delay-100 duration-400 delay-100 ease-in',
+          'transition-transform m-duration-400 m-ease-in m-delay-100 duration-400 delay-100 ease-in flex-auto',
           clsx({
             'rotate-180': opened,
           }),

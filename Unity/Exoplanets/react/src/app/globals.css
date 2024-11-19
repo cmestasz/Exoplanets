@@ -32,6 +32,10 @@
     --m-timing-function: linear;
     --m-delay: 0s;
   }
+  * {
+    box-sizing: border-box;
+    margin: 0;
+  }
 }
 
 /* @media (prefers-color-scheme: dark) {

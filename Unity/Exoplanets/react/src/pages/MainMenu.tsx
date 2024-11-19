@@ -4,86 +4,90 @@ import { Text } from '@components/ui/Text';
 import UserAuth from '@components/user/UserAuth';
 import { Astro } from '@mytypes/Astro';
 import { useMemo } from 'react';
+import { useTranslation } from 'react-i18next';
+import { FaGithub } from 'react-icons/fa6';
 import { useNavigate } from 'react-router';
 
 export default function MainMenu() {
   const nav = useNavigate();
+  const { t } = useTranslation();
   const astros = useMemo<Pick<Astro, 'imageUrl' | 'name'>[]>(() => [
-    { imageUrl: '/img/kepler.jpeg', name: 'Exoplanetas' },
-    { imageUrl: '/img/proximaCentauri.jpeg', name: 'Estrellas' },
-  ], []);
+    { imageUrl: '/img/kepler.jpeg', name: t('pages.exoplanets-option') as string },
+    { imageUrl: '/img/proximaCentauri.jpeg', name: t('pages.stars-option') as string },
+  ], [t]);
   return (
-    <view
-      className="flex flex-col"
-      style={{ minHeight: '100vh', padding: '0.75rem' }}
+    <div
+      className="flex flex-col w-full h-full gap-20"
     >
       <div
-        className="flex flex-row items-center justify-end"
-        style={{ justifyContent: 'flex-end', flexGrow: '0', height: 'fit-content' }}
+        className="flex flex-row items-center justify-end flex-none gap-9"
+        style={{ justifyContent: 'flex-end' }}
       >
         <UserAuth />
         <SelectLanguage />
       </div>
       <div
-        className="flex flex-col flex-auto justify-center"
-        style={{ gap: '2.5rem' }}
+        className="flex flex-col flex-auto justify-center gap-20"
       >
         <div
-          className="flex flex-col gap-1 items-center"
+          className="flex flex-col items-center justify-center"
         >
           <h1
-            className="text-primary"
-            style={{ fontFamily: 'Orbitron', fontSize: '3.5rem' }}
+            className="text-primary font-orbitron text-[6.5rem] leading-[3rem]"
           >
             Exoplanets
           </h1>
           <h2
-            className="font-exo text-secondary text-xl"
+            className="font-exo text-secondary text-5xl leading-3"
           >
-            Descubre el universo cercano
+            {t('pages.subtitle')}
           </h2>
         </div>
         <div
-          className="flex flex-row items-center justify-center"
-          style={{ gap: '3rem' }}
+          className="flex flex-col landscape:flex-row gap-24 flex-none self-center"
         >
-          <AstroCard astro={astros[0]} onClick={() => nav('exoplanets')} />
-          <AstroCard astro={astros[1]} onClick={() => nav('stars')} />
+          <AstroCard invertedStyle astro={astros[0]} onClick={() => nav('exoplanets')} />
+          <AstroCard invertedStyle astro={astros[1]} onClick={() => nav('stars')} />
         </div>
       </div>
       <div
-        className="flex flex-row justify-between"
+        className="flex flex-row justify-between flex-none"
         style={{ flexGrow: '0' }}
       >
         <div
-          className="flex flex-row gap-2"
+          className="flex flex-row gap-4"
         >
           <Text
             invertedStyle
             asButton
             onClick={() => nav('about')}
+            className="text-3xl"
           >
-            <icon>info</icon>
-            Acerca de
+            <icon className="text-3xl">info</icon>
+            {t('pages.about')}
           </Text>
           <Text
             invertedStyle
             asButton
             onClick={() => nav('help')}
+            className="text-3xl"
           >
-            <icon>help</icon>
-            Ayuda
+            <icon className="text-3xl">help</icon>
+            {t('pages.help')}
           </Text>
         </div>
         <Text
           invertedStyle
           asLink
           url="https://github.com/cmestasz/Exoplanets"
+          className="text-3xl"
         >
-          <icon>github</icon>
-          Repositorio
+          <FaGithub
+            style={{ fill: 'inherit' }}
+          />
+          {t('pages.repo')}
         </Text>
       </div>
-    </view>
+    </div>
   );
 }

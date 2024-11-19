@@ -31,7 +31,7 @@ export default function SelectLanguage({
   }, []);
   return (
     <view
-      className={twMerge('flex flex-col gap-1 p-3 max-w-48', className)}
+      className={twMerge('flex flex-col gap-1', className)}
     >
       {label && (
         <p className="font-audiowide text-primary w-full text-xl">
@@ -47,7 +47,7 @@ export default function SelectLanguage({
         {
           opened && (
             <view
-              className="flex flex-col items-start gap-2 p-2 enter:opacity-0 enter:-trans-y-10 enter:state-duration-0 state-duration-500 transition-all duration-500 m-duration-500 leave:-trans-y-10 leave:opacity-0 absolute top-[105%] left-0 bg-tertiary w-full rounded-md z-[1000]"
+              className="flex flex-col items-start gap-2 p-2 enter:opacity-0 enter:-trans-y-10 enter:state-duration-0 state-duration-500 transition-all duration-500 m-duration-500 leave:-trans-y-10 leave:opacity-0 absolute top-[105%] left-0 bg-tertiary w-full rounded-xl z-[1000] text-3xl"
             >
               {
                 AVAILABLE_LANGUAGES.map((lang: Language) => (
@@ -57,12 +57,11 @@ export default function SelectLanguage({
                     invertedStyle
                     disabled={lang.abbr === currentLang.abbr}
                     onClick={() => handleLanguage(lang)}
-                    className="w-full justify-start"
+                    className="w-full justify-start max-h-20 py-4 gap-5"
                   >
-                    <image
+                    <img
                       src={lang.img}
                       alt={lang.disp}
-                      className="h-full max-h-6 aspect-square"
                     />
                     <span>
                       {lang.disp}

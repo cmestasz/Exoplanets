@@ -12,18 +12,13 @@ export function Text(props: TextBaseProps & AsLink): React.JSX.Element;
 
 export function Text(props: TextBaseProps & (AsButton | AsLink | OnlyText)): JSX.Element {
   const {
-    invertedStyle, size, children, className,
+    invertedStyle, children, className,
   } = props;
   const resultClass = twMerge(
-    'cursor-pointer flex flex-row gap-[0.35rem] items-center w-fit p-2 font-exo',
+    'cursor-pointer flex flex-row gap-2 items-center w-fit p-2 font-exo',
     clsx({
       [INVERTED_COLOR]: invertedStyle,
       [DEFAULT_COLOR]: !invertedStyle,
-      'max-h-8 text-xs': size === 'xs',
-      'max-h-9 text-sm': size === 'sm',
-      'max-h-10 text-base': size === 'base',
-      'max-h-11 text-lg': size === 'lg',
-      'max-h-12 text-xl': size === 'xl',
     }),
     'disabled:text-primary disabled:cursor-default',
     className,

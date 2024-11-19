@@ -34,5 +34,13 @@
         "email": "Send us an email"
       }
     }
-  }
+  },
+  "pages": {
+    "subtitle": "Discover the universe nearby",
+    "exoplanets-option": "Exoplanets",
+    "stars-option": "Stars",
+    "about": "About",
+    "help": "Help",
+    "repo": "Repository"
+ }
 }

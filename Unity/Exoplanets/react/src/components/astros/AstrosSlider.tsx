@@ -1,4 +1,3 @@
-import { Astro } from '@mytypes/Astro';
 import {
   useCallback, useEffect, useRef, useState,
 } from 'react';
@@ -6,17 +5,17 @@ import { ArrayInfIterator } from '@lib/utils';
 import AstroCard, { AstroCardProps } from './AstroCard';
 import ArrowSlider from './ArrowSlider';
 
-interface AstroSliderProps<T extends Astro> {
-  astros: Omit<AstroCardProps<T>, 'invertedStyle' | 'handExHover'>[];
+interface AstroSliderProps {
+  astros: Omit<AstroCardProps, 'invertedStyle' | 'handExHover'>[];
 }
 
-export default function AstrosSlider<T extends Astro>({
+export default function AstrosSlider({
   astros,
-}: AstroSliderProps<T>) {
+}: AstroSliderProps) {
   const iterator = useRef<ArrayInfIterator<
-  Omit<AstroCardProps<T>, 'invertedStyle' | 'handExHover'>
+  Omit<AstroCardProps, 'invertedStyle' | 'handExHover'>
   > | null>(null);
-  const [currentAstro, setCurrentAstro] = useState<Omit<AstroCardProps<T>, 'invertedStyle' | 'handExHover'> | null>(null);
+  const [currentAstro, setCurrentAstro] = useState<Omit<AstroCardProps, 'invertedStyle' | 'handExHover'> | null>(null);
   const [cardHover, setCardHover] = useState<boolean>(false);
 
   useEffect(() => {
@@ -55,7 +54,6 @@ export default function AstrosSlider<T extends Astro>({
             onClick={currentAstro.onClick}
             className="rounded-none border-none px-6 absolute size-full transition-all duration-700 enter:opacity-0 enter:state-duration-0 state-duration-700 leave:opacity-0"
             handExHover={handleHover}
-            size="small"
           />
         )}
 

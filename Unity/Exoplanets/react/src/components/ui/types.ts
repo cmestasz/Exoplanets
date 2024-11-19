@@ -4,7 +4,6 @@ export type TextBaseProps = {
   invertedStyle?: boolean;
   className?: string;
   children?: React.ReactNode;
-  size?: 'xs' | 'sm' | 'base' | 'lg' | 'xl';
 };
 
 export type AsButton = {

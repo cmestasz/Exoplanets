@@ -11,19 +11,17 @@ export interface AstroCardProps {
   className?: string;
   onDoubleClick?: () => void;
   handExHover?: (isHov: boolean) => void;
-  size?: 'normal' | 'small';
 }
 
 export default function AstroCard({
-  astro, onClick, invertedStyle, className, onDoubleClick, handExHover, size = 'normal',
+  astro, onClick, invertedStyle, className, onDoubleClick, handExHover,
 }: AstroCardProps) {
   const [isHover, setIsHover] = useState<boolean>(false);
-  const buttonBaseStyle = 'relative font-exo flex flex-col items-center gap-3 p-10 border-primary hover:border-secondary transition-all duration-200 hover:ease-out border-2 rounded-2xl ease-in-out active:scale-[0.98] active:ease-out';
-  const buttonSizeStyle = size === 'normal' ? 'size-56' : 'size-48';
-  const buttonColorStyle = invertedStyle ? INVERTED_COLOR : DEFAULT_COLOR;
+  const buttonBaseStyle = 'relative font-exo flex flex-col items-center transition-all duration-200 hover:ease-out border-2 rounded-2xl ease-in-out active:scale-[0.98] active:ease-out flex-auto max-w-sm max-h-sm py-8 px-10 gap-1';
+  const buttonColorStyle = invertedStyle ? `${INVERTED_COLOR} border-secondary hover:border-primary` : `${DEFAULT_COLOR} border-primary hover:border-secondary`;
   const handleHover = (ishover: boolean) => {
     setIsHover(ishover);
-    handExHover(ishover);
+    if (handExHover) handExHover(ishover);
   };
   return (
     <button
@@ -33,34 +31,35 @@ export default function AstroCard({
       onMouseLeave={() => handleHover(false)}
       className={twMerge(
         buttonBaseStyle,
-        buttonSizeStyle,
         buttonColorStyle,
         className,
       )}
     >
       <div
         className={clsx(
-          'aspect-square rounded-full overflow-clip',
-          {
-            'w-44 text-lg': size === 'normal',
-            'w-28 text-sm': size === 'small',
-          },
+          'rounded-full flex-auto p-5',
         )}
       >
-        <image
+        <img
           src={astro.imageUrl}
           alt={astro.name || ''}
-          className="object-cover rounded-full"
+          className="w-full"
         />
       </div>
-      <p className="w-full text-ellipsis overflow-hidden whitespace-nowrap">
+      <p className="text-ellipsis overflow-hidden whitespace-nowrap flex-auto text-5xl leading-[4rem]">
         {astro.name}
       </p>
       {
         isHover && (
           <icon
             key="externalLinkCard"
-            className="absolute top-1 right-1 duration-300 transition-all enter:opacity-0 enter:trans-x-4 enter:-trans-y-4 enter:state-duration-0 state-duration-500 text-secondary trans-0 leave:trans-x-4 leave:-trans-y-4 leave:opacity-0 leave:text-primary m-duration-500 m-ease-out"
+            className={clsx(
+              'absolute top-2 right-2 duration-300 transition-all enter:opacity-0 enter:trans-x-4 enter:-trans-y-4 enter:state-duration-0 state-duration-500 trans-0 leave:trans-x-4 leave:-trans-y-4 leave:opacity-0 m-duration-500 m-ease-out text-5xl',
+              {
+                'text-secondary leave:text-primary': !invertedStyle,
+                'text-primary leave:text-secondary': invertedStyle,
+              },
+            )}
           >
             open_in_new
           </icon>
