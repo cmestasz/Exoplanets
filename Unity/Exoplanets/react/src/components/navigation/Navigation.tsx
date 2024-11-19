@@ -32,7 +32,7 @@ export default function Navigation({
               invertedStyle
               className="text-3xl gap-2"
               asButton
-              onClick={() => nav(routes.splice(i + 1).join('/'))}
+              onClick={() => nav(routes.splice(i).join('/'))}
             >
               {
                 route === 'exoplanets' || route === 'stars'
