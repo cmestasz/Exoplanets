@@ -77,14 +77,14 @@ export const useUserActions = () => {
       setUserFetched({ state: 'error' });
     });
   }, [getUser]);
-  const logout = useCallback((redirectTo: string) => {
+  const logout = useCallback((redirectTo?: string) => {
     supabase.auth.signOut().then(({ error }) => {
       if (error) {
         console.error(error);
         showAlert({ message: t('components.user.logout-error'), type: 'error' });
       } else {
         setUserFetched({ state: 'error' });
-        nav(redirectTo);
+        if (redirectTo) nav(redirectTo);
         console.log('Cerró sesión');
       }
     });

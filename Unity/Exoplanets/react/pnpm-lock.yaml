@@ -6,7 +6,7 @@ settings:
 
 patchedDependencies:
   '@supabase/postgrest-js@1.16.3':
-    hash: cturmbqwgfwzpjt2y7nm65r23e
+    hash: gvhmw2qinheva2ts6nn6hlwtni
     path: patches/@supabase__postgrest-js@1.16.3.patch
 
 importers:
@@ -6160,7 +6160,7 @@ snapshots:
     dependencies:
       whatwg-url: 5.0.0
 
-  '@supabase/postgrest-js@1.16.3(patch_hash=cturmbqwgfwzpjt2y7nm65r23e)':
+  '@supabase/postgrest-js@1.16.3(patch_hash=gvhmw2qinheva2ts6nn6hlwtni)':
     dependencies:
       '@supabase/node-fetch': 2.6.15
 
@@ -6183,7 +6183,7 @@ snapshots:
       '@supabase/auth-js': 2.65.1
       '@supabase/functions-js': 2.4.3
       '@supabase/node-fetch': 2.6.15
-      '@supabase/postgrest-js': 1.16.3(patch_hash=cturmbqwgfwzpjt2y7nm65r23e)
+      '@supabase/postgrest-js': 1.16.3(patch_hash=gvhmw2qinheva2ts6nn6hlwtni)
       '@supabase/realtime-js': 2.10.7
       '@supabase/storage-js': 2.7.1
     transitivePeerDependencies:

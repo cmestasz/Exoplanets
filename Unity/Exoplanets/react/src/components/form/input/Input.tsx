@@ -30,6 +30,9 @@ export default function Input({
   };
   const handleSending = () => {
     const valueInput = inputRef.current?.Value || '';
+    if (!valueInput) {
+      return;
+    }
     if (valueInput === savedValue) {
       setStateInput('normal');
       return;

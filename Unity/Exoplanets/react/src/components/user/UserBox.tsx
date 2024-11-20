@@ -41,7 +41,7 @@ export default function UserBox() {
               asButton
               invertedStyle
               className="w-full justify-start gap-5"
-              onClick={() => userAction.logout('')}
+              onClick={() => userAction.logout()}
             >
               <icon className="text-6xl">logout</icon>
               {t('components.user.logout')}

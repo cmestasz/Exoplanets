@@ -8,9 +8,13 @@ export default function AccountProfile() {
   const { t } = useTranslation();
   const userAction = useContext(UserContext);
   const sendName = useCallback(async (name: string) => {
-    const { error } = await supabase.from('users').update({ first_name: name }).eq('id', userAction.current.state === 'loaded' && userAction.current.data.id);
-    if (error) {
-      throw new Error(`${t('components.form.input.error-update')}${error.code}`);
+    if (userAction.current.state === 'loaded') {
+      const data = await supabase.from('users').update({ first_name: name });
+      //   .eq('id', userAction.current.data.id);
+      if (data.error) {
+        console.error(data.error.details.toString());
+        throw new Error(`${t('components.form.input.error-update')}${data.error.code}`);
+      }
     }
   }, [userAction, t]);
   if (userAction.current.state !== 'loaded') return null;

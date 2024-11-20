@@ -1137,10 +1137,10 @@ index 0000000000000000000000000000000000000000..2a117fca9e759e13464b476ec7f9c699
 \ No newline at end of file
 diff --git a/dist/esm/PostgrestQueryBuilder.js b/dist/esm/PostgrestQueryBuilder.js
 new file mode 100644
-index 0000000000000000000000000000000000000000..a5b580d9c235c91f7e2ec087db08ad6b61c8f61f
+index 0000000000000000000000000000000000000000..e3528825823e2b017442886cfdbc12dcd21755bc
 --- /dev/null
 +++ b/dist/esm/PostgrestQueryBuilder.js
-@@ -0,0 +1,265 @@
+@@ -0,0 +1,269 @@
 +import PostgrestFilterBuilder from './PostgrestFilterBuilder';
 +export default class PostgrestQueryBuilder {
 +    constructor(url, { headers = {}, schema, fetch, }) {
@@ -1349,13 +1349,17 @@ index 0000000000000000000000000000000000000000..a5b580d9c235c91f7e2ec087db08ad6b
 +    update(values, { count, } = {}) {
 +        const method = 'PATCH';
 +        const prefersHeaders = [];
++        console.log('Url a enviar: ', this.url);
++        console.log('Valor de this.headers: Before: ', this.headers);
 +        if (this.headers['Prefer']) {
 +            prefersHeaders.push(this.headers['Prefer']);
 +        }
 +        if (count) {
 +            prefersHeaders.push(`count=${count}`);
 +        }
++        console.log('Valor de prefersHeaders: ', prefersHeaders);
 +        this.headers['Prefer'] = prefersHeaders.join(',');
++        console.log('Valor de this.headers: After: ', this.headers);
 +        return new PostgrestFilterBuilder({
 +            method,
 +            url: this.url,

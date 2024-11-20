@@ -1,8 +1,6 @@
 import SelectLanguage from '@components/languages/SelectLanguage';
 import Navigation from '@components/layouts/main/Navigation';
 import UserAuth from '@components/user/UserAuth';
-import { UserContext } from '@components/user/UserContext';
-import { useUserActions } from '@lib/hooks';
 import clsx from 'clsx';
 import { useMemo } from 'react';
 import { Outlet, useLocation } from 'react-router';
@@ -10,7 +8,6 @@ import { Outlet, useLocation } from 'react-router';
 export default function MainLayout() {
   const location = useLocation();
   const routes = useMemo(() => location.pathname.split('/').filter((s) => s), [location]);
-  const userAction = useUserActions();
   return (
     <div
       className="flex flex-col gap-20 w-screen h-screen px-8 py-5 landscape:px-20"
@@ -25,11 +22,7 @@ export default function MainLayout() {
         <div
           className="flex flex-row items-center justify-end portrait:justify-between gap-9"
         >
-          <UserContext.Provider
-            value={userAction}
-          >
-            <UserAuth />
-          </UserContext.Provider>
+          <UserAuth />
           <SelectLanguage />
         </div>
       </div>

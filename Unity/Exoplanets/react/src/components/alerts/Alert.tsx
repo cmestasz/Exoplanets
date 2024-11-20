@@ -22,7 +22,10 @@ export default function Alert({
       <span className="flex-auto">{alertOptions.message}</span>
       <icon
         onClick={hideAlert}
-        className="cursor-pointer text-red flex-auto"
+        className={clsx('cursor-pointer flex-auto', {
+          'text-red': alertOptions.type === 'error',
+          'text-green': alertOptions.type === 'success',
+        })}
       >
         close
       </icon>

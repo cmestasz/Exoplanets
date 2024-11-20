@@ -101,7 +101,7 @@ export default function Aside({
           <Text
             invertedStyle
             asButton
-            onClick={() => userAction.logout('-1')}
+            onClick={() => userAction.logout('..')}
             className="text-red hover:text-red-dark"
           >
             <icon
