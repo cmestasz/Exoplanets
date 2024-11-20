@@ -1,45 +1,25 @@
 import { useTranslation } from 'react-i18next';
 import { Text } from '@components/ui/Text';
 import { useContext, useState } from 'react';
-import { supabase } from '@lib/supabase';
-import { AlertContext } from '@components/alerts/Alert';
 import { useNavigate } from 'react-router';
 import HeaderUserBox from './HeaderUserBox';
+import { UserContext } from './UserContext';
 
-interface UserBoxProps {
-  username: string;
-  photo?: string;
-  onSignOut: () => void;
-}
-
-export default function UserBox({
-  username, photo, onSignOut,
-}: UserBoxProps) {
+export default function UserBox() {
   const { t } = useTranslation();
   const nav = useNavigate();
-  const showAlert = useContext(AlertContext);
+  const userAction = useContext(UserContext);
   const [opened, setOpened] = useState<boolean>(false);
   const handleProfile = () => {
     nav('profile/account');
     setOpened(false);
   };
-  const handleLogout = () => {
-    supabase.auth.signOut().then(({ error }) => {
-      if (error) {
-        console.error(error);
-        showAlert({ message: t('components.user.logout-error'), type: 'error' });
-      } else {
-        onSignOut();
-        console.log('Cerró sesión');
-      }
-    });
-    setOpened(false);
-  };
+  if (userAction.current.state !== 'loaded') return null;
   return (
     <view className="relative w-fit flex-grow-0">
       <HeaderUserBox
-        username={username}
-        photo={photo}
+        username={userAction.current.data.username}
+        photo={userAction.current.data.avatar}
         opened={opened}
         onClick={() => setOpened((p) => !p)}
       />
@@ -61,7 +41,7 @@ export default function UserBox({
               asButton
               invertedStyle
               className="w-full justify-start gap-5"
-              onClick={handleLogout}
+              onClick={() => userAction.logout()}
             >
               <icon className="text-6xl">logout</icon>
               {t('components.user.logout')}

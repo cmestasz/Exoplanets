@@ -3,8 +3,8 @@
   "components": {
     "form": {
       "input": {
-        "error-update": "No ha sido posible actualizar los datos",
-        "success-update": "Se han actualizado los datos correctamente",
+        "error-update": "No ha sido posible actualizar los datos. Código de error: ",
+        "success-update": "Se han actualizado los datos correctamente.",
         "sending": "Actualizando..."
       }
     },
@@ -72,6 +72,21 @@
           "header": "Ayuda"
         },
         "back": "Volver"
+      },
+      "account": {
+        "username": {
+          "label": "Nombre de usuario",
+          "placeholder": "Idéntificate con el universo"
+        },
+        "name": {
+          "label": "Nombres",
+          "placeholder": "¿Cómo te llamas?"
+        },
+        "last-name": {
+          "label": "Apellidos",
+          "placeholder": "¿Cómo te apellidas?"
+        },
+        "email": "Email"
       }
     }
   }

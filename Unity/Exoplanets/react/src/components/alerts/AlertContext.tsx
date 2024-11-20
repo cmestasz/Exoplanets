@@ -1,11 +1,5 @@
 import { createContext } from 'react';
 import { AlertOptions } from './types';
 
-interface AlertContextType {
-  alertOptions: AlertOptions | null;
-  showAlert: (options: AlertOptions) => void;
-  hideAlert: () => void;
-  isVisible: boolean;
-}
-
-export const AlertContext = createContext<AlertContextType | null>(null);
+export const AlertContext = createContext<({ message, duration, type }: AlertOptions) => void
+>(null);

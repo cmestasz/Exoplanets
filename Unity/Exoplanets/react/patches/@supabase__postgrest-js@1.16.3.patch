@@ -41,10 +41,10 @@ index 0000000000000000000000000000000000000000..0f5e9f7feba8409f935cad3d5909cb1b
 \ No newline at end of file
 diff --git a/dist/esm/PostgrestBuilder.js b/dist/esm/PostgrestBuilder.js
 new file mode 100644
-index 0000000000000000000000000000000000000000..1a193503f07b967ef2af3d05c082f50cfa1d79ff
+index 0000000000000000000000000000000000000000..5af912447f063920e6df11e88f6dc4dfcabd795c
 --- /dev/null
 +++ b/dist/esm/PostgrestBuilder.js
-@@ -0,0 +1,180 @@
+@@ -0,0 +1,187 @@
 +// @ts-ignore
 +import nodeFetch from '@supabase/node-fetch';
 +import PostgrestError from './PostgrestError';
@@ -104,6 +104,13 @@ index 0000000000000000000000000000000000000000..1a193503f07b967ef2af3d05c082f50c
 +        // NOTE: Invoke w/o `this` to avoid illegal invocation error.
 +        // https://github.com/supabase/postgrest-js/pull/247
 +        const _fetch = this.fetch;
++        // console.log('Fetch info to send: \nURL: ', this.url.toString()); console.log('\nMethod: ', this.method);
++        // console.log('\nHeaders: Is null?: ', this.headers === null);
++        // Object.entries(this.headers).forEach(([key, value]) => {
++        //     console.log(key, ': ', value);
++        // });
++        // console.log('\nBody: ', this.body);
++        // console.log('\nSignal: ', this.signal);
 +        let res = _fetch(this.url.toString(), {
 +            method: this.method,
 +            headers: this.headers,
@@ -1137,10 +1144,10 @@ index 0000000000000000000000000000000000000000..2a117fca9e759e13464b476ec7f9c699
 \ No newline at end of file
 diff --git a/dist/esm/PostgrestQueryBuilder.js b/dist/esm/PostgrestQueryBuilder.js
 new file mode 100644
-index 0000000000000000000000000000000000000000..a5b580d9c235c91f7e2ec087db08ad6b61c8f61f
+index 0000000000000000000000000000000000000000..e3a000e895cf7d4233e6803009e0a4497b797c7e
 --- /dev/null
 +++ b/dist/esm/PostgrestQueryBuilder.js
-@@ -0,0 +1,265 @@
+@@ -0,0 +1,266 @@
 +import PostgrestFilterBuilder from './PostgrestFilterBuilder';
 +export default class PostgrestQueryBuilder {
 +    constructor(url, { headers = {}, schema, fetch, }) {
@@ -1355,7 +1362,8 @@ index 0000000000000000000000000000000000000000..a5b580d9c235c91f7e2ec087db08ad6b
 +        if (count) {
 +            prefersHeaders.push(`count=${count}`);
 +        }
-+        this.headers['Prefer'] = prefersHeaders.join(',');
++        if (prefersHeaders.filter((s) => s).length > 0)
++            this.headers['Prefer'] = prefersHeaders.join(',');
 +        return new PostgrestFilterBuilder({
 +            method,
 +            url: this.url,

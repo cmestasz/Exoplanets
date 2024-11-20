@@ -3,8 +3,8 @@
   "components": {
     "form": {
       "input": {
-        "error-update": "It was not possible to update the data",
-        "success-update": "Data has been updated correctly",
+        "error-update": "It was not possible to update the data. Error code: ",
+        "success-update": "Data has been updated correctly.",
         "sending": "Updating..."
       }
     },
@@ -72,6 +72,21 @@
           "header": "Help"
         },
         "back": "Back"
+      },
+      "account": {
+        "username": {
+          "label": "Username",
+          "placeholder": "Identify yourself with the universe"
+        },
+        "name": {
+          "label": "Name",
+          "placeholder": "What is your name?"
+        },
+        "last-name": {
+          "label": "Last Name",
+          "placeholder": "What is your last name?"
+        },
+        "email": "Email"
       }
     }
   }
