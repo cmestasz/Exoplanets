@@ -41,7 +41,7 @@ index 0000000000000000000000000000000000000000..0f5e9f7feba8409f935cad3d5909cb1b
 \ No newline at end of file
 diff --git a/dist/esm/PostgrestBuilder.js b/dist/esm/PostgrestBuilder.js
 new file mode 100644
-index 0000000000000000000000000000000000000000..df4b7ccd0b6159268caa5c083c8e439a1568cda7
+index 0000000000000000000000000000000000000000..5af912447f063920e6df11e88f6dc4dfcabd795c
 --- /dev/null
 +++ b/dist/esm/PostgrestBuilder.js
 @@ -0,0 +1,187 @@
@@ -104,13 +104,13 @@ index 0000000000000000000000000000000000000000..df4b7ccd0b6159268caa5c083c8e439a
 +        // NOTE: Invoke w/o `this` to avoid illegal invocation error.
 +        // https://github.com/supabase/postgrest-js/pull/247
 +        const _fetch = this.fetch;
-+        console.log('Fetch info to send: \nURL: ', this.url.toString()); console.log('\nMethod: ', this.method);
-+        console.log('\nHeaders: Is null?: ', this.headers === null);
-+        Object.entries(this.headers).forEach(([key, value]) => {
-+            console.log(key, ': ', value);
-+        });
-+        console.log('\nBody: ', this.body);
-+        console.log('\nSignal: ', this.signal);
++        // console.log('Fetch info to send: \nURL: ', this.url.toString()); console.log('\nMethod: ', this.method);
++        // console.log('\nHeaders: Is null?: ', this.headers === null);
++        // Object.entries(this.headers).forEach(([key, value]) => {
++        //     console.log(key, ': ', value);
++        // });
++        // console.log('\nBody: ', this.body);
++        // console.log('\nSignal: ', this.signal);
 +        let res = _fetch(this.url.toString(), {
 +            method: this.method,
 +            headers: this.headers,
