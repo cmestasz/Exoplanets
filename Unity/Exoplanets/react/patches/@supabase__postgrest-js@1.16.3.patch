@@ -41,10 +41,10 @@ index 0000000000000000000000000000000000000000..0f5e9f7feba8409f935cad3d5909cb1b
 \ No newline at end of file
 diff --git a/dist/esm/PostgrestBuilder.js b/dist/esm/PostgrestBuilder.js
 new file mode 100644
-index 0000000000000000000000000000000000000000..1a193503f07b967ef2af3d05c082f50cfa1d79ff
+index 0000000000000000000000000000000000000000..df4b7ccd0b6159268caa5c083c8e439a1568cda7
 --- /dev/null
 +++ b/dist/esm/PostgrestBuilder.js
-@@ -0,0 +1,180 @@
+@@ -0,0 +1,187 @@
 +// @ts-ignore
 +import nodeFetch from '@supabase/node-fetch';
 +import PostgrestError from './PostgrestError';
@@ -104,6 +104,13 @@ index 0000000000000000000000000000000000000000..1a193503f07b967ef2af3d05c082f50c
 +        // NOTE: Invoke w/o `this` to avoid illegal invocation error.
 +        // https://github.com/supabase/postgrest-js/pull/247
 +        const _fetch = this.fetch;
++        console.log('Fetch info to send: \nURL: ', this.url.toString()); console.log('\nMethod: ', this.method);
++        console.log('\nHeaders: Is null?: ', this.headers === null);
++        Object.entries(this.headers).forEach(([key, value]) => {
++            console.log(key, ': ', value);
++        });
++        console.log('\nBody: ', this.body);
++        console.log('\nSignal: ', this.signal);
 +        let res = _fetch(this.url.toString(), {
 +            method: this.method,
 +            headers: this.headers,
@@ -1137,10 +1144,10 @@ index 0000000000000000000000000000000000000000..2a117fca9e759e13464b476ec7f9c699
 \ No newline at end of file
 diff --git a/dist/esm/PostgrestQueryBuilder.js b/dist/esm/PostgrestQueryBuilder.js
 new file mode 100644
-index 0000000000000000000000000000000000000000..e3528825823e2b017442886cfdbc12dcd21755bc
+index 0000000000000000000000000000000000000000..e3a000e895cf7d4233e6803009e0a4497b797c7e
 --- /dev/null
 +++ b/dist/esm/PostgrestQueryBuilder.js
-@@ -0,0 +1,269 @@
+@@ -0,0 +1,266 @@
 +import PostgrestFilterBuilder from './PostgrestFilterBuilder';
 +export default class PostgrestQueryBuilder {
 +    constructor(url, { headers = {}, schema, fetch, }) {
@@ -1349,17 +1356,14 @@ index 0000000000000000000000000000000000000000..e3528825823e2b017442886cfdbc12dc
 +    update(values, { count, } = {}) {
 +        const method = 'PATCH';
 +        const prefersHeaders = [];
-+        console.log('Url a enviar: ', this.url);
-+        console.log('Valor de this.headers: Before: ', this.headers);
 +        if (this.headers['Prefer']) {
 +            prefersHeaders.push(this.headers['Prefer']);
 +        }
 +        if (count) {
 +            prefersHeaders.push(`count=${count}`);
 +        }
-+        console.log('Valor de prefersHeaders: ', prefersHeaders);
-+        this.headers['Prefer'] = prefersHeaders.join(',');
-+        console.log('Valor de this.headers: After: ', this.headers);
++        if (prefersHeaders.filter((s) => s).length > 0)
++            this.headers['Prefer'] = prefersHeaders.join(',');
 +        return new PostgrestFilterBuilder({
 +            method,
 +            url: this.url,
