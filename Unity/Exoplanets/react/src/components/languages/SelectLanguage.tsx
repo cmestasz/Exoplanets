@@ -20,15 +20,24 @@ export default function SelectLanguage({
   const [currentLang, setCurrentLang] = useState<Language>(DEFAULT_LANGUAGE);
   const label = showLabel ? t('components.languages.selectLang') : undefined;
   const handleLanguage = useCallback((lang: Language) => {
+    console.log('Changing to: ', lang.disp);
     setCurrentLang(lang);
+    localStorage.setItem('language', lang.code);
     i18n.changeLanguage(lang.abbr);
-  }, []);
+  }, [i18n.language]);
   useEffect(() => {
-    const language = Interop.UnityEngine.Application.systemLanguage;
-    const defaultLang = AVAILABLE_LANGUAGES
-      .find((lang: Language) => lang.code === language.toString());
-    setCurrentLang(defaultLang || DEFAULT_LANGUAGE);
-  }, []);
+    const cacheCodeLang = localStorage.getItem('language');
+    let customLang;
+    if (!cacheCodeLang) {
+      const language = Interop.UnityEngine.Application.systemLanguage;
+      customLang = AVAILABLE_LANGUAGES
+        .find((lang: Language) => lang.code === language.toString()) || DEFAULT_LANGUAGE;
+    } else {
+      customLang = AVAILABLE_LANGUAGES
+        .find((lang: Language) => lang.code === cacheCodeLang);
+    }
+    handleLanguage(customLang);
+  }, [handleLanguage]);
   return (
     <view
       className={twMerge('flex flex-col gap-1', className)}
