@@ -28,9 +28,16 @@ export default function Input({
   const handleEdit = () => {
     setStateInput('editing');
   };
+  const handleCancel = () => {
+    setStateInput('normal');
+    if (inputRef.current) {
+      inputRef.current.Value = savedValue;
+    }
+  };
   const handleSending = () => {
     const valueInput = inputRef.current?.Value || '';
     if (!valueInput) {
+      handleCancel();
       return;
     }
     if (valueInput === savedValue) {
@@ -46,12 +53,6 @@ export default function Input({
       setStateInput('editing');
       showAlert({ message: message.message, type: 'error' });
     });
-  };
-  const handleCancel = () => {
-    setStateInput('normal');
-    if (inputRef.current) {
-      inputRef.current.Value = savedValue;
-    }
   };
   useEffect(() => {
     if (defaultValue && inputRef.current) {
