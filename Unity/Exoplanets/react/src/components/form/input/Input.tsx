@@ -12,11 +12,11 @@ type InputProps = UGUIElements['input'] & {
   label?: string,
   name: string,
   defaultValue?: string,
-  send: (value: string) => Promise<void>;
+  send: (name: string, value: string) => Promise<void>;
 };
 
 export default function Input({
-  label, name, send, defaultValue = '', ...props
+  label, name, send, defaultValue = '', disabled, ...props
 }: InputProps) {
   const { t } = useTranslation();
   const SUCCESS_UPLOADING = t('components.form.input.success-update') as string;
@@ -38,7 +38,7 @@ export default function Input({
       return;
     }
     setStateInput('sending');
-    send(valueInput).then(() => {
+    send(name, valueInput).then(() => {
       setSavedValue(valueInput);
       setStateInput('normal');
       showAlert({ message: SUCCESS_UPLOADING, type: 'success' });
@@ -83,17 +83,18 @@ export default function Input({
         <input
           name={name}
           ref={inputRef}
-          onFocus={handleEdit}
+          onFocus={disabled ? undefined : handleEdit}
           className="bg-transparent cursor-text focus:outline-none focus:border-b-2 border-b-transparent focus:border-b-primary transition-colors font-exo flex-grow rounded-none pb-1 placeholder:text-quaternary"
+          disabled={disabled}
           {...props}
         />
         {
-          stateInput === 'sending' && (
+          !disabled && stateInput === 'sending' && (
             <p className="font-exo text-sm">{SENDIND_MESSAGE}</p>
           )
         }
         {
-          stateInput === 'editing' && (
+          !disabled && stateInput === 'editing' && (
             <Options
               handleCancel={handleCancel}
               handleSending={handleSending}
@@ -101,7 +102,7 @@ export default function Input({
           )
         }
         {
-          stateInput === 'normal' && (
+          !disabled && stateInput === 'normal' && (
             <icon
               onClick={handleEdit}
               className={`${INVERTED_COLOR} cursor-pointer text-6xl`}
