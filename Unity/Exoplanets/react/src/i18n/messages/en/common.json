@@ -87,6 +87,10 @@
           "placeholder": "What is your last name?"
         },
         "email": "Email"
+      },
+      "constellations": {
+        "howto": "How do I create a constellation?",
+        "visit": "Visit your constellations!"
       }
     }
   }
