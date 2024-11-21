@@ -15,6 +15,7 @@ import { UserContext } from '@components/user/UserContext';
 import About from '@pages/profile/About';
 import Settings from '@pages/profile/Settings';
 import Help from '@pages/profile/Help';
+import ContentProfileLayout from '@pages/layouts/ContentProfileLayout';
 
 function UserProvider() {
   const userActions = useUserActions();
@@ -42,11 +43,13 @@ export default function AppRoutes() {
           </Route>
         </Route>
         <Route path="profile" element={<ProfileLayout />}>
-          <Route path="account" element={<AccountProfile />} />
+          <Route element={<ContentProfileLayout />}>
+            <Route path="account" element={<AccountProfile />} />
+            <Route path="options" element={<Settings />} />
+            <Route path="about" element={<About />} />
+            <Route path="help" element={<Help />} />
+          </Route>
           <Route path="constellations" element={<Constellations />} />
-          <Route path="options" element={<Settings />} />
-          <Route path="about" element={<About />} />
-          <Route path="help" element={<Help />} />
         </Route>
         <Route path="max" element={<Maximized />} />
       </Route>

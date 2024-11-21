@@ -1,6 +1,6 @@
 import AstroCard from '@components/astros/AstroCard';
 import { Text } from '@components/ui/Text';
-import { Astro } from '@mytypes/Astro';
+import { Astro } from '@mytypes/astros';
 import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { FaGithub } from 'react-icons/fa6';

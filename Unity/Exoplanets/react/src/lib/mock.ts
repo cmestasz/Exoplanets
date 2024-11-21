@@ -1,4 +1,64 @@
-import { Exoplanet } from '@mytypes/Astro';
+import type { Exoplanet, Star } from '@mytypes/astros';
+
+export const ProximaCentauri: Star = {
+  name: 'Proxima Centauri',
+  distanceFromEarth: 4.24, // Distance in light years
+  massUnit: 'Sun',
+  mass: 0.12, // Mass relative to Sun
+  radius: 100000, // Radius in kilometers
+  imageUrl: 'https://example.com/images/proxima_centauri.jpg', // Image of the star
+  temperature: 3042, // Temperature in Kelvin
+  luminosity: 0.0017, // Luminosity relative to Sun
+  spectralType: 'M', // Spectral type M
+};
+
+export const Kepler_22: Star = {
+  name: 'Kepler-22',
+  distanceFromEarth: 600, // Distance in light years
+  mass: 0.97, // Mass relative to Sun
+  massUnit: 'Sun', // Unit is Sun
+  radius: 696342, // Radius in kilometers
+  imageUrl: '/images/kepler.jpeg', // Image of the star
+  temperature: 5518, // Temperature in Kelvin
+  luminosity: 0.79, // Luminosity relative to Sun
+  spectralType: 'G', // Spectral type G
+};
+
+export const Kepler_21: Star = {
+  name: 'Kepler-21',
+  distanceFromEarth: 620, // Distance in light years
+  mass: 1.1, // Mass relative to Sun
+  massUnit: 'Sun', // Unit is Sun
+  radius: 702000, // Radius in kilometers
+  imageUrl: '/img/kepler.jpeg', // Image URL
+  temperature: 5800, // Temperature in Kelvin
+  luminosity: 1.05, // Luminosity relative to Sun
+  spectralType: 'F', // Spectral type F
+};
+
+export const Alpha_Centauri_A: Star = {
+  name: 'Alpha Centauri A',
+  distanceFromEarth: 4.37, // Distance in light years
+  mass: 1.1, // Mass relative to Sun
+  radius: 1234000, // Radius in kilometers
+  imageUrl: 'https://example.com/images/alpha_centauri_a.jpg', // Image URL
+  massUnit: 'Sun',
+  temperature: 5790, // Temperature in Kelvin
+  luminosity: 1.52, // Luminosity relative to Sun
+  spectralType: 'G', // Spectral type G
+};
+
+export const Alpha_Centauri_B: Star = {
+  name: 'Alpha Centauri B',
+  distanceFromEarth: 4.37, // Distance in light years
+  mass: 0.9, // Mass relative to Sun
+  massUnit: 'Sun',
+  radius: 870000, // Radius in kilometers
+  imageUrl: 'https://example.com/images/alpha_centauri_b.jpg', // Image URL
+  temperature: 5260, // Temperature in Kelvin
+  luminosity: 0.5, // Luminosity relative to Sun
+  spectralType: 'K', // Spectral type K
+};
 
 export const kepler22b: Exoplanet = {
   name: 'Kepler-22b',
@@ -11,29 +71,9 @@ export const kepler22b: Exoplanet = {
   // Exoplanet-specific properties
   size: 2.4, // Size relative to Earth
   orbitalType: 'elliptical', // Elliptical orbit
-  hostStar: {
-    name: 'Kepler-22',
-    distanceFromEarth: 600, // Distance in light years
-    mass: 0.97, // Mass relative to Sun
-    massUnit: 'Sun', // Unit is Sun
-    radius: 696342, // Radius in kilometers
-    imageUrl: '/images/kepler.jpeg', // Image of the star
-    temperature: 5518, // Temperature in Kelvin
-    luminosity: 0.79, // Luminosity relative to Sun
-    spectralType: 'G', // Spectral type G
-  },
+  hostStar: Kepler_22,
   nearestStars: [
-    {
-      name: 'Kepler-21',
-      distanceFromEarth: 620, // Distance in light years
-      mass: 1.1, // Mass relative to Sun
-      massUnit: 'Sun', // Unit is Sun
-      radius: 702000, // Radius in kilometers
-      imageUrl: '/img/kepler.jpeg', // Image URL
-      temperature: 5800, // Temperature in Kelvin
-      luminosity: 1.05, // Luminosity relative to Sun
-      spectralType: 'F', // Spectral type F
-    },
+    Kepler_21,
   ],
 };
 export const proximaCentauriB: Exoplanet = {
@@ -47,39 +87,9 @@ export const proximaCentauriB: Exoplanet = {
   // Exoplanet-specific properties
   size: 1.17, // Size relative to Earth
   orbitalType: 'elliptical', // Elliptical orbit
-  hostStar: {
-    name: 'Proxima Centauri',
-    distanceFromEarth: 4.24, // Distance in light years
-    massUnit: 'Sun',
-    mass: 0.12, // Mass relative to Sun
-    radius: 100000, // Radius in kilometers
-    imageUrl: 'https://example.com/images/proxima_centauri.jpg', // Image of the star
-    temperature: 3042, // Temperature in Kelvin
-    luminosity: 0.0017, // Luminosity relative to Sun
-    spectralType: 'M', // Spectral type M
-  },
+  hostStar: ProximaCentauri,
   nearestStars: [
-    {
-      name: 'Alpha Centauri A',
-      distanceFromEarth: 4.37, // Distance in light years
-      mass: 1.1, // Mass relative to Sun
-      radius: 1234000, // Radius in kilometers
-      imageUrl: 'https://example.com/images/alpha_centauri_a.jpg', // Image URL
-      massUnit: 'Sun',
-      temperature: 5790, // Temperature in Kelvin
-      luminosity: 1.52, // Luminosity relative to Sun
-      spectralType: 'G', // Spectral type G
-    },
-    {
-      name: 'Alpha Centauri B',
-      distanceFromEarth: 4.37, // Distance in light years
-      mass: 0.9, // Mass relative to Sun
-      massUnit: 'Sun',
-      radius: 870000, // Radius in kilometers
-      imageUrl: 'https://example.com/images/alpha_centauri_b.jpg', // Image URL
-      temperature: 5260, // Temperature in Kelvin
-      luminosity: 0.5, // Luminosity relative to Sun
-      spectralType: 'K', // Spectral type K
-    },
+    Alpha_Centauri_A,
+    Alpha_Centauri_B,
   ],
 };

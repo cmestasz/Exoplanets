@@ -1,5 +1,5 @@
 import { Locale } from '@i18n/i18next';
-import Language from '@mytypes/Language';
+import { Language } from '@mytypes/language';
 
 export const SPANISH: Language = {
   abbr: 'es',

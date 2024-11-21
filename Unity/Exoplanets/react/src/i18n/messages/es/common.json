@@ -86,7 +86,11 @@
           "label": "Apellidos",
           "placeholder": "¿Cómo te apellidas?"
         },
-        "email": "Email"
+        "email": "Correo electrónico"
+      },
+      "constellations": {
+        "howto": "¿Cómo creo una constelación?",
+        "visit": "¡Visita tus constelaciones!"
       }
     }
   }

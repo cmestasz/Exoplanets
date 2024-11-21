@@ -4,11 +4,11 @@ import {
 } from 'react';
 import { AlertOptions } from '@components/alerts/types';
 import { useTranslation } from 'react-i18next';
-import { AsyncData } from '@mytypes/AsyncData';
-import UserAPI from '@mytypes/User';
+import { UserAPI } from '@mytypes/user';
 import { User } from '@supabase/supabase-js';
 import { AlertContext } from '@components/alerts/AlertContext';
 import { useNavigate } from 'react-router';
+import { AsyncData } from '@mytypes/index';
 import { supabase } from './supabase';
 import { DEFAULT_ALERT_DURATION } from './constants';
 

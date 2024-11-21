@@ -1,4 +1,4 @@
-export default interface UserAPI {
+interface UserAPI {
   avatar: string | null
   created_at: string
   email: string
@@ -8,7 +8,4 @@ export default interface UserAPI {
   username: string | null
 }
 
-export interface UserBoxOptions {
-  content: string;
-  action: () => void;
-}
+export { UserAPI };

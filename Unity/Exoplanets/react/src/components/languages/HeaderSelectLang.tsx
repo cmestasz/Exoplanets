@@ -1,5 +1,5 @@
 import { Text } from '@components/ui/Text';
-import Language from '@mytypes/Language';
+import { Language } from '@mytypes/language';
 import clsx from 'clsx';
 import { twMerge } from 'tailwind-merge';
 
