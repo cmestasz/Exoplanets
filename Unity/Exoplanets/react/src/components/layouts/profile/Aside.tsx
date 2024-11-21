@@ -99,7 +99,7 @@ export default function Aside({
             className="text-red hover:text-red-dark"
           >
             <icon
-              className="text-3xl"
+              className="text-3xl rotate-180"
             >
               logout
             </icon>
