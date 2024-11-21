@@ -20,10 +20,10 @@ export default function SelectLanguage({
   const [currentLang, setCurrentLang] = useState<Language>(DEFAULT_LANGUAGE);
   const label = showLabel ? t('components.languages.selectLang') : undefined;
   const handleLanguage = useCallback((lang: Language) => {
-    console.log('Changing to: ', lang.disp);
     setCurrentLang(lang);
     localStorage.setItem('language', lang.code);
     i18n.changeLanguage(lang.abbr);
+    setOpened(false);
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [i18n.language]);
   useEffect(() => {

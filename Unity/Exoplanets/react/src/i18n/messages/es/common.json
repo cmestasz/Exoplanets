@@ -86,7 +86,7 @@
           "label": "Apellidos",
           "placeholder": "¿Cómo te apellidas?"
         },
-        "email": "Email"
+        "email": "Correo electrónico"
       }
     }
   }
