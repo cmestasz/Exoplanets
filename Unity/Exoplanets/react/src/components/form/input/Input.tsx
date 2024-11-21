@@ -73,7 +73,7 @@ export default function Input({
         <label
           // eslint-disable-next-line react/no-unknown-property
           for={name}
-          className="font-audiowide text-primary cursor-default text-5xl leading-8"
+          className="font-audiowide text-primary cursor-default text-5xl leading-10"
         >
           {label}
         </label>

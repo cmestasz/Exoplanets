@@ -7,10 +7,11 @@ interface HeaderSelectLangProps {
   lang: Language;
   opened: boolean;
   onClick: () => void;
+  showLabel?: boolean;
 }
 
 export default function HeaderSelectLang({
-  lang, onClick, opened,
+  lang, onClick, opened, showLabel,
 }: HeaderSelectLangProps) {
   return (
     <Text
@@ -22,11 +23,18 @@ export default function HeaderSelectLang({
       })}
     >
       <img
-        className="flex-auto"
+        className={clsx({
+          'flex-auto': !showLabel,
+        })}
         src={lang.img}
         alt="Language"
       />
-      <span>{lang.disp}</span>
+      <span className={clsx({
+        'flex-auto text-left': showLabel,
+      })}
+      >
+        {lang.disp}
+      </span>
       <icon
         className={twMerge(
           'transition-transform m-duration-400 m-ease-in m-delay-100 duration-400 delay-100 ease-in text-5xl',

@@ -41,18 +41,19 @@ export default function SelectLanguage({
   }, [handleLanguage]);
   return (
     <view
-      className={twMerge('flex flex-col gap-1', className)}
+      className={twMerge('flex flex-col gap-1 p-3', className)}
     >
       {label && (
-        <p className="font-audiowide text-primary w-full text-xl">
+        <p className="font-audiowide text-primary text-5xl leading-10">
           {label}
         </p>
       )}
-      <view className="relative w-full flex-grow-0">
+      <view className="relative">
         <HeaderSelectLang
           lang={currentLang}
           opened={opened}
           onClick={() => setOpened((p) => !p)}
+          showLabel={showLabel}
         />
         {
           opened && (
