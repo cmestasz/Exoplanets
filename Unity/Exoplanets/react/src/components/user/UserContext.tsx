@@ -6,5 +6,6 @@ import { createContext } from 'react';
 export const UserContext = createContext<{
   current: AsyncData<UserAPI>,
   fetchUser:(userGetted?: User, withAlert?: boolean) => void,
-  logout: (redirectTo?: string) => void
+  logout: (redirectTo?: string) => void,
+  login: () => void,
 }>(null);
