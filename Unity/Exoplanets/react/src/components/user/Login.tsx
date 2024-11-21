@@ -1,9 +1,16 @@
 import { Text } from '@components/ui/Text';
 import { useContext } from 'react';
 import { useTranslation } from 'react-i18next';
+import clsx from 'clsx';
 import { UserContext } from './UserContext';
 
-export default function Login() {
+interface LoginProps {
+  asideMenu?: boolean
+}
+
+export default function Login({
+  asideMenu,
+}: LoginProps) {
   const { t } = useTranslation();
   const userAction = useContext(UserContext);
   return (
@@ -11,7 +18,10 @@ export default function Login() {
       asButton
       invertedStyle
       onClick={() => userAction.login()}
-      className="max-h-32 text-3xl px-3 py-10 gap-3 shrink"
+      className={clsx('text-3xl gap-3 shrink', {
+        'px-3 py-10 max-h-32': !asideMenu,
+        'max-h-14 py-3': asideMenu,
+      })}
     >
       <img
         src="/img/google.png"

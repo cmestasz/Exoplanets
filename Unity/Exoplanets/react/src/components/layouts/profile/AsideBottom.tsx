@@ -37,7 +37,7 @@ export default function AsideBottom() {
         <hr className="border-primary border-[1px] landscape:w-full portrait:h-full" />
         {
           userAction.current.state !== 'loaded' ? (
-            <Login />
+            <Login asideMenu />
           ) : (
             <Logout />
           )
