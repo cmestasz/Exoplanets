@@ -1,9 +1,9 @@
+import Scroll from '@components/ui/Scroll';
 import { Text } from '@components/ui/Text';
 import { UserContext } from '@components/user/UserContext';
 import { ProfileRoutes, routes } from '@pages/profile/ProfileRoutes';
-import { ReactUnity } from '@reactunity/renderer';
 import clsx from 'clsx';
-import { useContext, useEffect, useRef } from 'react';
+import { useContext } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router';
 
@@ -15,15 +15,8 @@ export default function Aside({
   currentRoute,
 }: AsideProps) {
   const { t } = useTranslation();
-  const scrollRef = useRef<ReactUnity.UGUI.ScrollComponent>();
   const nav = useNavigate();
   const userAction = useContext(UserContext);
-  useEffect(() => {
-    if (scrollRef.current) {
-      scrollRef.current.HorizontalScrollbar.Thumb.SetProperty('className', 'bg-primary border-secondary border-4 border-solid rounded-full');
-      scrollRef.current.HorizontalScrollbar.SetProperty('className', 'bg-transparent h-2');
-    }
-  }, []);
   return (
     <aside
       className="flex flex-col rounded-lg landscape:py-4 landscape:px-7 landscape:border-2 landscape:border-primary min-w-48 gap-7"
@@ -42,9 +35,10 @@ export default function Aside({
           {t('pages.subtitle')}
         </h2>
       </div>
-      <scroll
-        ref={scrollRef}
+      <Scroll
         className="flex flex-col portrait:flex-row flex-auto overflow-hidden gap-5 portrait:border-2 portrait:border-primary portrait:py-3 portrait:px-2"
+        thumbClassName="bg-primary border-secondary border-4 border-solid rounded-full"
+        scrollBarClassName="bg-transparent h-2"
       >
         {
           routes.map((route, i) => (
@@ -114,7 +108,7 @@ export default function Aside({
             </span>
           </Text>
         </div>
-      </scroll>
+      </Scroll>
     </aside>
   );
 }

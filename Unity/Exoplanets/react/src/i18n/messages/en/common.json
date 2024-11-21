@@ -93,7 +93,7 @@
         "visit": "Visit your constellations!"
       },
       "about": {
-        "introduction": "Exoplanets is a project developed for the NASA Space Apps hackathon. The application's goal is to easily and didactically showcase a part of the universe, so that elementary school students can boost their learning through its use.",
+        "introduction": "Exoplanets is a project that seeks to show in an easy and didactic way part of the universe. In this way, basic education students can boost their spatial learning through its use.",
         "team": {
           "title": "Our Team",
           "content": "We are Systems Engineering students from the National University of San Agustín."

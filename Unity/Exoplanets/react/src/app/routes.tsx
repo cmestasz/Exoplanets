@@ -12,7 +12,7 @@ import AccountProfile from '@pages/profile/AccountProfile';
 import Constellations from '@pages/profile/Constellations';
 import { useUserActions } from '@lib/hooks';
 import { UserContext } from '@components/user/UserContext';
-import About from '@pages/profile/About';
+import About from '@pages/profile/about/About';
 import Settings from '@pages/profile/Settings';
 import Help from '@pages/profile/Help';
 import ContentProfileLayout from '@pages/layouts/ContentProfileLayout';
