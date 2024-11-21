@@ -9,6 +9,8 @@ import { User } from '@supabase/supabase-js';
 import { AlertContext } from '@components/alerts/AlertContext';
 import { useNavigate } from 'react-router';
 import { AsyncData } from '@mytypes/index';
+import { useGlobals } from '@reactunity/renderer';
+import { AuthServer } from '@mytypes/UnityTypes';
 import { supabase } from './supabase';
 import { DEFAULT_ALERT_DURATION } from './constants';
 
@@ -47,6 +49,7 @@ export function useAlert() {
 
 export const useUserActions = () => {
   const { t } = useTranslation();
+  const authServer = useGlobals().AuthServer as AuthServer;
   const showAlert = useContext(AlertContext);
   const nav = useNavigate();
   const [userFetched, setUserFetched] = useState<AsyncData<UserAPI>>({ state: 'loading' });
@@ -89,6 +92,48 @@ export const useUserActions = () => {
       }
     });
   }, [t, nav, showAlert]);
+  const handleCode = useCallback((code: string) => {
+    supabase.auth.exchangeCodeForSession(code).then(({ data, error }) => {
+      if (error) {
+        console.log(error);
+        showAlert({ message: t('components.user.get-user-error') });
+        return;
+      }
+      fetchUser(data.user);
+    });
+  }, [fetchUser, t, showAlert]);
+  const login = useCallback(() => {
+    supabase.auth.signInWithOAuth({ provider: 'google', options: { redirectTo: 'http://localhost:7463/callback', skipBrowserRedirect: true } }).then(({ data, error }) => {
+      if (error) {
+        console.error(error);
+        showAlert({ message: t('components.user.login-error'), type: 'error' });
+        return;
+      }
+      const d = {
+        titlePage: t('components.user.auth-page.success.title') as string,
+        titlePageError: t('components.user.auth-page.error.title') as string,
+        mainMessage: t('components.user.auth-page.success.main-message') as string,
+        mainMessageError: t('components.user.auth-page.error.main-message') as string,
+        subMessage: t('components.user.auth-page.success.sub-message') as string,
+        subMessageError: t('components.user.auth-page.error.sub-message') as string,
+        repo: t('components.user.auth-page.repo') as string,
+        email: t('components.user.auth-page.email') as string,
+      };
+      authServer.SetHandleCode(
+        handleCode,
+        d.titlePage,
+        d.titlePageError,
+        d.mainMessage,
+        d.mainMessageError,
+        d.subMessage,
+        d.subMessageError,
+        d.repo,
+        d.email,
+      );
+      Interop.UnityEngine.Application.OpenURL(data.url);
+    }).catch((e) => console.log('Redirección no completada: ', e));
+    console.log('sign in');
+  }, [showAlert, authServer, t, handleCode]);
   useEffect(() => {
     let isMounted = true;
     getUser().catch((r) => {
@@ -100,6 +145,6 @@ export const useUserActions = () => {
     return () => { isMounted = false; };
   }, [getUser]);
   return useMemo(() => ({
-    current: userFetched, fetchUser, logout,
-  }), [fetchUser, userFetched, logout]);
+    current: userFetched, fetchUser, logout, login,
+  }), [fetchUser, userFetched, logout, login]);
 };

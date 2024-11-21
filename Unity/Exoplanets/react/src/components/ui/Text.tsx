@@ -50,7 +50,7 @@ export function Text(props: TextBaseProps & (AsButton | AsLink | OnlyText)): JSX
       };
       return (
         <richtext
-          className={resultClass}
+          className={twMerge(resultClass, 'hover:text-quaternary')}
           // eslint-disable-next-line react/no-unknown-property
           onPointerClick={handleLink}
         >

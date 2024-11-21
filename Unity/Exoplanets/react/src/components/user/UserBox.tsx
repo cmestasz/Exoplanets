@@ -43,7 +43,7 @@ export default function UserBox() {
               className="w-full justify-start gap-5"
               onClick={() => userAction.logout()}
             >
-              <icon className="text-6xl">logout</icon>
+              <icon className="text-6xl rotate-180">logout</icon>
               {t('components.user.logout')}
             </Text>
           </view>

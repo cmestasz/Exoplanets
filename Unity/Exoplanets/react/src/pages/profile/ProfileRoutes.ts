@@ -1,9 +1,9 @@
 export const routes = [
-  { route: 'account', icon: 'person' },
-  { route: 'constellations', icon: 'star' },
-  { route: 'options', icon: 'settings' },
-  { route: 'about', icon: 'info' },
-  { route: 'help', icon: 'help' },
+  { route: 'account', icon: 'person', auth: true },
+  { route: 'constellations', icon: 'star', auth: true },
+  { route: 'options', icon: 'settings', auth: false },
+  { route: 'about', icon: 'info', auth: false },
+  { route: 'help', icon: 'help', auth: false },
 ] as const;
 
 export type ProfileRoutes = typeof routes[number]['route'];
