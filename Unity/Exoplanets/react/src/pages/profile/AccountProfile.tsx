@@ -19,7 +19,7 @@ export default function AccountProfile() {
   if (userAction.current.state !== 'loaded') return null;
   return (
     <div
-      className="flex flex-col"
+      className="flex flex-col gap-5"
     >
       <Input
         name="username"

@@ -1,5 +1,13 @@
+import SelectLanguage from '@components/languages/SelectLanguage';
+
 export default function Settings() {
   return (
-    <div>settings</div>
+    <view
+      className="flex flex-col gap-5"
+    >
+      <SelectLanguage
+        showLabel
+      />
+    </view>
   );
 }
