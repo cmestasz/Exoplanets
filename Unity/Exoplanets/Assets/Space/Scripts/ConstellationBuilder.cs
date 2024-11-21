@@ -3,27 +3,26 @@ using UnityEngine;
 
 public class ConstellationBuilder
 {
-    public Transform ConnectionsParent { get; private set; }
-    public GameObject ConstellationConnectionPrefab { get; private set; }
+    public GameObject ConstellationPrefab { get; private set; }
+    public GameObject ConnectionPrefab { get; private set; }
     public List<LineRenderer> ConstellationLines { get; private set; } = new();
-    public ConstellationOld CurrentConstellation { get; private set; }
+    public ConstellationController CurrentConstellation { get; private set; }
 
-    public ConstellationBuilder(GameObject constellationConnectionPrefab, Transform connectionsParent)
+    public ConstellationBuilder(GameObject connectionPrefab)
     {
-        ConnectionsParent = connectionsParent;
-        ConstellationConnectionPrefab = constellationConnectionPrefab;
+        ConnectionPrefab = connectionPrefab;
     }
 
-    public void AddConnection(StarController star1, StarController star2)
+    public void AddConnection(StarController star1, StarController star2, Transform parent)
     {
-        GameObject connection = Object.Instantiate(ConstellationConnectionPrefab, ConnectionsParent);
+        GameObject connection = Object.Instantiate(ConnectionPrefab);
         LineRenderer lineRenderer = connection.GetComponent<LineRenderer>();
         lineRenderer.positionCount = 2;
         lineRenderer.SetPosition(0, star1.transform.position);
         lineRenderer.SetPosition(1, star2.transform.position);
         ConstellationLines.Add(lineRenderer);
 
-        CurrentConstellation ??= ConstellationOld.CreateConstellation();
+        CurrentConstellation ??= ConstellationController.InitConstellation(ConstellationPrefab, parent);
         CurrentConstellation.AddConnection(star1, star2);
     }
 

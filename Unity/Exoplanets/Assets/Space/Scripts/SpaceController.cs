@@ -60,7 +60,7 @@ public class SpaceController : MonoBehaviour
     {
         foreach (Constellation constellation in constellations)
         {
-            ConstellationController.CreateConstellation(constellation, constellationPrefab, connectionPrefab, ConstellationParent);
+            ConstellationController.BuildConstellation(constellation, constellationPrefab, connectionPrefab, ConstellationParent);
         }
     }
 
@@ -195,7 +195,6 @@ public class SpaceController : MonoBehaviour
 
     public void AddConstellationConnection(StarController star1, StarController star2)
     {
-        ConstellationBuilder.AddConnection(star1, star2);
     }
 
     public void SaveConstellation(string name)

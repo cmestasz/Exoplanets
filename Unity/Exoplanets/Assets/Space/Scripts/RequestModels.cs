@@ -53,12 +53,13 @@ public class ActiveConstellationsRequest
 public class CreateConstellationRequest
 {
     public int user_id;
-    Constellation constellation;
+    public Constellation constellation;
 }
 
 [System.Serializable]
 public class CreateConstellationResponse
 {
+    public string message;
 }
 
 [System.Serializable]
