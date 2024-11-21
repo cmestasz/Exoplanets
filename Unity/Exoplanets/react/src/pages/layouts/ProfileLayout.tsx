@@ -21,9 +21,7 @@ export default function ProfileLayout() {
         >
           {t(`pages.profile.layout.${route}.header`)}
         </header>
-        <div className="flex-auto border-2 border-primary rounded-lg p-8">
-          <Outlet />
-        </div>
+        <Outlet />
       </main>
     </div>
   );
