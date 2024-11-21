@@ -1,4 +1,4 @@
-import Language from '@mytypes/Language';
+import { Language } from '@mytypes/language';
 import { useTranslation } from 'react-i18next';
 import { AVAILABLE_LANGUAGES, DEFAULT_LANGUAGE } from '@lib/constants';
 import i18n from '@i18n/i18n';

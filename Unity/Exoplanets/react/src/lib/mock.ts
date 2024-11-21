@@ -1,4 +1,4 @@
-import { Exoplanet, Star } from '@mytypes/Astro';
+import type { Exoplanet, Star } from '@mytypes/astros';
 
 export const ProximaCentauri: Star = {
   name: 'Proxima Centauri',

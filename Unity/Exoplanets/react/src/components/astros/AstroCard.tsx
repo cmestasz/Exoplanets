@@ -1,5 +1,5 @@
 import { DEFAULT_COLOR, INVERTED_COLOR } from '@styles/colors';
-import { Astro } from '@mytypes/Astro';
+import { Astro } from '@mytypes/astros';
 import { twMerge } from 'tailwind-merge';
 import { useState } from 'react';
 import clsx from 'clsx';

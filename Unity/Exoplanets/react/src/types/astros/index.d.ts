@@ -1,4 +1,4 @@
-export interface Astro {
+interface Astro {
   name: string;
   distanceFromEarth: number; // Distance in light years
   mass: number;
@@ -8,15 +8,24 @@ export interface Astro {
   discoveredDate?: Date;
 }
 
-export interface Exoplanet extends Astro {
+interface Exoplanet extends Astro {
   size: number; // Size relative to Earth
   orbitalType: 'circular' | 'elliptical';
   hostStar: Star;
   nearestStars: Star[];
 }
 
-export interface Star extends Astro {
+interface Star extends Astro {
   temperature: number; // Surface temperature in kelvin
   luminosity: number; // Luminosity relative to Sun
   spectralType: 'O' | 'B' | 'A' | 'F' | 'G' | 'K' | 'M'; // Spectral classifications
 }
+
+interface Constellation {
+  name: string;
+  stars: Star[];
+}
+
+export {
+  Astro, Exoplanet, Star, Constellation,
+};
