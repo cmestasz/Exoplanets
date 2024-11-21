@@ -85,6 +85,7 @@ export default function Constellations() {
             userConst.data.map((constellation, i, arr) => (
               <>
                 <Text
+                  key={constellation.name}
                   invertedStyle
                   asButton
                   onClick={() => handleSelected(constellation)}
