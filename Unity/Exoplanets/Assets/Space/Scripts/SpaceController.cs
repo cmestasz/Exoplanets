@@ -10,6 +10,7 @@ public class SpaceController : MonoBehaviour
 {
     [SerializeField] private GameObject[] starPrefabs;
     [SerializeField] private Material[] planetMaterials;
+    [SerializeField] private GameObject connectionPrefab;
     [SerializeField] private GameObject constellationConnectionPrefab;
     [SerializeField] private GameObject postProcessing;
     public static SpaceController Instance { get; private set; }
@@ -51,16 +52,15 @@ public class SpaceController : MonoBehaviour
         {
             int prefabIdx = Random.Range(0, starPrefabs.Length);
             Vector3 pos = new(star.x * 15, star.y * 15, star.z * 15);
-            StarController.CreateStar(star.name, starPrefabs[prefabIdx], pos, StarsParent);
+            StarController.CreateStar(star.id, starPrefabs[prefabIdx], pos, StarsParent);
         }
     }
 
     private void BuildConstellations(Constellation[] constellations)
     {
-        Debug.Log("Building constellations");
         foreach (Constellation constellation in constellations)
         {
-            // ConstellationBuilder.BuildConstellation(constellation);
+            ConstellationController.CreateConstellation(constellation, connectionPrefab);
         }
     }
 

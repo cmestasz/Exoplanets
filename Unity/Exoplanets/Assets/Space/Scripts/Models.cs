@@ -17,7 +17,7 @@ public class Star
     public float x;
     public float y;
     public float z;
-    public string name;
+    public string id;
 }
 
 [System.Serializable]
@@ -33,10 +33,8 @@ public class Exoplanet
 [System.Serializable]
 public class ConstellationStar
 {
-    public int id; //might not be needed
-    public string name;
-    public float x, y, z; // also might not be needed
-    public int[] connectedStars;
+    public string ext_id;
+    public string[] connectedStars;
 }
 
 [System.Serializable]
@@ -46,6 +44,7 @@ public class Constellation
     public float dec;
     public float dist;
     public string name;
+    public int id;
     public ConstellationStar[] stars;
 }
 

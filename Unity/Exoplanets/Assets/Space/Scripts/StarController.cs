@@ -22,4 +22,9 @@ public class StarController : MonoBehaviour, IHasInfo
         return starController;
     }
 
+    public static StarController GetStar(string id)
+    {
+        return stars[id];
+    }
+
 }
