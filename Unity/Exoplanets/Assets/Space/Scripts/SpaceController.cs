@@ -11,14 +11,14 @@ public class SpaceController : MonoBehaviour
     [SerializeField] private GameObject[] starPrefabs;
     [SerializeField] private Material[] planetMaterials;
     [SerializeField] private GameObject connectionPrefab;
-    [SerializeField] private GameObject constellationConnectionPrefab;
+    [SerializeField] private GameObject constellationPrefab;
     [SerializeField] private GameObject postProcessing;
     public static SpaceController Instance { get; private set; }
     public GameObject CurrentPlanet { get; private set; }
     public ConstellationBuilder ConstellationBuilder { get; private set; }
+    public Transform ConstellationParent { get; private set; }
     public Transform StarsParent { get; private set; }
     public SpaceCoord CurrentReference { get; private set; }
-    private int StarId { get; set; } = 0;
     private ColorAdjustments ColorAdjustments { get; set; }
 
     private void Awake()
@@ -34,8 +34,8 @@ public class SpaceController : MonoBehaviour
 
     private void InitVariables()
     {
-        ConstellationBuilder = new(constellationConnectionPrefab, transform.Find("ConstellationConnections"));
         StarsParent = transform.Find("Stars");
+        ConstellationParent = transform.Find("Constellations");
         ColorAdjustments = postProcessing.GetComponent<Volume>().profile.components[1] as ColorAdjustments;
         CurrentPlanet = transform.Find("Planet").gameObject;
     }
@@ -60,7 +60,7 @@ public class SpaceController : MonoBehaviour
     {
         foreach (Constellation constellation in constellations)
         {
-            ConstellationController.CreateConstellation(constellation, connectionPrefab);
+            ConstellationController.CreateConstellation(constellation, constellationPrefab, connectionPrefab, ConstellationParent);
         }
     }
 
@@ -147,9 +147,22 @@ public class SpaceController : MonoBehaviour
         }
 
         CurrentReference = new SpaceCoord(ra, dec, dist);
-        error = null;
-        error = LoadConstellationsAsync(response => constellations = response.constellations);
-        yield return new WaitUntil(() => constellations != null || error != null);
+        ActiveConstellationsRequest request1 = new()
+        {
+            user_id = 0,
+            ra = ra,
+            dec = dec,
+            dist = dist
+        };
+        yield return APIConnector.Post<ActiveConstellationsRequest, ConstellationsResponse>("list_active_constellations", request1,
+        response =>
+        {
+            constellations = response.constellations;
+        }, err =>
+        {
+            error = err;
+        });
+
         if (error != null)
         {
             DialogueController.Instance.ShowDialogue("warp_fail");
@@ -178,17 +191,6 @@ public class SpaceController : MonoBehaviour
         {
             Destroy(child.gameObject);
         }
-    }
-
-    public string LoadConstellationsAsync(System.Action<ConstellationsResponse> callback)
-    {
-        Debug.Log($"We should now be loading constellations for {CurrentReference}");
-        ConstellationsResponse response = new()
-        {
-            constellations = new Constellation[1]
-        };
-        callback(response);
-        return null;
     }
 
     public void AddConstellationConnection(StarController star1, StarController star2)

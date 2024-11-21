@@ -4,7 +4,7 @@ using UnityEngine;
 public class ConstellationController : MonoBehaviour, IHasInfo
 {
     public static Dictionary<int, ConstellationController> constellations = new();
-    public static Vector3 RelativePosition { get; private set; }
+    public SpaceCoord RelativePosition { get; private set; }
     public int Id { get; private set; }
     public string Name { get; private set; }
     public string Info => $"This is a constellation with id {Id}";
@@ -15,6 +15,7 @@ public class ConstellationController : MonoBehaviour, IHasInfo
         ConstellationController controller = constellationObj.GetComponent<ConstellationController>();
         controller.Id = constellation.id;
         controller.Name = constellation.name;
+        controller.RelativePosition = new(constellation.ra, constellation.dec, constellation.dist);
         constellations.Add(constellation.id, controller);
         foreach (ConstellationStar star in constellation.stars)
         {

@@ -53,8 +53,7 @@ public class ActiveConstellationsRequest
 public class CreateConstellationRequest
 {
     public int user_id;
-    public string name;
-    public ConstellationStar[] stars;
+    Constellation constellation;
 }
 
 [System.Serializable]

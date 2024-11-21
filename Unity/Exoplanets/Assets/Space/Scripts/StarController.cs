@@ -4,10 +4,7 @@ using UnityEngine;
 
 public class StarController : MonoBehaviour, IHasInfo
 {
-    // TODO: maybe keep a serializable star object inside of here??
-
     public static Dictionary<string, StarController> stars = new();
-    public static Vector3 RelativePosition { get; private set; }
     public string Id { get; private set; }
     public string Info => $"This is a star with id {Id}";
 
