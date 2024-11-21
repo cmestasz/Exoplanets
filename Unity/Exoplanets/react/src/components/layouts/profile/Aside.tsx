@@ -6,6 +6,7 @@ import clsx from 'clsx';
 import { useContext } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router';
+import AsideBottom from './AsideBottom';
 
 interface AsideProps {
   currentRoute: ProfileRoutes;
@@ -17,6 +18,7 @@ export default function Aside({
   const { t } = useTranslation();
   const nav = useNavigate();
   const userAction = useContext(UserContext);
+  const auth = userAction.current.state === 'loaded';
   return (
     <aside
       className="flex flex-col rounded-lg landscape:py-4 landscape:px-7 landscape:border-2 landscape:border-primary min-w-48 gap-7"
@@ -41,7 +43,7 @@ export default function Aside({
         scrollBarClassName="bg-transparent h-2"
       >
         {
-          routes.map((route, i) => (
+          routes.filter((route) => route.auth === auth || !route.auth).map((route, i) => (
             <div
               key={route.route}
               className="text-3xl flex flex-col portrait:flex-row items-start gap-5"
@@ -69,45 +71,7 @@ export default function Aside({
           ))
         }
         <div className="flex-auto" />
-        <div
-          className="text-3xl flex flex-col items-start gap-6 portrait:flex-row"
-        >
-          <hr className="border-primary border-[1px] landscape:w-full portrait:h-full landscape:hidden" />
-          <Text
-            invertedStyle
-            asButton
-            onClick={() => nav(-1)}
-          >
-            <icon
-              className="text-3xl"
-            >
-              arrow_back
-            </icon>
-            <span>
-              {t('pages.profile.layout.back')}
-            </span>
-          </Text>
-        </div>
-        <div
-          className="text-3xl flex flex-col items-start gap-6 portrait:flex-row"
-        >
-          <hr className="border-primary border-[1px] landscape:w-full portrait:h-full" />
-          <Text
-            invertedStyle
-            asButton
-            onClick={() => userAction.logout('..')}
-            className="text-red hover:text-red-dark"
-          >
-            <icon
-              className="text-3xl rotate-180"
-            >
-              logout
-            </icon>
-            <span>
-              {t('components.user.logout')}
-            </span>
-          </Text>
-        </div>
+        <AsideBottom />
       </Scroll>
     </aside>
   );
