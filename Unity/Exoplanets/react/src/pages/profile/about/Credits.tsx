@@ -21,17 +21,20 @@ export default function Credits() {
         credits.map((credit) => (
           <li
             key={credit.id}
+            className="flex flex-row gap-1"
           >
-            <Text
-              className="justify-start"
-              asLink
-              url={credit.link}
-            >
-              *
-              {credit.name}
-              -
-              {credit.author}
-            </Text>
+            <span className="flex flex-row gap-3">
+              {'•'}
+              <Text
+                className="justify-start"
+                asLink
+                inline
+                url={credit.link}
+                content={credit.name}
+              />
+            </span>
+            -
+            {credit.author}
           </li>
         ))
       }

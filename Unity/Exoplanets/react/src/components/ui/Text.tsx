@@ -1,7 +1,9 @@
+/* eslint-disable react/void-dom-elements-no-children */
 import { DEFAULT_COLOR, INVERTED_COLOR } from '@styles/colors';
 import clsx from 'clsx';
 import { twMerge } from 'tailwind-merge';
 import React from 'react';
+import { ReactUnity, UnityEngine } from '@reactunity/renderer';
 import {
   AsButton, AsLink, OnlyText, TextBaseProps,
 } from './types';
@@ -37,7 +39,27 @@ export function Text(props: TextBaseProps & (AsButton | AsLink | OnlyText)): JSX
   }
 
   if ('url' in props) {
-    const { url } = props;
+    const { url, inline, content } = props;
+    if (inline) {
+      const handleLink = (
+        ev: UnityEngine.EventSystems.PointerEventData,
+        sender: ReactUnity.UGUI.TextComponent,
+      ) => {
+        const linkId = sender.GetLinkInfo(ev);
+        if (linkId) Interop.UnityEngine.Application.OpenURL(linkId);
+      };
+      return (
+        <richtext
+          className={resultClass}
+          // eslint-disable-next-line react/no-unknown-property
+          onPointerClick={handleLink}
+        >
+          <link value={url}>
+            {content}
+          </link>
+        </richtext>
+      );
+    }
     return (
       <anchor
         // eslint-disable-next-line react/no-unknown-property
@@ -48,7 +70,6 @@ export function Text(props: TextBaseProps & (AsButton | AsLink | OnlyText)): JSX
       </anchor>
     );
   }
-
   return (
     <div
       className={resultClass}

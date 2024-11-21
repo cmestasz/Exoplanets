@@ -24,17 +24,15 @@ export default function Developers() {
     <ul className="flex flex-col">
       {
         developers.map((dev) => (
-          <li key={dev.username}>
-            <Text
-              className="justify-start"
-              asLink
-              url={`https://github.com/${dev.username}`}
-            >
-              *
+          <li
+            key={dev.username}
+            className="flex flex-row gap-1"
+          >
+            <span className="flex flex-row gap-3">
+              {'•'}
               {dev.name}
-              -
-              {dev.rol}
-            </Text>
+            </span>
+            <Text asLink inline url={`https://github.com/${dev.username}`} content={`(${dev.username})`} />
           </li>
         ))
       }

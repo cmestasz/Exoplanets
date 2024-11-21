@@ -15,6 +15,8 @@ export type AsButton = {
 export type AsLink = {
   asLink: true;
   url: string;
+  inline?: boolean;
+  content?: string;
 };
 
 export type OnlyText = {

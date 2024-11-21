@@ -18,15 +18,16 @@ export default function Technologies() {
         technologies.map((tech) => (
           <li
             key={tech.name}
+            className="flex flex-row gap-3"
           >
+            •
             <Text
               className="justify-start"
               asLink
+              inline
               url={tech.link}
-            >
-              *
-              {tech.name}
-            </Text>
+              content={tech.name}
+            />
           </li>
         ))
       }
