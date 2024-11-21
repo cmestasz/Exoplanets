@@ -91,6 +91,21 @@
       "constellations": {
         "howto": "¿Cómo creo una constelación?",
         "visit": "¡Visita tus constelaciones!"
+      },
+      "about": {
+        "introduction": "Exoplanets es un proyecto desarrollado para la hackaton de la Nasa Space Apps. La aplicación tiene el objetivo de mostrar fácil y didácticamente parte del universo. De manera que los estudiantes de educación básica puedan impulsar su aprendizaje mediante su uso.",
+        "team": {
+          "title": "Nuestro equipo",
+          "content": "Somos estudiantes de Ingeniería de Sistemas de la Universidad Nacional de San Agustín."
+        },
+        "develop": {
+          "title": "Desarrollo",
+          "content": "La aplicación se desarrolló con diferentes tecnologías. El código fuente y las versiones están alojadas en Github."
+        },
+        "credits": {
+          "title": "Créditos",
+          "content": "Agradecemos a las personas que crearon los materiales utilizados en el proyecto."
+        }
       }
     }
   }

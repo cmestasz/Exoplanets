@@ -91,6 +91,21 @@
       "constellations": {
         "howto": "How do I create a constellation?",
         "visit": "Visit your constellations!"
+      },
+      "about": {
+        "introduction": "Exoplanets is a project developed for the NASA Space Apps hackathon. The application's goal is to easily and didactically showcase a part of the universe, so that elementary school students can boost their learning through its use.",
+        "team": {
+          "title": "Our Team",
+          "content": "We are Systems Engineering students from the National University of San Agustín."
+        },
+        "develop": {
+          "title": "Development",
+          "content": "The application was developed with different technologies. The source code and versions are hosted on GitHub."
+        },
+        "credits": {
+          "title": "Credits",
+          "content": "We thank the people who created the materials used in the project."
+        }
       }
     }
   }
