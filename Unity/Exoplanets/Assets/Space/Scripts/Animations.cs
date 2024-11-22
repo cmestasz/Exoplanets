@@ -33,6 +33,7 @@ public class Animations
         while (alpha < 255)
         {
             alpha += 127 * Time.deltaTime;
+            alpha = alpha > 255 ? 255 : alpha;
             titleText.color = new Color32(255, 255, 255, (byte)alpha);
             yield return null;
         }
@@ -44,6 +45,7 @@ public class Animations
         while (alpha > 0)
         {
             alpha -= 127 * Time.deltaTime;
+            alpha = alpha < 0 ? 0 : alpha;
             titleText.color = new Color32(255, 255, 255, (byte)alpha);
             yield return null;
         }

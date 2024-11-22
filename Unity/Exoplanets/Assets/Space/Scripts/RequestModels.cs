@@ -29,9 +29,9 @@ public class SurroundingsIdResponse
 }
 
 [System.Serializable]
-public class ConstellationsRequest
+public class AllConstellationsRequest
 {
-    public string reference;
+    public int user_id;
 }
 
 [System.Serializable]
@@ -41,15 +41,25 @@ public class ConstellationsResponse
 }
 
 [System.Serializable]
-public class ExoplanetsByNameRequest
+public class ActiveConstellationsRequest
 {
-    public string name;
+    public int user_id;
+    public float ra;
+    public float dec;
+    public float dist;
 }
 
 [System.Serializable]
-public class ExoplanetsResponse
+public class CreateConstellationRequest
 {
-    public Exoplanet[] exoplanets;
+    public int user_id;
+    public Constellation constellation;
+}
+
+[System.Serializable]
+public class CreateConstellationResponse
+{
+    public string message;
 }
 
 [System.Serializable]

@@ -6,22 +6,6 @@ public class APIConnector
 {
     const string API_URL = "http://127.0.0.1:8000/";
 
-    public static IEnumerator Get<Response>(string endpoint, System.Action<Response> callback)
-    {
-        using UnityWebRequest request = UnityWebRequest.Get(API_URL + endpoint);
-        yield return request.SendWebRequest();
-
-        if (request.result != UnityWebRequest.Result.Success)
-        {
-            Debug.LogError(request.error);
-        }
-        else
-        {
-            Debug.Log(request.downloadHandler.text);
-            callback(JsonUtility.FromJson<Response>(request.downloadHandler.text));
-        }
-    }
-
     public static IEnumerator Post<Request, Response>(string endpoint, Request data, System.Action<Response> callback, System.Action<string> errorCallback = null)
     {
         using UnityWebRequest request = UnityWebRequest.Post(API_URL + endpoint, JsonUtility.ToJson(data), "application/json");
@@ -29,9 +13,10 @@ public class APIConnector
 
         if (request.result != UnityWebRequest.Result.Success)
         {
-            Debug.LogError(request.error);
-            string error = request.error != null ? request.error : request.responseCode.ToString();
-            errorCallback?.Invoke(request.error);
+            Error error = JsonUtility.FromJson<Error>(request.downloadHandler.text);
+            Debug.LogError(request.result);
+            if (error != null)
+                errorCallback?.Invoke(error.detail);
         }
         else
         {

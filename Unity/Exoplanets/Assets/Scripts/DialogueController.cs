@@ -10,7 +10,7 @@ public class DialogueController : MonoBehaviour
     private const float FADE_SPEED = 255;
     private const float POST_DELAY_PER_CHARACTER = 0.1f;
     private TMP_Text textBox;
-    private Queue<string> dialogueQueue = new();
+    private Queue<Dialogue> dialogueQueue = new();
 
     private void Awake()
     {
@@ -23,14 +23,15 @@ public class DialogueController : MonoBehaviour
         StartCoroutine(WriteTextCoroutine());
     }
 
-    public void ShowDialogue(string key)
+    public void ShowDialogue(string key, float delay = 0.5f)
     {
-        WriteText(Dialogues.DIALOGUES[$"{SettingsManager.Language}_{key}"]);
+        Dialogue dialogue = new() { text = Dialogues.DIALOGUES[$"{SettingsManager.Language}_{key}"], delay = delay };
+        WriteText(dialogue);
     }
 
-    public void WriteText(string text)
+    public void WriteText(Dialogue dialogue)
     {
-        dialogueQueue.Enqueue(text);
+        dialogueQueue.Enqueue(dialogue);
     }
 
     private IEnumerator WriteTextCoroutine()
@@ -38,7 +39,9 @@ public class DialogueController : MonoBehaviour
         while (true)
         {
             yield return new WaitUntil(() => dialogueQueue.Count > 0);
-            string text = dialogueQueue.Dequeue();
+            Dialogue dialogue = dialogueQueue.Dequeue();
+            string text = dialogue.text;
+            yield return new WaitForSeconds(dialogue.delay);
             textBox.color = Color.white;
             for (int i = 0; i < text.Length; i++)
             {

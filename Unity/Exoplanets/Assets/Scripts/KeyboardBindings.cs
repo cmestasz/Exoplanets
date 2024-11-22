@@ -13,5 +13,5 @@ public static class KeyboardBindings
     public static KeyCode SPEED_UP = KeyCode.LeftShift;
     public static KeyCode WARP_POS = KeyCode.P;
     public static KeyCode WARP_ID = KeyCode.I;
-    public static KeyCode GET_INFO = KeyCode.I;
+    public static KeyCode GET_INFO = KeyCode.K;
 }
