@@ -108,6 +108,14 @@
         }
       },
       "help": "¿Tienes problemas? Envíanos un correo"
+    },
+    "exoplanets": {
+      "title": "Selecciona un exoplaneta y empieza a explorar",
+      "search": "Busca exoplanetas en el espacio",
+      "card": {
+        "mass": "Masa",
+        "diameter": "Diámetro"
+      }
     }
   }
 }

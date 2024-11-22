@@ -10,7 +10,7 @@ export default function MainLayout() {
   const routes = useMemo(() => location.pathname.split('/').filter((s) => s), [location]);
   return (
     <div
-      className="flex flex-col gap-20 w-screen h-screen px-8 py-5 landscape:px-20"
+      className="flex flex-col gap-5 w-screen h-screen px-8 py-5 landscape:px-20"
     >
       <div
         className={clsx('flex flex-row portrait:flex-col-reverse', {

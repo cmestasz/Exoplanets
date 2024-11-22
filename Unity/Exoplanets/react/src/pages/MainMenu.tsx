@@ -14,7 +14,7 @@ export default function MainMenu() {
     { imageUrl: '/img/proximaCentauri.jpeg', name: t('pages.stars-option') as string },
   ], [t]);
   return (
-    <>
+    <view className="flex flex-col flex-auto">
       <div
         className="flex flex-col flex-auto justify-center gap-20"
       >
@@ -77,6 +77,6 @@ export default function MainMenu() {
           {t('pages.repo')}
         </Text>
       </div>
-    </>
+    </view>
   );
 }
