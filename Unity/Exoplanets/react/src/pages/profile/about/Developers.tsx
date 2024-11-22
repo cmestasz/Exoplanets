@@ -26,7 +26,7 @@ export default function Developers() {
         developers.map((dev) => (
           <li
             key={dev.username}
-            className="flex flex-row gap-1"
+            className="flex flex-row gap-1 flex-wrap"
           >
             <span className="flex flex-row gap-3">
               {'•'}
