@@ -6,7 +6,7 @@ using static Animations;
 public class UIInteractor : MonoBehaviour
 {
     private TMP_Text infoText, titleText;
-    private TMP_InputField warpToRA, warpToDEC, warpToDIST, warpToID;
+    private TMP_InputField warpToRA, warpToDEC, warpToDIST, warpToID, constellationName;
     private const float TITLE_TIME = 2, TITLE_DELAY = 2;
     public static UIInteractor Instance { get; private set; }
 
@@ -28,11 +28,12 @@ public class UIInteractor : MonoBehaviour
         warpToDEC = transform.Find("WarpToDEC").GetComponent<TMP_InputField>();
         warpToDIST = transform.Find("WarpToDIST").GetComponent<TMP_InputField>();
         warpToID = transform.Find("WarpToID").GetComponent<TMP_InputField>();
+        constellationName = transform.Find("ConstellationName").GetComponent<TMP_InputField>();
     }
 
     public string GetConstellationName()
     {
-        return "nuh uh";
+        return constellationName.text;
     }
 
     public void SetInfoText(string text)

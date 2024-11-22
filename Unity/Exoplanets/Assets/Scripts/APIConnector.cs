@@ -14,9 +14,8 @@ public class APIConnector
         if (request.result != UnityWebRequest.Result.Success)
         {
             Error error = JsonUtility.FromJson<Error>(request.downloadHandler.text);
-            if (error == null)
-                Debug.LogError(request.result);
-            else
+            Debug.LogError(request.result);
+            if (error != null)
                 errorCallback?.Invoke(error.detail);
         }
         else

@@ -34,7 +34,7 @@ public class Exoplanet
 public class ConstellationStar
 {
     public string ext_id;
-    public string[] connectedStars;
+    public string[] connected_stars;
 }
 
 [System.Serializable]
@@ -43,8 +43,8 @@ public class Constellation
     public float ra;
     public float dec;
     public float dist;
-    public string name;
     public int id;
+    public string name;
     public ConstellationStar[] stars;
 }
 

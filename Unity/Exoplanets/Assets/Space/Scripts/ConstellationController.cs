@@ -16,7 +16,7 @@ public class ConstellationController : MonoBehaviour, IHasInfo
     {
         GameObject constellationObj = Instantiate(prefab, parent);
         Current = constellationObj.GetComponent<ConstellationController>();
-        Current.Constellation = new() { ra = relative.ra, dec = relative.dec, dist = relative.dist };
+        Current.Constellation = new() { id = 0, ra = relative.ra, dec = relative.dec, dist = relative.dist };
         Current.Stars = new();
         return Current;
     }
@@ -48,11 +48,11 @@ public class ConstellationController : MonoBehaviour, IHasInfo
         int i = 0;
         foreach (string key in Current.Stars.Keys)
         {
-            Current.Constellation.stars[i] = new() { ext_id = key, connectedStars = new string[Current.Stars[key].Count] }; 
+            Current.Constellation.stars[i] = new() { ext_id = key, connected_stars = new string[Current.Stars[key].Count] }; 
             int j = 0;
             foreach(string star in Current.Stars[key])
             {
-                Current.Constellation.stars[i].connectedStars[j] = star;
+                Current.Constellation.stars[i].connected_stars[j] = star;
                 j++;
             }
             i++;
@@ -64,7 +64,8 @@ public class ConstellationController : MonoBehaviour, IHasInfo
     public static IEnumerator SaveConstellationCoroutine()
     {
         Debug.Log("trying to save");
-        CreateConstellationRequest request = new() { user_id = 0, constellation = Current.Constellation };
+        Debug.Log(JsonUtility.ToJson(Current.Constellation));
+        CreateConstellationRequest request = new() { user_id = 1, constellation = Current.Constellation };
         yield return APIConnector.Post<CreateConstellationRequest, CreateConstellationResponse>("create_constellation", request,
         response => {
             Debug.Log("yay");
@@ -81,7 +82,7 @@ public class ConstellationController : MonoBehaviour, IHasInfo
         foreach (ConstellationStar star in constellation.stars)
         {
             StarController curr = StarController.GetStar(star.ext_id);
-            foreach (string connectedStarId in star.connectedStars)
+            foreach (string connectedStarId in star.connected_stars)
             {
                 StarController other = StarController.GetStar(connectedStarId);
                 GameObject connection = Instantiate(connectionPrefab, controller.Parent);

@@ -15,7 +15,6 @@ public class SpaceController : MonoBehaviour
     [SerializeField] private GameObject postProcessing;
     public static SpaceController Instance { get; private set; }
     public GameObject CurrentPlanet { get; private set; }
-    public ConstellationBuilder ConstellationBuilder { get; private set; }
     public Transform ConstellationParent { get; private set; }
     public Transform StarsParent { get; private set; }
     public SpaceCoord CurrentReference { get; private set; }
@@ -149,7 +148,7 @@ public class SpaceController : MonoBehaviour
         CurrentReference = new SpaceCoord(ra, dec, dist);
         ActiveConstellationsRequest request1 = new()
         {
-            user_id = 0,
+            user_id = 1,
             ra = ra,
             dec = dec,
             dist = dist
@@ -195,11 +194,15 @@ public class SpaceController : MonoBehaviour
 
     public void AddConstellationConnection(StarController star1, StarController star2)
     {
+        if (ConstellationController.Current == null)
+            ConstellationController.InitConstellation(constellationPrefab, ConstellationParent, CurrentReference);
+
+        ConstellationController.AddConnection(star1, star2, connectionPrefab);
     }
 
     public void SaveConstellation(string name)
     {
-        ConstellationBuilder.SaveConstellation(name);
+        ConstellationController.SaveConstellation(name);
     }
 
 }
