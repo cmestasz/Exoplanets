@@ -13,7 +13,7 @@ export default function MainLayout() {
       className="flex flex-col gap-5 w-screen h-screen px-8 py-5 landscape:px-20"
     >
       <div
-        className={clsx('flex flex-row portrait:flex-col-reverse', {
+        className={clsx('flex flex-row flex-initial portrait:flex-col-reverse', {
           'landscape:justify-between': routes.length > 0,
           'landscape:justify-end': routes.length === 0,
         })}

@@ -114,7 +114,8 @@
       "search": "Busca exoplanetas en el espacio",
       "card": {
         "mass": "Masa",
-        "diameter": "Diámetro"
+        "ratio": "Radio",
+        "year": "Año de descubrimiento"
       }
     }
   }

@@ -21,7 +21,7 @@ export default function Search({
 
       </button>
       <input
-        className="flex-grow bg-transparent placeholder:text-quaternary text-secondary font-exo border-2 border-primary px-4 py-2 rounded-none border-l-0"
+        className="flex-auto bg-transparent placeholder:text-quaternary text-secondary font-exo border-2 border-primary px-4 py-2 rounded-none border-l-0"
         style={{ borderBottomRightRadius: '0.5rem', borderTopRightRadius: '0.5rem' }}
         placeholder={placeholder}
       />
