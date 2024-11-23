@@ -113,8 +113,9 @@
       "title": "Selecciona un exoplaneta y empieza a explorar",
       "search": "Busca exoplanetas en el espacio",
       "card": {
+        "button": "Visualizar en 3D",
         "mass": "Masa",
-        "ratio": "Radio",
+        "radius": "Radio",
         "year": "Año de descubrimiento"
       }
     }
