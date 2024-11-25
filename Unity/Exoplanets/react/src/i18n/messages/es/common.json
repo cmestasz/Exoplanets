@@ -112,6 +112,10 @@
     "exoplanets": {
       "title": "Selecciona un exoplaneta y empieza a explorar",
       "search": "Busca exoplanetas en el espacio",
+      "no-results": {
+        "main": "Sin resultados",
+        "sub": "Intenta con otra frase"
+      },
       "card": {
         "button": "Visualizar en 3D",
         "mass": "Masa",

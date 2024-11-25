@@ -14,7 +14,7 @@ import { AuthServer } from '@mytypes/UnityTypes';
 import { supabase } from './supabase';
 import { DEFAULT_ALERT_DURATION } from './constants';
 
-export function useAlert() {
+function useAlert() {
   const [isVisible, setIsVisible] = useState<boolean>(false);
   const [alertOptions, setAlertOptions] = useState<AlertOptions>({
     message: '',
@@ -47,7 +47,7 @@ export function useAlert() {
   };
 }
 
-export const useUserActions = () => {
+function useUserActions() {
   const { t } = useTranslation();
   const authServer = useGlobals().AuthServer as AuthServer;
   const showAlert = useContext(AlertContext);
@@ -147,4 +147,6 @@ export const useUserActions = () => {
   return useMemo(() => ({
     current: userFetched, fetchUser, logout, login,
   }), [fetchUser, userFetched, logout, login]);
-};
+}
+
+export { useAlert, useUserActions };

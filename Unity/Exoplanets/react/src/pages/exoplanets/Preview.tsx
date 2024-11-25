@@ -20,7 +20,7 @@ export default function Preview({
   }
   return (
     <view
-      className="flex flex-col flex-1 p-6 gap-4 border-2 border-primary rounded-lg"
+      className="flex flex-col flex-initial p-6 gap-4 border-2 border-primary rounded-lg"
     >
       <img
         src={currentExoplanet.imageUrl}
