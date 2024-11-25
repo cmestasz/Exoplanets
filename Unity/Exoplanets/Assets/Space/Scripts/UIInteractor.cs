@@ -1,12 +1,14 @@
 using System.Collections;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 using static Animations;
 
 public class UIInteractor : MonoBehaviour
 {
     private TMP_Text infoText, titleText;
     private TMP_InputField warpToRA, warpToDEC, warpToDIST, warpToID, constellationName;
+    private Image crosshair;
     private const float TITLE_TIME = 2, TITLE_DELAY = 2;
     public static UIInteractor Instance { get; private set; }
 
@@ -29,6 +31,7 @@ public class UIInteractor : MonoBehaviour
         warpToDIST = transform.Find("WarpToDIST").GetComponent<TMP_InputField>();
         warpToID = transform.Find("WarpToID").GetComponent<TMP_InputField>();
         constellationName = transform.Find("ConstellationName").GetComponent<TMP_InputField>();
+        crosshair = transform.Find("Crosshair").GetComponent<Image>();
     }
 
     public string GetConstellationName()
@@ -59,6 +62,11 @@ public class UIInteractor : MonoBehaviour
         StartCoroutine(ShowTitleAnim(title));
     }
 
+    public void MoveCrosshair(Vector2 position)
+    {
+        crosshair.rectTransform.anchoredPosition = position;
+    }
+
     private IEnumerator ShowTitleAnim(string title)
     {
         titleText.text = title;
@@ -66,5 +74,5 @@ public class UIInteractor : MonoBehaviour
         yield return TitleFadeIn(titleText);
         yield return new WaitForSeconds(TITLE_TIME);
         yield return TitleFadeOut(titleText);
-    }   
+    }
 }

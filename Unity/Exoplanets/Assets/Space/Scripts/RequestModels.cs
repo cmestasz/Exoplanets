@@ -63,7 +63,33 @@ public class CreateConstellationResponse
 }
 
 [System.Serializable]
+public class Cursor
+{
+    public float x;
+    public float y;
+
+    public bool IsValid()
+    {
+        return x != 0 || y != 0;
+    }
+}
+
+[System.Serializable]
+public class Rotation
+{
+    public float dx;
+    public float dy;
+    public bool IsValid()
+    {
+        return dx != 0 || dy != 0;
+    }
+}
+
+[System.Serializable]
 public class InputResponse
 {
-    public string action;
+    public Cursor cursor;
+    public string right_gesture;
+    public Rotation rotation;
+    public float zoom;
 }
