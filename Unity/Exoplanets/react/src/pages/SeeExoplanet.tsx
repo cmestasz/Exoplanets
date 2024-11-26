@@ -1,18 +1,33 @@
-import { useNavigate, useParams } from 'react-router-dom';
+import Visualization from '@components/astros/Visualization';
+import AstrosSlider from '@components/astros/AstrosSlider';
+import { useCallback } from 'react';
+import { Exoplanet } from '@mytypes/astros';
+import { useExoplanets } from './exoplanets/ExoplanetsProvider';
 
 export default function SeeExoplanet() {
-  const { id } = useParams();
-  const navigate = useNavigate();
-
+  const {
+    exoplanets, changeSelectedExo,
+  } = useExoplanets();
+  const handleCardClick = useCallback((exoplanet: Exoplanet) => {
+    changeSelectedExo(exoplanet, true);
+  }, [changeSelectedExo]);
   return (
-    <div>
-      <h1>
-        Exoplaneta
-        {id}
-      </h1>
-      <button onClick={() => navigate('max')}>Ver en 3D</button>
-      <button onClick={() => navigate(-1)}>Retroceder</button>
-      <button onClick={() => navigate('')}>Volver al Inicio</button>
-    </div>
+    <view
+      className="flex flex-col gap-6"
+    >
+      <Visualization />
+      <view
+        className="flex flex-row gap-16"
+      >
+        {
+          exoplanets.state === 'loaded' && (
+            <AstrosSlider
+              astros={exoplanets.data}
+              onCardClick={handleCardClick}
+            />
+          )
+        }
+      </view>
+    </view>
   );
 }

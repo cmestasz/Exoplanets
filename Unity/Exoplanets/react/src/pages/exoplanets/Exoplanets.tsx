@@ -1,5 +1,5 @@
 import { useTranslation } from 'react-i18next';
-import { useCallback } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { AsyncData } from '@mytypes/index';
 import { Exoplanet } from '@mytypes/astros';
 import ShowExoplanets from './ShowExoplanets';
@@ -8,8 +8,9 @@ import { useExoplanets } from './ExoplanetsProvider';
 
 export default function Exoplanets() {
   const { t } = useTranslation();
+  const [leakedExos, setLeakedExos] = useState<AsyncData<Exoplanet[]>>({ state: 'loading' });
   const {
-    exoplanets, leakedExos, setLeakedExos, selectedExo, setSelectedExo,
+    exoplanets, selectedExo, changeSelectedExo,
   } = useExoplanets();
   const changeLeakedExos = (data: AsyncData<Exoplanet[]>) => {
     setLeakedExos(data);
@@ -26,8 +27,11 @@ export default function Exoplanets() {
     }
   }, [exoplanets, setLeakedExos]);
   const handleSelect = useCallback((exo: Exoplanet) => {
-    setSelectedExo(exo);
-  }, [setSelectedExo]);
+    changeSelectedExo(exo);
+  }, [changeSelectedExo]);
+  useEffect(() => {
+    if (leakedExos.state !== 'loaded') setLeakedExos(exoplanets);
+  }, [exoplanets]);
   return (
     <view
       className="flex flex-col flex-auto gap-2"
