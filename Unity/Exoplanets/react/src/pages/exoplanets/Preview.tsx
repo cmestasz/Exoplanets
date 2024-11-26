@@ -20,33 +20,41 @@ export default function Preview({
   }
   return (
     <view
-      className="flex flex-col flex-initial p-6 gap-4 border-2 border-primary rounded-lg"
+      className="flex flex-col portrait:flex-row flex-initial p-6 gap-4 portrait:gap-10 border-2 border-primary rounded-lg"
     >
-      <img
-        src={currentExoplanet.imageUrl}
-        alt={currentExoplanet.name}
-        className="flex-auto"
-      />
-      <h3
-        className="font-audiowide text-4xl text-center text-primary leading-10"
+      <view
+        className="flex flex-col portrait:basis-1/3 gap-4 flex-initial"
       >
-        {currentExoplanet.name}
-      </h3>
-      <hr className="border-primary border-[1px]" />
-      <Text
-        className="flex flex-row font-exo text-3xl text-primary"
-        asButton
-        onClick={() => nav(currentExoplanet.id)}
+        <img
+          src={currentExoplanet.imageUrl}
+          alt={currentExoplanet.name}
+          className="flex-auto"
+        />
+        <h3
+          className="font-audiowide text-4xl text-center text-primary leading-10"
+        >
+          {currentExoplanet.name}
+        </h3>
+      </view>
+      <article
+        className="flex portrait:flex-col-reverse flex-auto gap-5"
       >
-        {t('pages.exoplanets.card.button')}
-        <icon className="text-2xl">open_in_new</icon>
-      </Text>
-      <hr className="border-primary border-[1px]" />
-      <PreviewData
-        radius={currentExoplanet.radius}
-        mass={currentExoplanet.mass}
-        disc_date={currentExoplanet.disc_date}
-      />
+        <hr className="border-primary border-[1px] portrait:hidden" />
+        <Text
+          className="flex flex-row font-exo text-3xl text-primary"
+          asButton
+          onClick={() => nav(currentExoplanet.id)}
+        >
+          {t('pages.exoplanets.card.button')}
+          <icon className="text-2xl">open_in_new</icon>
+        </Text>
+        <hr className="border-primary border-[1px] portrait:hidden" />
+        <PreviewData
+          radius={currentExoplanet.radius}
+          mass={currentExoplanet.mass}
+          disc_date={currentExoplanet.disc_date}
+        />
+      </article>
     </view>
   );
 }

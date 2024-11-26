@@ -18,7 +18,7 @@ export default function PreviewData({
   ];
   return (
     <Scroll
-      className="flex flex-row gap-6 mb-8 justify-center"
+      className="flex flex-row portrait:flex-col gap-6 mb-8 justify-center"
       thumbClassName="bg-primary border-secondary border-4 border-solid rounded-full"
       scrollBarClassName="bg-transparent h-2 -bottom-9"
     >

@@ -47,7 +47,7 @@ export default function Exoplanets() {
         {t('pages.exoplanets.title')}
       </h1>
       <view
-        className="flex flex-row gap-10 flex-auto"
+        className="flex flex-row portrait:flex-col-reverse gap-10 flex-auto"
       >
         <ShowExoplanets
           handleSelect={handleSelect}

@@ -1,5 +1,6 @@
 import AstroCard from '@components/astros/AstroCard';
 import Search from '@components/search/Search';
+import Scroll from '@components/ui/Scroll';
 import { Exoplanet } from '@mytypes/astros';
 import { AsyncData } from '@mytypes/index';
 import { useTranslation } from 'react-i18next';
@@ -30,8 +31,10 @@ export default function ShowExoplanets({
         placeholder={t('pages.exoplanets.search')}
         onSearch={onSearch}
       />
-      <view
+      <Scroll
         className="flex flex-row flex-auto flex-wrap gap-5"
+        thumbClassName="bg-primary border-secondary border-4 border-solid rounded-full"
+        scrollBarClassName="bg-transparent w-2 -right-9"
       >
         {
           leakedExos.state === 'loading' && (
@@ -75,7 +78,7 @@ export default function ShowExoplanets({
             ))
           )
         }
-      </view>
+      </Scroll>
     </view>
   );
 }
