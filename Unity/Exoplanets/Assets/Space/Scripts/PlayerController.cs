@@ -6,6 +6,7 @@ public class PlayerController : MonoBehaviour
 {
     [SerializeField] private float moveSpeed;
     [SerializeField] private float rotateSpeed;
+    [SerializeField] private float cursorSpeed;
     [SerializeField] private float updateDelay;
     [SerializeField] private bool webcamInputActive;
     public static PlayerController Instance { get; private set; }
@@ -14,7 +15,7 @@ public class PlayerController : MonoBehaviour
     public Vector3Int CurrentSector { get; private set; }
     private bool InputActive { get; set; }
     private WebCamTexture webcamTexture;
-    private string currentAction;
+    private InputResponse currentAction;
 
     private void Awake()
     {
@@ -36,6 +37,7 @@ public class PlayerController : MonoBehaviour
         CheckInteractions();
         CheckAlwaysActive();
         UpdateConstellationConnection();
+        ProcessCurrentAction();
     }
 
     void InitVariables()
@@ -61,9 +63,9 @@ public class PlayerController : MonoBehaviour
             byte[] bytes = ImageConversion.EncodeArrayToJPG(colors, UnityEngine.Experimental.Rendering.GraphicsFormat.R8G8B8A8_SRGB, (uint)webcamTexture.width, (uint)webcamTexture.height, 0, 50);
 
             yield return
-                APIConnector.PostBytes<InputResponse>("get_action_by_image", bytes, response =>
+                APIConnector.PostBytes<InputResponse>("get_action", bytes, response =>
                 {
-                    currentAction = response.action;
+                    currentAction = response;
                 });
             yield return new WaitForSeconds(updateDelay);
         }
@@ -72,25 +74,33 @@ public class PlayerController : MonoBehaviour
     private void ProcessCurrentAction()
     {
         if (currentAction == null) return;
-        switch (currentAction)
+        if (currentAction.cursor.IsValid())
         {
-            case "left":
-                transform.Rotate(Vector3.up, -rotateSpeed);
+            Vector2 cursorPos = new(currentAction.cursor.x, currentAction.cursor.y);
+            cursorPos *= cursorSpeed;
+            // cursorPos.x = Mathf.Clamp(cursorPos.x, -Screen.width / 2, Screen.width / 2);
+            // cursorPos.y = Mathf.Clamp(cursorPos.y, -Screen.height / 2, Screen.height / 2);
+            UIInteractor.Instance.MoveCrosshair(cursorPos);
+        }
+        if (currentAction.rotation.IsValid())
+        {
+            transform.Rotate(Vector3.up, currentAction.rotation.dx * rotateSpeed);
+            transform.Rotate(Vector3.left, currentAction.rotation.dy * rotateSpeed);
+        }
+        if (currentAction.zoom != 0)
+        {
+            transform.Translate(Vector3.forward * currentAction.zoom);
+        }
+        switch (currentAction.right_gesture)
+        {
+            case "click":
+                TryGetInfo();
                 break;
-            case "right":
-                transform.Rotate(Vector3.up, rotateSpeed);
+            case "select":
+                TryStartConnection();
                 break;
-            case "up":
-                transform.Rotate(Vector3.left, -rotateSpeed);
-                break;
-            case "down":
-                transform.Rotate(Vector3.left, rotateSpeed);
-                break;
-            case "zoom_in":
-                transform.Translate(moveSpeed * Time.deltaTime * Vector3.forward);
-                break;
-            case "zoom_out":
-                transform.Translate(moveSpeed * Time.deltaTime * Vector3.back);
+            case "deselect":
+                TryEndConnection(); // TODO: maybe we should try to end it after a bit
                 break;
         }
     }
@@ -175,6 +185,37 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    private void TryGetInfo()
+    {
+        if (Physics.Raycast(transform.position, transform.forward, out RaycastHit hit)
+            && hit.collider.TryGetComponent<IHasInfo>(out var hasInfo))
+        {
+            UIInteractor.Instance.SetInfoText(hasInfo.Info);
+        }
+    }
+
+    private void TryStartConnection()
+    {
+        if (Physics.Raycast(transform.position, transform.forward, out RaycastHit hit)
+            && hit.collider.TryGetComponent<StarController>(out var star))
+        {
+            StartConnection(star);
+        }
+    }
+
+    private void TryEndConnection()
+    {
+        if (Physics.Raycast(transform.position, transform.forward, out RaycastHit hit)
+            && hit.collider.TryGetComponent<StarController>(out var star))
+        {
+            EndConnection(star);
+        }
+        else
+        {
+            EndConnection();
+        }
+    }
+
     void CheckAlwaysActive()
     {
         if (Input.GetKeyDown(TOGGLE_INPUT))
@@ -235,6 +276,6 @@ public class PlayerController : MonoBehaviour
     void ToggleInput()
     {
         InputActive = !InputActive;
-        Cursor.lockState = InputActive ? CursorLockMode.Locked : CursorLockMode.None;
+        UnityEngine.Cursor.lockState = InputActive ? CursorLockMode.Locked : CursorLockMode.None;
     }
 }
