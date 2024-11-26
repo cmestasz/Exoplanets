@@ -60,7 +60,7 @@ El proyecto se encuentra en fase de desarrollo.
 
 -   Unity 2022.3.37f1
 -   Python 3.12.3
--   Node 22.11.0
+-   Node 20.17.0
 
 ## Instalación y Configuración (Desarrollo)
 
