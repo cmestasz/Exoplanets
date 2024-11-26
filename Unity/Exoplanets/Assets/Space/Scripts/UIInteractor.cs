@@ -67,6 +67,12 @@ public class UIInteractor : MonoBehaviour
         crosshair.rectTransform.anchoredPosition = position;
     }
 
+    public Vector2 GetCanvasSize()
+    {
+        RectTransform rt = GetComponent<RectTransform>();
+        return new Vector2(rt.rect.width, rt.rect.height);
+    }
+
     private IEnumerator ShowTitleAnim(string title)
     {
         titleText.text = title;

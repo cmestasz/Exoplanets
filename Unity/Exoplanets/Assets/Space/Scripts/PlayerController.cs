@@ -7,6 +7,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float moveSpeed;
     [SerializeField] private float rotateSpeed;
     [SerializeField] private float cursorSpeed;
+    [SerializeField] private float zoomSpeed;
     [SerializeField] private float updateDelay;
     [SerializeField] private bool webcamInputActive;
     public static PlayerController Instance { get; private set; }
@@ -16,6 +17,8 @@ public class PlayerController : MonoBehaviour
     private bool InputActive { get; set; }
     private WebCamTexture webcamTexture;
     private InputResponse currentAction;
+    private Vector2 cursorPos;
+    private const float borderOffset = 50;
 
     private void Awake()
     {
@@ -76,10 +79,10 @@ public class PlayerController : MonoBehaviour
         if (currentAction == null) return;
         if (currentAction.cursor.IsValid())
         {
-            Vector2 cursorPos = new(currentAction.cursor.x, currentAction.cursor.y);
-            cursorPos *= cursorSpeed;
-            // cursorPos.x = Mathf.Clamp(cursorPos.x, -Screen.width / 2, Screen.width / 2);
-            // cursorPos.y = Mathf.Clamp(cursorPos.y, -Screen.height / 2, Screen.height / 2);
+            Vector2 canvasSize = UIInteractor.Instance.GetCanvasSize();
+            float x = Mathf.Clamp(cursorPos.x + (currentAction.cursor.x - 0.5f) * cursorSpeed, -canvasSize.x / 2 + borderOffset, canvasSize.x / 2 - borderOffset);
+            float y = Mathf.Clamp(cursorPos.y + (currentAction.cursor.y - 0.5f) * cursorSpeed, -canvasSize.y / 2 + borderOffset, canvasSize.y / 2 - borderOffset);
+            cursorPos = new Vector2(x, y);
             UIInteractor.Instance.MoveCrosshair(cursorPos);
         }
         if (currentAction.rotation.IsValid())
@@ -89,7 +92,7 @@ public class PlayerController : MonoBehaviour
         }
         if (currentAction.zoom != 0)
         {
-            transform.Translate(Vector3.forward * currentAction.zoom);
+            transform.Translate(currentAction.zoom * zoomSpeed * Vector3.forward);
         }
         switch (currentAction.right_gesture)
         {
