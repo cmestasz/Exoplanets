@@ -1,7 +1,4 @@
-import AstroCard from '@components/astros/AstroCard';
 import { Text } from '@components/ui/Text';
-import { Astro } from '@mytypes/astros';
-import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { FaGithub } from 'react-icons/fa6';
 import { useNavigate } from 'react-router';
@@ -9,10 +6,6 @@ import { useNavigate } from 'react-router';
 export default function MainMenu() {
   const nav = useNavigate();
   const { t } = useTranslation();
-  const astros = useMemo<Pick<Astro, 'imageUrl' | 'name'>[]>(() => [
-    { imageUrl: '/img/kepler.jpeg', name: t('pages.exoplanets-option') as string },
-    { imageUrl: '/img/proximaCentauri.jpeg', name: t('pages.stars-option') as string },
-  ], [t]);
   return (
     <view className="flex flex-col flex-auto gap-10 portrait:gap-20">
       <view
@@ -35,8 +28,14 @@ export default function MainMenu() {
         <view
           className="flex flex-col flex-initial landscape:flex-row gap-24 self-center max-w-6xl max-h-[70rem]"
         >
-          <AstroCard invertedStyle astro={astros[0]} onClick={() => nav('exoplanets')} />
-          <AstroCard invertedStyle astro={astros[1]} onClick={() => nav('stars')} />
+          <Text
+            className="text-5xl leading-10 border-2 border-primary p-6 rounded-lg hover:border-secondary"
+            asButton
+            onClick={() => nav('exoplanets')}
+          >
+            <h2>{t('pages.start')}</h2>
+            <icon className="text-5xl">open_in_new</icon>
+          </Text>
         </view>
       </view>
       <view

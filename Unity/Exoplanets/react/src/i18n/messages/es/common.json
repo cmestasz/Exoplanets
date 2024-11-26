@@ -38,8 +38,7 @@
   },
   "pages": {
     "subtitle": "Descubre el universo cercano",
-    "exoplanets-option": "Exoplanetas",
-    "stars-option": "Estrellas",
+    "start": "Vamos a un exoplaneta!",
     "about": "Acerca de",
     "help": "Ayuda",
     "repo": "Repositorio",
