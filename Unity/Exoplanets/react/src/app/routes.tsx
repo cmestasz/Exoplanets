@@ -3,28 +3,17 @@ import Exoplanets from '@pages/exoplanets/Exoplanets';
 import MainMenu from '@pages/MainMenu';
 import Maximized from '@pages/Maximized';
 import SeeExoplanet from '@pages/SeeExoplanet';
-import { Outlet, Route, Routes } from 'react-router-dom';
+import { Route, Routes } from 'react-router-dom';
 import MainLayout from '@pages/layouts/MainLayout';
 import ProfileLayout from '@pages/layouts/ProfileLayout';
 import AccountProfile from '@pages/profile/AccountProfile';
 import Constellations from '@pages/profile/Constellations';
-import { useUserActions } from '@lib/hooks';
-import { UserContext } from '@components/user/UserContext';
 import About from '@pages/profile/about/About';
 import Settings from '@pages/profile/Settings';
 import Help from '@pages/profile/Help';
 import ContentProfileLayout from '@pages/layouts/ContentProfileLayout';
-
-function UserProvider() {
-  const userActions = useUserActions();
-  return (
-    <UserContext.Provider
-      value={userActions}
-    >
-      <Outlet />
-    </UserContext.Provider>
-  );
-}
+import ExoplanetsProvider from '@pages/exoplanets/ExoplanetsProvider';
+import UserProvider from 'src/providers/UserProvider';
 
 export default function AppRoutes() {
   return (
@@ -32,11 +21,12 @@ export default function AppRoutes() {
       <Route element={<UserProvider />}>
         <Route element={<MainLayout />}>
           <Route path="" element={<MainMenu />} />
-          <Route path="exoplanets" element={<Exoplanets />} />
-          <Route path="exoplanets/:id" element={<SeeExoplanet />}>
-            <Route path="create" element={<CreateConstellation />} />
+          <Route path="exoplanets" element={<ExoplanetsProvider />}>
+            <Route path="" element={<Exoplanets />} />
+            <Route path=":id" element={<SeeExoplanet />}>
+              <Route path="create" element={<CreateConstellation />} />
+            </Route>
           </Route>
-
         </Route>
         <Route path="profile" element={<ProfileLayout />}>
           <Route element={<ContentProfileLayout />}>

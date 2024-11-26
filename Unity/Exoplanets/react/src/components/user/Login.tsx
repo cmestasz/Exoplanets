@@ -1,8 +1,7 @@
 import { Text } from '@components/ui/Text';
-import { useContext } from 'react';
 import { useTranslation } from 'react-i18next';
 import clsx from 'clsx';
-import { UserContext } from './UserContext';
+import { useUser } from 'src/providers/UserProvider';
 
 interface LoginProps {
   asideMenu?: boolean
@@ -12,7 +11,7 @@ export default function Login({
   asideMenu,
 }: LoginProps) {
   const { t } = useTranslation();
-  const userAction = useContext(UserContext);
+  const userAction = useUser();
   return (
     <view className="flex">
       <Text

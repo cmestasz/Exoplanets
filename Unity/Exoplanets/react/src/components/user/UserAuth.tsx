@@ -1,10 +1,9 @@
-import { useContext } from 'react';
+import { useUser } from 'src/providers/UserProvider';
 import UserBox from './UserBox';
-import { UserContext } from './UserContext';
 import Login from './Login';
 
 export default function UserAuth() {
-  const userAction = useContext(UserContext);
+  const userAction = useUser();
   if (userAction.current.state === 'loading') return null;
   if (userAction.current.state === 'error') {
     return (

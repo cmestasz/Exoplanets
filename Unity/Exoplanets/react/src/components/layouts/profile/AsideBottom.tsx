@@ -1,15 +1,14 @@
 import { Text } from '@components/ui/Text';
 import Login from '@components/user/Login';
 import Logout from '@components/user/Logout';
-import { UserContext } from '@components/user/UserContext';
-import { useContext } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router';
+import { useUser } from 'src/providers/UserProvider';
 
 export default function AsideBottom() {
   const { t } = useTranslation();
   const nav = useNavigate();
-  const userAction = useContext(UserContext);
+  const userAction = useUser();
   return (
     <>
       <view

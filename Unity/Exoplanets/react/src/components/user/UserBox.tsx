@@ -1,14 +1,14 @@
 import { useTranslation } from 'react-i18next';
 import { Text } from '@components/ui/Text';
-import { useContext, useState } from 'react';
+import { useState } from 'react';
 import { useNavigate } from 'react-router';
+import { useUser } from 'src/providers/UserProvider';
 import HeaderUserBox from './HeaderUserBox';
-import { UserContext } from './UserContext';
 
 export default function UserBox() {
   const { t } = useTranslation();
   const nav = useNavigate();
-  const userAction = useContext(UserContext);
+  const userAction = useUser();
   const [opened, setOpened] = useState<boolean>(false);
   const handleProfile = () => {
     nav('profile/account');

@@ -1,11 +1,10 @@
 import { Text } from '@components/ui/Text';
 import { useTranslation } from 'react-i18next';
-import { useContext } from 'react';
-import { UserContext } from './UserContext';
+import { useUser } from 'src/providers/UserProvider';
 
 export default function Logout() {
   const { t } = useTranslation();
-  const userAction = useContext(UserContext);
+  const userAction = useUser();
   return (
     <Text
       invertedStyle

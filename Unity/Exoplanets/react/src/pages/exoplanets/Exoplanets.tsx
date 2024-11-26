@@ -1,16 +1,16 @@
 import { useTranslation } from 'react-i18next';
-import { useCallback, useEffect, useState } from 'react';
-import { AsyncData, AsyncResponse } from '@mytypes/index';
+import { useCallback } from 'react';
+import { AsyncData } from '@mytypes/index';
 import { Exoplanet } from '@mytypes/astros';
-import { kepler22b, proximaCentauriB } from '@lib/mock';
 import ShowExoplanets from './ShowExoplanets';
 import Preview from './Preview';
+import { useExoplanets } from './ExoplanetsProvider';
 
 export default function Exoplanets() {
   const { t } = useTranslation();
-  const [exoplanets, setExoplanets] = useState<AsyncData<Exoplanet[]>>({ state: 'loading' });
-  const [leakedExos, setLeakedExos] = useState<AsyncData<Exoplanet[]>>({ state: 'loading' });
-  const [selectedExo, setSelectedExo] = useState<Exoplanet>();
+  const {
+    exoplanets, leakedExos, setLeakedExos, selectedExo, setSelectedExo,
+  } = useExoplanets();
   const changeLeakedExos = (data: AsyncData<Exoplanet[]>) => {
     setLeakedExos(data);
   };
@@ -24,19 +24,10 @@ export default function Exoplanets() {
         ),
       });
     }
-  }, [exoplanets]);
+  }, [exoplanets, setLeakedExos]);
   const handleSelect = useCallback((exo: Exoplanet) => {
     setSelectedExo(exo);
-  }, []);
-  useEffect(() => {
-    const data: AsyncResponse<Exoplanet[]> = {
-      state: 'loaded',
-      data: [kepler22b, proximaCentauriB],
-    };
-    setExoplanets(data);
-    setLeakedExos(data);
-    setSelectedExo(kepler22b);
-  }, []);
+  }, [setSelectedExo]);
   return (
     <view
       className="flex flex-col flex-auto gap-2"
