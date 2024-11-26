@@ -5,7 +5,7 @@ import { useState } from 'react';
 import clsx from 'clsx';
 
 export interface AstroCardProps {
-  astro: Pick<Astro, 'imageUrl' | 'name'>;
+  astro: Astro;
   invertedStyle?: boolean;
   onClick: () => void;
   className?: string;

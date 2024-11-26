@@ -2,19 +2,24 @@ import { kepler22b, proximaCentauriB } from '@lib/mock';
 import { Exoplanet } from '@mytypes/astros';
 import { AsyncData, AsyncResponse } from '@mytypes/index';
 import {
-  createContext, useContext, useEffect, useMemo, useState,
+  createContext, useCallback, useContext, useEffect, useMemo, useState,
 } from 'react';
-import { Outlet } from 'react-router';
+import { Outlet, useNavigate } from 'react-router';
 
-const ExoplanetsCont = createContext(null);
+const ExoplanetsCont = createContext<{
+  exoplanets: AsyncData<Exoplanet[]>,
+  selectedExo: Exoplanet,
+  changeSelectedExo:(exo: Exoplanet, redir?: boolean) => void
+}>(null);
 
 export function useExoplanets() {
   return useContext(ExoplanetsCont);
 }
 
 export default function ExoplanetsProvider() {
+  const nav = useNavigate();
   const [exoplanets, setExoplanets] = useState<AsyncData<Exoplanet[]>>({ state: 'loading' });
-  const [leakedExos, setLeakedExos] = useState<AsyncData<Exoplanet[]>>({ state: 'loading' });
+
   const [selectedExo, setSelectedExo] = useState<Exoplanet>();
   useEffect(() => {
     const data: AsyncResponse<Exoplanet[]> = {
@@ -22,12 +27,15 @@ export default function ExoplanetsProvider() {
       data: [kepler22b, proximaCentauriB],
     };
     setExoplanets(data);
-    setLeakedExos(data);
     setSelectedExo(kepler22b);
   }, []);
+  const changeSelectedExo = useCallback((exo: Exoplanet, redir?: boolean) => {
+    setSelectedExo(exo);
+    if (redir) nav(exo.name, { replace: true });
+  }, []);
   const exoData = useMemo(() => ({
-    exoplanets, leakedExos, setLeakedExos, selectedExo, setSelectedExo,
-  }), [exoplanets, leakedExos, setLeakedExos, selectedExo, setSelectedExo]);
+    exoplanets, selectedExo, changeSelectedExo,
+  }), [exoplanets, selectedExo, changeSelectedExo]);
   return (
     <ExoplanetsCont.Provider
       value={exoData}

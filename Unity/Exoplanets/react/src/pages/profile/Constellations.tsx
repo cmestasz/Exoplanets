@@ -1,3 +1,4 @@
+import Visualization from '@components/astros/Visualization';
 import { Text } from '@components/ui/Text';
 import { Constellation } from '@mytypes/astros';
 import { AsyncData } from '@mytypes/index';
@@ -52,11 +53,7 @@ export default function Constellations() {
         >
           {selectedConstellation.name}
         </h2>
-        <view
-          className="flex-auto border-primary border-2 rounded-lg"
-        >
-          Visualization
-        </view>
+        <Visualization />
       </view>
       <view
         className="gap-5"
