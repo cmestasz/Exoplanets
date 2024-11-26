@@ -1,9 +1,7 @@
-import Stars from '@pages/Stars';
 import CreateConstellation from '@pages/CreateConstellation';
 import Exoplanets from '@pages/exoplanets/Exoplanets';
 import MainMenu from '@pages/MainMenu';
 import Maximized from '@pages/Maximized';
-import SeeStar from '@pages/SeeStar';
 import SeeExoplanet from '@pages/SeeExoplanet';
 import { Outlet, Route, Routes } from 'react-router-dom';
 import MainLayout from '@pages/layouts/MainLayout';
@@ -34,13 +32,11 @@ export default function AppRoutes() {
       <Route element={<UserProvider />}>
         <Route element={<MainLayout />}>
           <Route path="" element={<MainMenu />} />
-          <Route path="exoplanets" element={<Exoplanets />}>
-            <Route path=":id" element={<SeeExoplanet />} />
-          </Route>
-          <Route path="stars" element={<Stars />}>
-            <Route path=":id" element={<SeeStar />} />
+          <Route path="exoplanets" element={<Exoplanets />} />
+          <Route path="exoplanets/:id" element={<SeeExoplanet />}>
             <Route path="create" element={<CreateConstellation />} />
           </Route>
+
         </Route>
         <Route path="profile" element={<ProfileLayout />}>
           <Route element={<ContentProfileLayout />}>

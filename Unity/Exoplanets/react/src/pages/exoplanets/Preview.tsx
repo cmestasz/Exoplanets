@@ -43,7 +43,7 @@ export default function Preview({
         <Text
           className="flex flex-row font-exo text-3xl text-primary"
           asButton
-          onClick={() => nav(currentExoplanet.id)}
+          onClick={() => nav(currentExoplanet.name)}
         >
           {t('pages.exoplanets.card.button')}
           <icon className="text-2xl">open_in_new</icon>
