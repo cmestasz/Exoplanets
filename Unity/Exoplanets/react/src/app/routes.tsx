@@ -32,10 +32,11 @@ export default function AppRoutes() {
       <Route element={<UserProvider />}>
         <Route element={<MainLayout />}>
           <Route path="" element={<MainMenu />} />
-          <Route path="exoplanets" element={<Exoplanets />}>
-            <Route path=":id" element={<SeeExoplanet />} />
+          <Route path="exoplanets" element={<Exoplanets />} />
+          <Route path="exoplanets/:id" element={<SeeExoplanet />}>
             <Route path="create" element={<CreateConstellation />} />
           </Route>
+
         </Route>
         <Route path="profile" element={<ProfileLayout />}>
           <Route element={<ContentProfileLayout />}>

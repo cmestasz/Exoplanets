@@ -8,6 +8,7 @@ import { Outlet, useLocation } from 'react-router';
 export default function MainLayout() {
   const location = useLocation();
   const routes = useMemo(() => location.pathname.split('/').filter((s) => s), [location]);
+  console.log(routes);
   return (
     <div
       className="flex flex-col gap-5 w-screen h-screen px-8 py-5 landscape:px-20"
