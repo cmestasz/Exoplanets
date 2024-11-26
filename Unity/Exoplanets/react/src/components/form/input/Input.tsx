@@ -91,7 +91,7 @@ export default function Input({
         />
         {
           !disabled && stateInput === 'sending' && (
-            <p className="font-exo text-sm">{SENDIND_MESSAGE}</p>
+            <p className="font-exo text-3xl">{SENDIND_MESSAGE}</p>
           )
         }
         {

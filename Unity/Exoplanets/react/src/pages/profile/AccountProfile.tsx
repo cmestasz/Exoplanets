@@ -14,6 +14,7 @@ export default function AccountProfile() {
         console.error(data.error.details.toString());
         throw new Error(`${t('components.form.input.error-update')}${data.error.code}`);
       }
+      userAction.fetchUser();
     }
   }, [userAction, t]);
   if (userAction.current.state !== 'loaded') return null;
