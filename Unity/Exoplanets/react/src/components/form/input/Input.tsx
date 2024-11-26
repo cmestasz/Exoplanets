@@ -19,8 +19,8 @@ export default function Input({
   label, name, send, defaultValue = '', disabled, ...props
 }: InputProps) {
   const { t } = useTranslation();
-  const SUCCESS_UPLOADING = t('components.form.input.success-update') as string;
-  const SENDIND_MESSAGE = t('components.form.input.sending') as string;
+  const SUCCESS_UPLOADING = t('components.form.input.success-update');
+  const SENDIND_MESSAGE = t('components.form.input.sending');
   const showAlert = useContext(AlertContext);
   const [stateInput, setStateInput] = useState<'normal' | 'editing' | 'sending'>('normal');
   const [savedValue, setSavedValue] = useState<string>(defaultValue);

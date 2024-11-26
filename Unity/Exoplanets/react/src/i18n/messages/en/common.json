@@ -108,6 +108,20 @@
         }
       },
       "help": "Having problems? Send us an email"
+    },
+    "exoplanets": {
+      "title": "Select an exoplanet and start exploring",
+      "search": "Busca exoplanetas en el espacio",
+      "no-results": {
+        "main": "No results",
+        "sub": "Try another phrase"
+      },
+      "card": {
+        "button": "View in 3D",
+        "mass": "Mass",
+        "radius": "Ratio",
+        "year": "Year of discovery"
+      }
     }
   }
 }

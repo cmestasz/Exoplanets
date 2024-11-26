@@ -14,12 +14,12 @@ export default function MainMenu() {
     { imageUrl: '/img/proximaCentauri.jpeg', name: t('pages.stars-option') as string },
   ], [t]);
   return (
-    <>
-      <div
+    <view className="flex flex-col flex-auto gap-10 portrait:gap-20">
+      <view
         className="flex flex-col flex-auto justify-center gap-20"
       >
-        <div
-          className="flex flex-col items-center justify-center"
+        <view
+          className="flex flex-col items-center flex-initial justify-center"
         >
           <h1
             className="text-primary font-orbitron text-[6.5rem] leading-[3rem]"
@@ -31,19 +31,19 @@ export default function MainMenu() {
           >
             {t('pages.subtitle')}
           </h2>
-        </div>
-        <div
-          className="flex flex-col landscape:flex-row gap-24 flex-none self-center"
+        </view>
+        <view
+          className="flex flex-col flex-initial landscape:flex-row gap-24 self-center max-w-6xl max-h-[70rem]"
         >
           <AstroCard invertedStyle astro={astros[0]} onClick={() => nav('exoplanets')} />
           <AstroCard invertedStyle astro={astros[1]} onClick={() => nav('stars')} />
-        </div>
-      </div>
-      <div
-        className="flex flex-row justify-between flex-none"
+        </view>
+      </view>
+      <view
+        className="flex flex-row flex-initial justify-between"
         style={{ flexGrow: '0' }}
       >
-        <div
+        <view
           className="flex flex-row gap-4"
         >
           <Text
@@ -64,7 +64,7 @@ export default function MainMenu() {
             <icon className="text-3xl">help</icon>
             {t('pages.help')}
           </Text>
-        </div>
+        </view>
         <Text
           invertedStyle
           asLink
@@ -76,7 +76,7 @@ export default function MainMenu() {
           />
           {t('pages.repo')}
         </Text>
-      </div>
-    </>
+      </view>
+    </view>
   );
 }

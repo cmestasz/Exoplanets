@@ -1,7 +1,4 @@
 import { Text } from '@components/ui/Text';
-import {
-  Alpha_Centauri_A, Alpha_Centauri_B, Kepler_21, Kepler_22, ProximaCentauri,
-} from '@lib/mock';
 import { Constellation } from '@mytypes/astros';
 import { AsyncData } from '@mytypes/index';
 import { useCallback, useEffect, useState } from 'react';
@@ -24,11 +21,11 @@ export default function Constellations() {
     setUserConst({
       state: 'loaded',
       data: [
-        { name: 'SampleConstellation1', stars: [Kepler_22, ProximaCentauri] },
-        { name: 'SampleConstellation2', stars: [Kepler_21, Alpha_Centauri_A, Alpha_Centauri_B] },
+        { name: 'SampleConstellation1', id: 1 },
+        { name: 'SampleConstellation2', id: 2 },
       ],
     });
-    setSelectedConst({ name: 'SampleConstellation1', stars: [Kepler_22, ProximaCentauri] });
+    setSelectedConst({ name: 'SampleConstellation1', id: 1 });
   }, []);
   useEffect(() => {
     // Is caching the constellations a good idea?

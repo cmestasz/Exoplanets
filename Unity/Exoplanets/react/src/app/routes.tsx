@@ -1,6 +1,6 @@
 import Stars from '@pages/Stars';
 import CreateConstellation from '@pages/CreateConstellation';
-import Exoplanets from '@pages/Exoplanets';
+import Exoplanets from '@pages/exoplanets/Exoplanets';
 import MainMenu from '@pages/MainMenu';
 import Maximized from '@pages/Maximized';
 import SeeStar from '@pages/SeeStar';

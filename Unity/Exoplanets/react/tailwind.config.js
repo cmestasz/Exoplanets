@@ -28,6 +28,9 @@ module.exports = {
       1000: '1s',
     },
     extend: {
+      animation: {
+        'spin-f': 'spin-fix 1.4s linear infinite',
+      },
       colors: {
         primary: 'var(--primary)',
         secondary: 'var(--secondary)',
@@ -46,6 +49,16 @@ module.exports = {
         orbitron: 'var(--font-orbitron)',
         audiowide: 'var(--font-audiowide)',
         exo: 'var(--font-exo)',
+      },
+      keyframes: {
+        'spin-fix': {
+          '0%': {
+            rotate: '180deg',
+          },
+          '100%': {
+            rotate: '-180deg',
+          },
+        },
       },
     },
   },
