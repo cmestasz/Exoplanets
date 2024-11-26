@@ -6,14 +6,14 @@ import { useExoplanets } from './exoplanets/ExoplanetsProvider';
 
 export default function SeeExoplanet() {
   const {
-    exoplanets, changeSelectedExo,
+    exoplanets, selectedExo, changeSelectedExo,
   } = useExoplanets();
   const handleCardClick = useCallback((exoplanet: Exoplanet) => {
     changeSelectedExo(exoplanet, true);
   }, [changeSelectedExo]);
   return (
     <view
-      className="flex flex-col gap-6"
+      className="flex flex-col flex-auto gap-6"
     >
       <Visualization />
       <view
@@ -24,6 +24,7 @@ export default function SeeExoplanet() {
             <AstrosSlider
               astros={exoplanets.data}
               onCardClick={handleCardClick}
+              current={selectedExo}
             />
           )
         }

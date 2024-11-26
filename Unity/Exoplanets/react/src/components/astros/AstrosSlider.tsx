@@ -8,22 +8,16 @@ import ArrowSlider from './ArrowSlider';
 
 interface AstroSliderProps<T extends Astro> {
   astros: T[];
+  current?: T;
   onCardClick: (astro: T) => void;
 }
 
 export default function AstrosSlider<T extends Astro>({
-  astros, onCardClick,
+  astros, current, onCardClick,
 }: AstroSliderProps<T>) {
   const iterator = useRef<ArrayInfIterator<T>>(null);
   const [currentAstro, setCurrentAstro] = useState<T>(null);
   const [cardHover, setCardHover] = useState<boolean>(false);
-
-  useEffect(() => {
-    if (astros.length > 0) {
-      iterator.current = new ArrayInfIterator(astros);
-      setCurrentAstro(iterator.current.next());
-    }
-  }, [astros]);
 
   const handleHover = useCallback((isHover: boolean) => {
     setCardHover(isHover);
@@ -40,6 +34,13 @@ export default function AstrosSlider<T extends Astro>({
       setCurrentAstro(iterator.current.before());
     }
   }, [iterator]);
+
+  useEffect(() => {
+    if (astros.length > 0) {
+      iterator.current = new ArrayInfIterator(astros, current);
+      setCurrentAstro(iterator.current.next());
+    }
+  }, [astros, current]);
 
   return (
     <div className="flex flex-row w-fit">
