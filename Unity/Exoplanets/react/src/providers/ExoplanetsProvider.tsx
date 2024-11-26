@@ -31,11 +31,11 @@ export default function ExoplanetsProvider() {
     const exoRoute = data.data.find((exo) => exo.name === name);
     if (exoRoute) setSelectedExo(exoRoute);
     else setSelectedExo(kepler22b);
-  }, []);
+  }, [name]);
   const changeSelectedExo = useCallback((exo: Exoplanet, redir?: boolean) => {
     setSelectedExo(exo);
     if (redir) nav(exo.name, { replace: true });
-  }, []);
+  }, [nav]);
   const exoData = useMemo(() => ({
     exoplanets, selectedExo, changeSelectedExo,
   }), [exoplanets, selectedExo, changeSelectedExo]);

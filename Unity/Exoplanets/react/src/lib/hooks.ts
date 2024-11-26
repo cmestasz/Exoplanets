@@ -2,11 +2,11 @@ import {
   useState, useCallback, useEffect, useMemo,
   useContext,
 } from 'react';
-import { AlertOptions } from '@components/alerts/types';
+import { AlertOptions } from '@components/modals/types';
 import { useTranslation } from 'react-i18next';
 import { UserAPI } from '@mytypes/user';
 import { User } from '@supabase/supabase-js';
-import { AlertContext } from '@components/alerts/AlertContext';
+import { AlertContext } from '@components/modals/AlertContext';
 import { useNavigate } from 'react-router';
 import { AsyncData } from '@mytypes/index';
 import { useGlobals } from '@reactunity/renderer';
@@ -44,6 +44,28 @@ function useAlert() {
 
   return {
     isVisible, alertOptions, showAlert, hideAlert,
+  };
+}
+
+function useModal() {
+  const [modalVisible, setModalVisible] = useState<boolean>(false);
+  const [content, setContent] = useState<{ title: string, children?: React.ReactNode, onAccept:() => void }>({ title: '', onAccept: () => console.log('Modal setted') });
+  const cancel = useCallback(() => setModalVisible(false), []);
+  const accept = useCallback(() => {
+    content.onAccept();
+    cancel();
+  }, [content, cancel]);
+  const open = () => setModalVisible(true);
+  const showModal = useCallback((
+    { title, children, onAccept }:
+    { title: string, children?: React.ReactNode, onAccept: () => void },
+  ) => {
+    open();
+    setContent({ title, children, onAccept });
+  }, []);
+
+  return {
+    modalVisible, accept, cancel, showModal, content,
   };
 }
 
@@ -149,4 +171,4 @@ function useUserActions() {
   }), [fetchUser, userFetched, logout, login]);
 }
 
-export { useAlert, useUserActions };
+export { useAlert, useModal, useUserActions };

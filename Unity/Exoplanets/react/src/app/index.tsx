@@ -4,8 +4,9 @@ import '@i18n/i18n';
 import { render } from '@reactunity/renderer';
 import { MemoryRouter } from 'react-router-dom';
 import { useAlert } from '@lib/hooks';
-import Alert from '@components/alerts/Alert';
-import { AlertContext } from '@components/alerts/AlertContext';
+import Alert from '@components/modals/Alert';
+import { AlertContext } from '@components/modals/AlertContext';
+import ModalProvider from 'src/providers/ModalProvider';
 import AppRoutes from './routes';
 
 function App() {
@@ -22,7 +23,9 @@ function App() {
         {
           isVisible && <Alert alertOptions={alertOptions} hideAlert={hideAlert} />
         }
-        <AppRoutes />
+        <ModalProvider>
+          <AppRoutes />
+        </ModalProvider>
       </AlertContext.Provider>
     </MemoryRouter>
   );

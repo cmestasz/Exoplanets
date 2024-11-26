@@ -123,7 +123,12 @@
       }
     },
     "see-exoplanet": {
-      "create-const": "Create constellation"
+      "create-const": {
+        "button": "Create constellation",
+        "accept": "Accept",
+        "cancel": "Cancel",
+        "title": "What do you want to call your constellation?"
+      }
     }
   }
 }

@@ -1,6 +1,7 @@
 import { Text } from '@components/ui/Text';
 import { Exoplanet } from '@mytypes/astros';
 import { useTranslation } from 'react-i18next';
+import { useModals } from 'src/providers/ModalProvider';
 
 interface ExoDataProps {
   exo: Exoplanet;
@@ -10,6 +11,7 @@ export default function ExoData({
   exo,
 }: ExoDataProps) {
   const { t } = useTranslation();
+  const showModal = useModals();
   if (!exo) {
     return (
       <view className="size-7 animate-spin" />
@@ -20,12 +22,20 @@ export default function ExoData({
     { key: t('pages.exoplanets.card.mass'), val: exo.mass },
     { key: t('pages.exoplanets.card.year'), val: exo.disc_date },
   ];
+  const onAccept = () => {
+    console.log('Accepted content');
+  };
   const handleClick = () => {
+    showModal({
+      title: t('pages.see-exoplanet.create-const.title'),
+      onAccept,
+      children: <h1>Proving</h1>,
+    });
     console.log(exo.name);
   };
   return (
     <view
-      className="flex flex-col gap-4 flex-auto"
+      className="flex flex-col gap-8 pt-2 flex-auto"
     >
       <header
         className="flex flex-row flex-initial justify-between"
@@ -37,7 +47,7 @@ export default function ExoData({
           className="text-3xl"
         >
           <icon className="text-4xl">add</icon>
-          {t('pages.see-exoplanet.create-const')}
+          {t('pages.see-exoplanet.create-const.button')}
         </Text>
       </header>
       <view
@@ -60,7 +70,6 @@ export default function ExoData({
           ))
         }
       </view>
-
     </view>
   );
 }

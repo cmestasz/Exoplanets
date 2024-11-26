@@ -12,7 +12,7 @@ import About from '@pages/profile/about/About';
 import Settings from '@pages/profile/Settings';
 import Help from '@pages/profile/Help';
 import ContentProfileLayout from '@pages/layouts/ContentProfileLayout';
-import ExoplanetsProvider from '@pages/exoplanets/ExoplanetsProvider';
+import ExoplanetsProvider from 'src/providers/ExoplanetsProvider';
 import UserProvider from 'src/providers/UserProvider';
 
 export default function AppRoutes() {

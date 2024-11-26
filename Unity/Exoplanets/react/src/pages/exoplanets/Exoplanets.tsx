@@ -4,7 +4,7 @@ import { AsyncData } from '@mytypes/index';
 import { Exoplanet } from '@mytypes/astros';
 import ShowExoplanets from './ShowExoplanets';
 import Preview from './Preview';
-import { useExoplanets } from './ExoplanetsProvider';
+import { useExoplanets } from '../../providers/ExoplanetsProvider';
 
 export default function Exoplanets() {
   const { t } = useTranslation();

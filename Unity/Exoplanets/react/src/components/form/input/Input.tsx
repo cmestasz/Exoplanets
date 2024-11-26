@@ -5,7 +5,7 @@ import {
 import { useTranslation } from 'react-i18next';
 import { UGUIElements } from '@reactunity/renderer/ugui';
 import { ReactUnity } from '@reactunity/renderer';
-import { AlertContext } from '@components/alerts/AlertContext';
+import { AlertContext } from '@components/modals/AlertContext';
 import Options from './Options';
 
 type InputProps = UGUIElements['input'] & {
