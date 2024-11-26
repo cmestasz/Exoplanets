@@ -118,9 +118,12 @@
       "card": {
         "button": "View in 3D",
         "mass": "Mass",
-        "radius": "Ratio",
+        "radius": "Radius",
         "year": "Year of discovery"
       }
+    },
+    "see-exoplanet": {
+      "create-const": "Create constellation"
     }
   }
 }

@@ -121,6 +121,9 @@
         "radius": "Radio",
         "year": "Año de descubrimiento"
       }
+    },
+    "see-exoplanet": {
+      "create-const": "Crear constelación"
     }
   }
 }

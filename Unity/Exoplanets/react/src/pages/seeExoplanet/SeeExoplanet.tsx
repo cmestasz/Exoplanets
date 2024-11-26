@@ -2,7 +2,8 @@ import Visualization from '@components/astros/Visualization';
 import AstrosSlider from '@components/astros/AstrosSlider';
 import { useCallback } from 'react';
 import { Exoplanet } from '@mytypes/astros';
-import { useExoplanets } from './exoplanets/ExoplanetsProvider';
+import { useExoplanets } from '../exoplanets/ExoplanetsProvider';
+import ExoData from './ExoData';
 
 export default function SeeExoplanet() {
   const {
@@ -28,6 +29,9 @@ export default function SeeExoplanet() {
             />
           )
         }
+        <ExoData
+          exo={selectedExo}
+        />
       </view>
     </view>
   );
