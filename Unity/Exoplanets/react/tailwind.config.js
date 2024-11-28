@@ -111,6 +111,8 @@ module.exports = {
       addVariant('wmd', '@media (window-width >= 768)');
       addVariant('wlg', '@media (window-width >= 1024)');
       addVariant('wxl', '@media (window-width >= 1280)');
+      addVariant('hsm', '@media (window-height >= 480)');
+      addVariant('hmd', '@media (window-height >= 768)');
     }),
     plugin(({ addUtilities }) => {
       addUtilities({

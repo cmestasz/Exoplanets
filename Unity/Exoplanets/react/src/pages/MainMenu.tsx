@@ -1,4 +1,5 @@
 import { Text } from '@components/ui/Text';
+import { useGlobals } from '@reactunity/renderer';
 import { useTranslation } from 'react-i18next';
 import { FaGithub } from 'react-icons/fa6';
 import { useNavigate } from 'react-router';
@@ -6,6 +7,7 @@ import { useNavigate } from 'react-router';
 export default function MainMenu() {
   const nav = useNavigate();
   const { t } = useTranslation();
+  const { Star } = useGlobals();
   return (
     <view className="flex flex-col flex-auto gap-10 portrait:gap-20">
       <view
@@ -25,11 +27,15 @@ export default function MainMenu() {
             {t('pages.subtitle')}
           </h2>
         </view>
+        <prefab
+          className="basis-52 self-center"
+          target={Star}
+        />
         <view
           className="flex flex-col flex-initial landscape:flex-row gap-24 self-center max-w-6xl max-h-[70rem]"
         >
           <Text
-            className="text-5xl leading-10 border-2 border-primary p-6 rounded-lg hover:border-secondary"
+            className="text-5xl leading-10 -mt-7 p-6 rounded-lg"
             asButton
             onClick={() => nav('exoplanets')}
           >
@@ -37,6 +43,7 @@ export default function MainMenu() {
             <icon className="text-5xl">open_in_new</icon>
           </Text>
         </view>
+
       </view>
       <view
         className="flex flex-row flex-initial justify-between"

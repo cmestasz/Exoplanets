@@ -8,7 +8,11 @@ public class MainStar : MonoBehaviour, IPrefabTarget
 {
     PrefabComponent Component { get; set; }
 
-    public Material curstomMaterial;
+    GameObject instance;
+
+    public float rotationSpeed = 3f;
+
+    public Material customMaterial;
     public ReactRendererUGUI react;
     public GameObject prefab;
 
@@ -24,9 +28,9 @@ public class MainStar : MonoBehaviour, IPrefabTarget
 
         if (prefab != null)
         {
-            GameObject instance = Instantiate(prefab, Vector3.zero, Quaternion.identity);
+            instance = Instantiate(prefab, Vector3.zero, Quaternion.identity);
             instance.transform.SetParent(cmp.RectTransform, false);
-            instance.transform.localScale = new Vector3(300f, 300f, 300f);
+            instance.transform.localScale = new Vector3(250f, 250f, 250f);
 
             RectTransform rectTransform = instance.GetComponent<RectTransform>();
             if (rectTransform != null)
@@ -39,9 +43,9 @@ public class MainStar : MonoBehaviour, IPrefabTarget
             Renderer renderer = instance.GetComponent<Renderer>();
             if (renderer != null)
             {
-                if (curstomMaterial != null)
+                if (customMaterial != null)
                 {
-                    renderer.material = curstomMaterial;
+                    renderer.material = customMaterial;
                     Debug.Log("Material assigned successfully");
                 }
                 else
@@ -86,6 +90,11 @@ public class MainStar : MonoBehaviour, IPrefabTarget
 
     void Update()
     {
+        if (instance != null)
+        {
+            Vector3 inclinedAxis = new Vector3(0.3f, 1f, 0f).normalized;
+            instance.transform.Rotate(inclinedAxis, rotationSpeed * Time.deltaTime);
+        }
 
     }
 }

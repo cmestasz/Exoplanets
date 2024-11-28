@@ -25,7 +25,7 @@ RenderSettings:
   m_AmbientGroundColor: {r: 0.047, g: 0.043, b: 0.035, a: 1}
   m_AmbientIntensity: 1
   m_AmbientMode: 0
-  m_SubtractiveShadowColor: {r: 0.42, g: 0.478, b: 0.627, a: 1}
+  m_SubtractiveShadowColor: {r: 0, g: 0, b: 0, a: 1}
   m_SkyboxMaterial: {fileID: 2100000, guid: 0a98eaa61401f3c49a068e4fbd6c2e2a, type: 2}
   m_HaloStrength: 0.5
   m_FlareStrength: 1
@@ -37,7 +37,7 @@ RenderSettings:
   m_ReflectionBounces: 1
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
-  m_Sun: {fileID: 0}
+  m_Sun: {fileID: 1323256007}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -96,9 +96,10 @@ LightmapSettings:
     m_ExportTrainingData: 0
     m_TrainingDataDestination: TrainingData
     m_LightProbeSampleCountMultiplier: 4
-  m_LightingDataAsset: {fileID: 112000000, guid: b31acb50bc7c0fbad8dd34b1bb3978d2,
+  m_LightingDataAsset: {fileID: 112000000, guid: cfb63c86464203f9ea4e54d0094a01e8,
     type: 2}
-  m_LightingSettings: {fileID: 0}
+  m_LightingSettings: {fileID: 4890085278179872738, guid: 85669e43aa60155808256235b54fb403,
+    type: 2}
 --- !u!196 &4
 NavMeshSettings:
   serializedVersion: 2
@@ -376,7 +377,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d37629a97f0543976b86d8dccd52f874, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  curstomMaterial: {fileID: 2100000, guid: fb33f9c6a0714076baa7313d5521b0ce, type: 2}
+  rotationSpeed: 3
+  customMaterial: {fileID: 2100000, guid: fb33f9c6a0714076baa7313d5521b0ce, type: 2}
   react: {fileID: 635399859}
   prefab: {fileID: 1972576250904842090, guid: abd6ebe7d6a92a3488d7cb01c8af3242, type: 3}
 --- !u!114 &635399868
@@ -503,13 +505,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1323256005}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.40821788, y: -0.23456968, z: 0.10938163, w: 0.8754261}
-  m_LocalPosition: {x: 960.92926, y: 540.31604, z: -2.0383089}
+  m_LocalRotation: {x: -0.7596591, y: -0.3800385, z: -0.46629584, w: -0.24709709}
+  m_LocalPosition: {x: 1881, y: 1136, z: -68}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 50, y: -30, z: 0}
+  m_LocalEulerAnglesHint: {x: -541.203, y: 296.303, z: -53.903015}
 --- !u!1 &1516718325
 GameObject:
   m_ObjectHideFlags: 0
@@ -661,6 +663,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: -0.5
+  directionalLight: {fileID: 1323256007}
+  tiltAngle: 135
+  offSet: 40
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
