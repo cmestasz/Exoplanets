@@ -46,7 +46,7 @@ export default function AstrosSlider<T extends Astro>({
     <div className="flex flex-row flex-initial basis-1/4">
       <ArrowSlider toLeft onClick={handleBefore} cardHover={cardHover} />
       <div
-        className="flex-auto min-h-[30%] max-h-96 relative border-transparent border-t-primary hover:border-t-secondary border-b-primary hover:border-b-secondary border-2"
+        className="flex-auto min-h-[30%] relative border-transparent border-t-primary hover:border-t-secondary border-b-primary hover:border-b-secondary border-2"
       >
         {currentAstro && (
           <AstroCard
