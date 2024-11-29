@@ -379,7 +379,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d37629a97f0543976b86d8dccd52f874, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  rotationSpeed: 3
+  dragSpeed: 5
+  rotationSpeed: 7
   customMaterial: {fileID: 2100000, guid: fb33f9c6a0714076baa7313d5521b0ce, type: 2}
   react: {fileID: 635399859}
   prefab: {fileID: 1972576250904842090, guid: abd6ebe7d6a92a3488d7cb01c8af3242, type: 3}
