@@ -1,35 +1,28 @@
-using System;
-using ReactUnity.Helpers;
+using ReactUnity.Interfaces;
 using ReactUnity.UGUI;
-using ReactUnity.UGUI.Behaviours;
 using UnityEngine;
-
-public class MainStar : MonoBehaviour, IPrefabTarget
+public class MainStar : MonoBehaviour, IReactInsertable
 {
-    PrefabComponent Component { get; set; }
+    private GameObject instance;
 
-    GameObject instance;
+    private Vector3 lastMousePosition;
+
+    public float dragSpeed = 5f;
 
     public float rotationSpeed = 3f;
 
     public Material customMaterial;
+
     public ReactRendererUGUI react;
+
     public GameObject prefab;
 
-    public void Mount(PrefabComponent cmp)
+    public void Insert(PrefabComponent Component)
     {
-        if (cmp == null)
-        {
-            Debug.Log("Cmp is null, cannot mount");
-            return;
-        }
-        Debug.Log("Mounting MainStar Component");
-        Component = cmp;
-
         if (prefab != null)
         {
             instance = Instantiate(prefab, Vector3.zero, Quaternion.identity);
-            instance.transform.SetParent(cmp.RectTransform, false);
+            instance.transform.SetParent(Component.RectTransform, false);
             instance.transform.localScale = new Vector3(250f, 250f, 250f);
 
             RectTransform rectTransform = instance.GetComponent<RectTransform>();
@@ -60,29 +53,7 @@ public class MainStar : MonoBehaviour, IPrefabTarget
 
             Debug.Log("Prefab instantiated successfully");
         }
-        else
-        {
-            Debug.LogError("Failed to load prefab");
-        }
     }
-
-    public bool SetProperty(string propertyName, object value)
-    {
-        return false;
-    }
-
-    public Action AddEventListener(string eventName, Callback callback)
-    {
-        return null;
-    }
-
-    public void Unmount(PrefabComponent cmp)
-    {
-        Debug.Log("Unmounting Main Star component");
-        Component = null;
-    }
-
-
 
     void Start()
     {
@@ -90,11 +61,34 @@ public class MainStar : MonoBehaviour, IPrefabTarget
 
     void Update()
     {
+        AutoRotate();
+        HandleMouseDrag();
+    }
+
+    void HandleMouseDrag()
+    {
+        if (Input.GetMouseButtonDown(0))
+        {
+            lastMousePosition = Input.mousePosition;
+        }
+
+        if (Input.GetMouseButton(0))
+        {
+            Vector3 delta = Input.mousePosition - lastMousePosition;
+            lastMousePosition = Input.mousePosition;
+
+            // Rotación en el eje Y para horizontal y en el eje X para vertical
+            instance.transform.Rotate(Vector3.up, -delta.x * dragSpeed * Time.deltaTime, Space.World);
+            instance.transform.Rotate(Vector3.right, delta.y * dragSpeed * Time.deltaTime, Space.World);
+        }
+    }
+
+    void AutoRotate()
+    {
         if (instance != null)
         {
             Vector3 inclinedAxis = new Vector3(0.3f, 1f, 0f).normalized;
             instance.transform.Rotate(inclinedAxis, rotationSpeed * Time.deltaTime);
         }
-
     }
 }

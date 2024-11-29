@@ -1,6 +1,6 @@
 //
 // Types in assemblies: Assembly-CSharp
-// Generated 28/11/2024 17:48:13
+// Generated 29/11/2024 18:39:01
 //
 /* eslint-disable */
 
@@ -390,14 +390,12 @@ export declare class MainStar {
   particleSystem: UnityEngine.Component;
   name: string;
   hideFlags: UnityEngine.HideFlags;
+  dragSpeed: number;
   rotationSpeed: number;
   customMaterial: UnityEngine.Material;
   react: ReactUnity.UGUI.ReactRendererUGUI;
   prefab: UnityEngine.GameObject;
-  Mount(cmp: ReactUnity.UGUI.PrefabComponent): void;
-  SetProperty(propertyName: string, value: any): boolean;
-  AddEventListener(eventName: string, callback: ReactUnity.Helpers.Callback): (() => void);
-  Unmount(cmp: ReactUnity.UGUI.PrefabComponent): void;
+  Insert(Component: ReactUnity.UGUI.PrefabComponent): void;
   IsInvoking(): boolean;
   CancelInvoke(): void;
   Invoke(methodName: string, time: number): void;

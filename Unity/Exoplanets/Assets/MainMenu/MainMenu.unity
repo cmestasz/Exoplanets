@@ -243,6 +243,8 @@ MonoBehaviour:
     Entries:
     - Key: AuthServer
       Value: {fileID: 635399866}
+    - Key: MainStar
+      Value: {fileID: 635399867}
   AdvancedOptions:
     Pooling: 1
     MediaUpdateInterval: 0.5

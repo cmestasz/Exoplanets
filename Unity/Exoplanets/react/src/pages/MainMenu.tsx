@@ -1,5 +1,7 @@
 import { Text } from '@components/ui/Text';
-import { useGlobals } from '@reactunity/renderer';
+import { MainStar } from '@mytypes/UnityTypes';
+import { ReactUnity, useGlobals } from '@reactunity/renderer';
+import { useEffect, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { FaGithub } from 'react-icons/fa6';
 import { useNavigate } from 'react-router';
@@ -7,7 +9,13 @@ import { useNavigate } from 'react-router';
 export default function MainMenu() {
   const nav = useNavigate();
   const { t } = useTranslation();
-  const { Star } = useGlobals();
+  const mainStar = useGlobals().MainStar as MainStar;
+  const prefabRef = useRef<ReactUnity.UGUI.PrefabComponent>();
+  useEffect(() => {
+    if (prefabRef.current) {
+      mainStar.Insert(prefabRef.current);
+    }
+  }, [prefabRef.current]);
   return (
     <view className="flex flex-col flex-auto gap-10 portrait:gap-20">
       <view
@@ -28,8 +36,8 @@ export default function MainMenu() {
           </h2>
         </view>
         <prefab
-          className="basis-52 self-center"
-          target={Star}
+          ref={prefabRef}
+          className="flex-initial basis-40"
         />
         <view
           className="flex flex-col flex-initial landscape:flex-row gap-24 self-center max-w-6xl max-h-[70rem]"
@@ -43,7 +51,6 @@ export default function MainMenu() {
             <icon className="text-5xl">open_in_new</icon>
           </Text>
         </view>
-
       </view>
       <view
         className="flex flex-row flex-initial justify-between"
