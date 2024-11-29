@@ -21,7 +21,7 @@ export default function MainLayout() {
       >
         <Navigation routes={routes} />
         <div
-          className="flex flex-row items-center justify-end portrait:justify-between gap-9"
+          className="flex flex-row flex-auto items-center justify-end portrait:justify-between gap-9"
         >
           <UserAuth />
           <SelectLanguage />
