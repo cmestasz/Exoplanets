@@ -1,10 +1,10 @@
 //
 // Types in assemblies: Assembly-CSharp
-// Generated 17/11/2024 23:49:13
+// Generated 29/11/2024 18:39:01
 //
 /* eslint-disable */
 
-import { System, UnityEngine } from '@reactunity/renderer';
+import { ReactUnity, System, UnityEngine } from '@reactunity/renderer';
 
 export declare class CalibrationInputController {
   constructor();
@@ -104,6 +104,78 @@ export declare class WebcamDisplayController {
   particleSystem: UnityEngine.Component;
   name: string;
   hideFlags: UnityEngine.HideFlags;
+  IsInvoking(): boolean;
+  CancelInvoke(): void;
+  Invoke(methodName: string, time: number): void;
+  InvokeRepeating(methodName: string, time: number, repeatRate: number): void;
+  CancelInvoke(methodName: string): void;
+  IsInvoking(methodName: string): boolean;
+  StartCoroutine(methodName: string): UnityEngine.Coroutine;
+  StartCoroutine(methodName: string, value: any): UnityEngine.Coroutine;
+  StartCoroutine(routine: System.Collections.IEnumerator): UnityEngine.Coroutine;
+  StartCoroutine_Auto(routine: System.Collections.IEnumerator): UnityEngine.Coroutine;
+  StopCoroutine(routine: System.Collections.IEnumerator): void;
+  StopCoroutine(routine: UnityEngine.Coroutine): void;
+  StopCoroutine(methodName: string): void;
+  StopAllCoroutines(): void;
+  GetComponent(type: System.Type): UnityEngine.Component;
+  GetComponent(type: string): UnityEngine.Component;
+  GetComponentInChildren(t: System.Type, includeInactive: boolean): UnityEngine.Component;
+  GetComponentInChildren(t: System.Type): UnityEngine.Component;
+  GetComponentsInChildren(t: System.Type, includeInactive: boolean): UnityEngine.Component[];
+  GetComponentsInChildren(t: System.Type): UnityEngine.Component[];
+  GetComponentInParent(t: System.Type, includeInactive: boolean): UnityEngine.Component;
+  GetComponentInParent(t: System.Type): UnityEngine.Component;
+  GetComponentsInParent(t: System.Type, includeInactive: boolean): UnityEngine.Component[];
+  GetComponentsInParent(t: System.Type): UnityEngine.Component[];
+  GetComponents(type: System.Type): UnityEngine.Component[];
+  GetComponents(type: System.Type, results: UnityEngine.Component[]): void;
+  GetComponentIndex(): number;
+  CompareTag(tag: string): boolean;
+  SendMessageUpwards(methodName: string, value: any, options: UnityEngine.SendMessageOptions): void;
+  SendMessageUpwards(methodName: string, value: any): void;
+  SendMessageUpwards(methodName: string): void;
+  SendMessageUpwards(methodName: string, options: UnityEngine.SendMessageOptions): void;
+  SendMessage(methodName: string, value: any): void;
+  SendMessage(methodName: string): void;
+  SendMessage(methodName: string, value: any, options: UnityEngine.SendMessageOptions): void;
+  SendMessage(methodName: string, options: UnityEngine.SendMessageOptions): void;
+  BroadcastMessage(methodName: string, parameter: any, options: UnityEngine.SendMessageOptions): void;
+  BroadcastMessage(methodName: string, parameter: any): void;
+  BroadcastMessage(methodName: string): void;
+  BroadcastMessage(methodName: string, options: UnityEngine.SendMessageOptions): void;
+  GetInstanceID(): number;
+  GetHashCode(): number;
+  Equals(other: any): boolean;
+  ToString(): string;
+  GetType(): System.Type;
+}
+export declare class AdjustCamera {
+  constructor();
+  destroyCancellationToken: System.Threading.CancellationToken;
+  useGUILayout: boolean;
+  runInEditMode: boolean;
+  enabled: boolean;
+  isActiveAndEnabled: boolean;
+  transform: UnityEngine.Transform;
+  gameObject: UnityEngine.GameObject;
+  tag: string;
+  rigidbody: UnityEngine.Component;
+  rigidbody2D: UnityEngine.Component;
+  camera: UnityEngine.Component;
+  light: UnityEngine.Component;
+  animation: UnityEngine.Component;
+  constantForce: UnityEngine.Component;
+  renderer: UnityEngine.Component;
+  audio: UnityEngine.Component;
+  networkView: UnityEngine.Component;
+  collider: UnityEngine.Component;
+  collider2D: UnityEngine.Component;
+  hingeJoint: UnityEngine.Component;
+  particleSystem: UnityEngine.Component;
+  name: string;
+  hideFlags: UnityEngine.HideFlags;
+  canvas: UnityEngine.Canvas;
   IsInvoking(): boolean;
   CancelInvoke(): void;
   Invoke(methodName: string, time: number): void;
@@ -293,6 +365,83 @@ export declare class LoadEnv {
   ToString(): string;
   GetType(): System.Type;
 }
+export declare class MainStar {
+  constructor();
+  destroyCancellationToken: System.Threading.CancellationToken;
+  useGUILayout: boolean;
+  runInEditMode: boolean;
+  enabled: boolean;
+  isActiveAndEnabled: boolean;
+  transform: UnityEngine.Transform;
+  gameObject: UnityEngine.GameObject;
+  tag: string;
+  rigidbody: UnityEngine.Component;
+  rigidbody2D: UnityEngine.Component;
+  camera: UnityEngine.Component;
+  light: UnityEngine.Component;
+  animation: UnityEngine.Component;
+  constantForce: UnityEngine.Component;
+  renderer: UnityEngine.Component;
+  audio: UnityEngine.Component;
+  networkView: UnityEngine.Component;
+  collider: UnityEngine.Component;
+  collider2D: UnityEngine.Component;
+  hingeJoint: UnityEngine.Component;
+  particleSystem: UnityEngine.Component;
+  name: string;
+  hideFlags: UnityEngine.HideFlags;
+  dragSpeed: number;
+  rotationSpeed: number;
+  customMaterial: UnityEngine.Material;
+  react: ReactUnity.UGUI.ReactRendererUGUI;
+  prefab: UnityEngine.GameObject;
+  Insert(Component: ReactUnity.UGUI.PrefabComponent): void;
+  IsInvoking(): boolean;
+  CancelInvoke(): void;
+  Invoke(methodName: string, time: number): void;
+  InvokeRepeating(methodName: string, time: number, repeatRate: number): void;
+  CancelInvoke(methodName: string): void;
+  IsInvoking(methodName: string): boolean;
+  StartCoroutine(methodName: string): UnityEngine.Coroutine;
+  StartCoroutine(methodName: string, value: any): UnityEngine.Coroutine;
+  StartCoroutine(routine: System.Collections.IEnumerator): UnityEngine.Coroutine;
+  StartCoroutine_Auto(routine: System.Collections.IEnumerator): UnityEngine.Coroutine;
+  StopCoroutine(routine: System.Collections.IEnumerator): void;
+  StopCoroutine(routine: UnityEngine.Coroutine): void;
+  StopCoroutine(methodName: string): void;
+  StopAllCoroutines(): void;
+  GetComponent(type: System.Type): UnityEngine.Component;
+  GetComponent(type: string): UnityEngine.Component;
+  GetComponentInChildren(t: System.Type, includeInactive: boolean): UnityEngine.Component;
+  GetComponentInChildren(t: System.Type): UnityEngine.Component;
+  GetComponentsInChildren(t: System.Type, includeInactive: boolean): UnityEngine.Component[];
+  GetComponentsInChildren(t: System.Type): UnityEngine.Component[];
+  GetComponentInParent(t: System.Type, includeInactive: boolean): UnityEngine.Component;
+  GetComponentInParent(t: System.Type): UnityEngine.Component;
+  GetComponentsInParent(t: System.Type, includeInactive: boolean): UnityEngine.Component[];
+  GetComponentsInParent(t: System.Type): UnityEngine.Component[];
+  GetComponents(type: System.Type): UnityEngine.Component[];
+  GetComponents(type: System.Type, results: UnityEngine.Component[]): void;
+  GetComponentIndex(): number;
+  CompareTag(tag: string): boolean;
+  SendMessageUpwards(methodName: string, value: any, options: UnityEngine.SendMessageOptions): void;
+  SendMessageUpwards(methodName: string, value: any): void;
+  SendMessageUpwards(methodName: string): void;
+  SendMessageUpwards(methodName: string, options: UnityEngine.SendMessageOptions): void;
+  SendMessage(methodName: string, value: any): void;
+  SendMessage(methodName: string): void;
+  SendMessage(methodName: string, value: any, options: UnityEngine.SendMessageOptions): void;
+  SendMessage(methodName: string, options: UnityEngine.SendMessageOptions): void;
+  BroadcastMessage(methodName: string, parameter: any, options: UnityEngine.SendMessageOptions): void;
+  BroadcastMessage(methodName: string, parameter: any): void;
+  BroadcastMessage(methodName: string): void;
+  BroadcastMessage(methodName: string, options: UnityEngine.SendMessageOptions): void;
+  GetInstanceID(): number;
+  GetHashCode(): number;
+  Equals(other: any): boolean;
+  ToString(): string;
+  GetType(): System.Type;
+}
 export declare class MoveSkybox {
   constructor();
   destroyCancellationToken: System.Threading.CancellationToken;
@@ -319,6 +468,9 @@ export declare class MoveSkybox {
   name: string;
   hideFlags: UnityEngine.HideFlags;
   speed: number;
+  directionalLight: UnityEngine.Light;
+  tiltAngle: number;
+  offSet: number;
   IsInvoking(): boolean;
   CancelInvoke(): void;
   Invoke(methodName: string, time: number): void;
@@ -398,8 +550,8 @@ export declare class DialogueController {
   particleSystem: UnityEngine.Component;
   name: string;
   hideFlags: UnityEngine.HideFlags;
-  ShowDialogue(key: string): void;
-  WriteText(text: string): void;
+  ShowDialogue(key: string, delay?: number): void;
+  WriteText(dialogue: Dialogue): void;
   IsInvoking(): boolean;
   CancelInvoke(): void;
   Invoke(methodName: string, time: number): void;
@@ -557,19 +709,86 @@ export declare class Constants {
   GetType(): System.Type;
   ToString(): string;
 }
-export declare class ConstellationBuilder {
-  constructor(constellationConnectionPrefab: UnityEngine.GameObject, connectionsParent: UnityEngine.Transform);
-  ConnectionsParent: UnityEngine.Transform;
-  ConstellationConnectionPrefab: UnityEngine.GameObject;
-  ConstellationLines: UnityEngine.LineRenderer[];
-  CurrentConstellation: ConstellationOld;
-  AddConnection(star1: StarController, star2: StarController): void;
-  ClearConnections(): void;
-  SaveConstellation(id: string): void;
-  Equals(obj: any): boolean;
+export declare class ConstellationController {
+  constructor();
+  static Current: ConstellationController;
+  Parent: UnityEngine.Transform;
+  Constellation: Constellation;
+  Info: string;
+  destroyCancellationToken: System.Threading.CancellationToken;
+  useGUILayout: boolean;
+  runInEditMode: boolean;
+  enabled: boolean;
+  isActiveAndEnabled: boolean;
+  transform: UnityEngine.Transform;
+  gameObject: UnityEngine.GameObject;
+  tag: string;
+  rigidbody: UnityEngine.Component;
+  rigidbody2D: UnityEngine.Component;
+  camera: UnityEngine.Component;
+  light: UnityEngine.Component;
+  animation: UnityEngine.Component;
+  constantForce: UnityEngine.Component;
+  renderer: UnityEngine.Component;
+  audio: UnityEngine.Component;
+  networkView: UnityEngine.Component;
+  collider: UnityEngine.Component;
+  collider2D: UnityEngine.Component;
+  hingeJoint: UnityEngine.Component;
+  particleSystem: UnityEngine.Component;
+  name: string;
+  hideFlags: UnityEngine.HideFlags;
+  static constellations: System.Collections.Generic.Dictionary;
+  static InitConstellation(prefab: UnityEngine.GameObject, parent: UnityEngine.Transform, relative: SpaceCoord): ConstellationController;
+  static AddConnection(star1: StarController, star2: StarController, connectionPrefab: UnityEngine.GameObject): void;
+  static SaveConstellation(name: string): void;
+  static SaveConstellationCoroutine(): System.Collections.IEnumerator;
+  static BuildConstellation(constellation: Constellation, prefab: UnityEngine.GameObject, connectionPrefab: UnityEngine.GameObject, parent: UnityEngine.Transform): ConstellationController;
+  IsInvoking(): boolean;
+  CancelInvoke(): void;
+  Invoke(methodName: string, time: number): void;
+  InvokeRepeating(methodName: string, time: number, repeatRate: number): void;
+  CancelInvoke(methodName: string): void;
+  IsInvoking(methodName: string): boolean;
+  StartCoroutine(methodName: string): UnityEngine.Coroutine;
+  StartCoroutine(methodName: string, value: any): UnityEngine.Coroutine;
+  StartCoroutine(routine: System.Collections.IEnumerator): UnityEngine.Coroutine;
+  StartCoroutine_Auto(routine: System.Collections.IEnumerator): UnityEngine.Coroutine;
+  StopCoroutine(routine: System.Collections.IEnumerator): void;
+  StopCoroutine(routine: UnityEngine.Coroutine): void;
+  StopCoroutine(methodName: string): void;
+  StopAllCoroutines(): void;
+  GetComponent(type: System.Type): UnityEngine.Component;
+  GetComponent(type: string): UnityEngine.Component;
+  GetComponentInChildren(t: System.Type, includeInactive: boolean): UnityEngine.Component;
+  GetComponentInChildren(t: System.Type): UnityEngine.Component;
+  GetComponentsInChildren(t: System.Type, includeInactive: boolean): UnityEngine.Component[];
+  GetComponentsInChildren(t: System.Type): UnityEngine.Component[];
+  GetComponentInParent(t: System.Type, includeInactive: boolean): UnityEngine.Component;
+  GetComponentInParent(t: System.Type): UnityEngine.Component;
+  GetComponentsInParent(t: System.Type, includeInactive: boolean): UnityEngine.Component[];
+  GetComponentsInParent(t: System.Type): UnityEngine.Component[];
+  GetComponents(type: System.Type): UnityEngine.Component[];
+  GetComponents(type: System.Type, results: UnityEngine.Component[]): void;
+  GetComponentIndex(): number;
+  CompareTag(tag: string): boolean;
+  SendMessageUpwards(methodName: string, value: any, options: UnityEngine.SendMessageOptions): void;
+  SendMessageUpwards(methodName: string, value: any): void;
+  SendMessageUpwards(methodName: string): void;
+  SendMessageUpwards(methodName: string, options: UnityEngine.SendMessageOptions): void;
+  SendMessage(methodName: string, value: any): void;
+  SendMessage(methodName: string): void;
+  SendMessage(methodName: string, value: any, options: UnityEngine.SendMessageOptions): void;
+  SendMessage(methodName: string, options: UnityEngine.SendMessageOptions): void;
+  BroadcastMessage(methodName: string, parameter: any, options: UnityEngine.SendMessageOptions): void;
+  BroadcastMessage(methodName: string, parameter: any): void;
+  BroadcastMessage(methodName: string): void;
+  BroadcastMessage(methodName: string, options: UnityEngine.SendMessageOptions): void;
+  GetInstanceID(): number;
   GetHashCode(): number;
-  GetType(): System.Type;
+  Equals(other: any): boolean;
   ToString(): string;
+  GetType(): System.Type;
 }
 export declare class ConstellationOld {
   constructor();
@@ -596,12 +815,29 @@ export declare class Dialogues {
 export declare interface IHasInfo {
   Info: string;
 }
+export declare class Dialogue {
+  constructor();
+  delay: number;
+  text: string;
+  Equals(obj: any): boolean;
+  GetHashCode(): number;
+  GetType(): System.Type;
+  ToString(): string;
+}
+export declare class Error {
+  constructor();
+  detail: string;
+  Equals(obj: any): boolean;
+  GetHashCode(): number;
+  GetType(): System.Type;
+  ToString(): string;
+}
 export declare class Star {
   constructor();
   x: number;
   y: number;
   z: number;
-  name: string;
+  id: string;
   Equals(obj: any): boolean;
   GetHashCode(): number;
   GetType(): System.Type;
@@ -618,10 +854,10 @@ export declare class Exoplanet {
   GetType(): System.Type;
   ToString(): string;
 }
-export declare class StarPair {
+export declare class ConstellationStar {
   constructor();
-  star1: Star;
-  star2: Star;
+  ext_id: string;
+  connected_stars: string[];
   Equals(obj: any): boolean;
   GetHashCode(): number;
   GetType(): System.Type;
@@ -629,9 +865,12 @@ export declare class StarPair {
 }
 export declare class Constellation {
   constructor();
-  reference: string;
+  ra: number;
+  dec: number;
+  dist: number;
+  id: number;
   name: string;
-  connections: StarPair[];
+  stars: ConstellationStar[];
   Equals(obj: any): boolean;
   GetHashCode(): number;
   GetType(): System.Type;
@@ -726,6 +965,7 @@ export declare class PlanetController {
 }
 export declare class PlayerController {
   constructor();
+  static Instance: PlayerController;
   ConnectionLine: UnityEngine.LineRenderer;
   CurrentStar: StarController;
   CurrentSector: UnityEngine.Vector3Int;
@@ -836,9 +1076,9 @@ export declare class SurroundingsIdResponse {
   GetType(): System.Type;
   ToString(): string;
 }
-export declare class ConstellationsRequest {
+export declare class AllConstellationsRequest {
   constructor();
-  reference: string;
+  user_id: number;
   Equals(obj: any): boolean;
   GetHashCode(): number;
   GetType(): System.Type;
@@ -852,17 +1092,49 @@ export declare class ConstellationsResponse {
   GetType(): System.Type;
   ToString(): string;
 }
-export declare class ExoplanetsByNameRequest {
+export declare class ActiveConstellationsRequest {
   constructor();
-  name: string;
+  user_id: number;
+  ra: number;
+  dec: number;
+  dist: number;
   Equals(obj: any): boolean;
   GetHashCode(): number;
   GetType(): System.Type;
   ToString(): string;
 }
-export declare class ExoplanetsResponse {
+export declare class CreateConstellationRequest {
   constructor();
-  exoplanets: Exoplanet[];
+  user_id: number;
+  constellation: Constellation;
+  Equals(obj: any): boolean;
+  GetHashCode(): number;
+  GetType(): System.Type;
+  ToString(): string;
+}
+export declare class CreateConstellationResponse {
+  constructor();
+  message: string;
+  Equals(obj: any): boolean;
+  GetHashCode(): number;
+  GetType(): System.Type;
+  ToString(): string;
+}
+export declare class Cursor {
+  constructor();
+  x: number;
+  y: number;
+  IsValid(): boolean;
+  Equals(obj: any): boolean;
+  GetHashCode(): number;
+  GetType(): System.Type;
+  ToString(): string;
+}
+export declare class Rotation {
+  constructor();
+  dx: number;
+  dy: number;
+  IsValid(): boolean;
   Equals(obj: any): boolean;
   GetHashCode(): number;
   GetType(): System.Type;
@@ -870,7 +1142,10 @@ export declare class ExoplanetsResponse {
 }
 export declare class InputResponse {
   constructor();
-  action: string;
+  cursor: Cursor;
+  right_gesture: string;
+  rotation: Rotation;
+  zoom: number;
   Equals(obj: any): boolean;
   GetHashCode(): number;
   GetType(): System.Type;
@@ -900,9 +1175,9 @@ export declare class SerializableStar {
 export declare class SpaceController {
   constructor();
   static Instance: SpaceController;
-  ConstellationBuilder: ConstellationBuilder;
+  CurrentPlanet: UnityEngine.GameObject;
+  ConstellationParent: UnityEngine.Transform;
   StarsParent: UnityEngine.Transform;
-  PlanetsParent: UnityEngine.Transform;
   CurrentReference: SpaceCoord;
   destroyCancellationToken: System.Threading.CancellationToken;
   useGUILayout: boolean;
@@ -929,7 +1204,6 @@ export declare class SpaceController {
   hideFlags: UnityEngine.HideFlags;
   WarpToPos(pos: SpaceCoord): void;
   WarpToId(id: string): void;
-  LoadConstellationsAsync(callback: ((obj: ConstellationsResponse) => void)): string;
   AddConstellationConnection(star1: StarController, star2: StarController): void;
   SaveConstellation(name: string): void;
   IsInvoking(): boolean;
@@ -980,7 +1254,6 @@ export declare class SpaceController {
 }
 export declare class StarController {
   constructor();
-  static RelativePosition: UnityEngine.Vector3;
   Id: string;
   Info: string;
   destroyCancellationToken: System.Threading.CancellationToken;
@@ -1008,6 +1281,7 @@ export declare class StarController {
   hideFlags: UnityEngine.HideFlags;
   static stars: System.Collections.Generic.Dictionary;
   static CreateStar(id: string, prefab: UnityEngine.GameObject, position: UnityEngine.Vector3, parent: UnityEngine.Transform): StarController;
+  static GetStar(id: string): StarController;
   IsInvoking(): boolean;
   CancelInvoke(): void;
   Invoke(methodName: string, time: number): void;
@@ -1085,6 +1359,8 @@ export declare class UIInteractor {
   GetWarpPosition(): SpaceCoord;
   GetWarpId(): string;
   ShowTitle(title: string): void;
+  MoveCrosshair(position: UnityEngine.Vector2): void;
+  GetCanvasSize(): UnityEngine.Vector2;
   IsInvoking(): boolean;
   CancelInvoke(): void;
   Invoke(methodName: string, time: number): void;

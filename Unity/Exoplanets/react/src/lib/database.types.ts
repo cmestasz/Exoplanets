@@ -9,6 +9,102 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
+      constellations: {
+        Row: {
+          dec: number
+          dist: number
+          id: number
+          name: string
+          ra: number
+          user_id: string | null
+        }
+        Insert: {
+          dec: number
+          dist: number
+          id?: number
+          name: string
+          ra: number
+          user_id?: string | null
+        }
+        Update: {
+          dec?: number
+          dist?: number
+          id?: number
+          name?: string
+          ra?: number
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: 'constellations_user_id_fkey'
+            columns: ['user_id']
+            isOneToOne: false
+            referencedRelation: 'users'
+            referencedColumns: ['id']
+          },
+        ]
+      }
+      star_connections: {
+        Row: {
+          connected_star_id: number | null
+          id: number
+          star_id: number | null
+        }
+        Insert: {
+          connected_star_id?: number | null
+          id?: number
+          star_id?: number | null
+        }
+        Update: {
+          connected_star_id?: number | null
+          id?: number
+          star_id?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: 'star_connections_star_id_fkey'
+            columns: ['star_id']
+            isOneToOne: false
+            referencedRelation: 'stars'
+            referencedColumns: ['id']
+          },
+        ]
+      }
+      stars: {
+        Row: {
+          constellation_id: number | null
+          ext_id: string
+          id: number
+          luminosity: number | null
+          name: string
+          radius: number | null
+        }
+        Insert: {
+          constellation_id?: number | null
+          ext_id: string
+          id?: number
+          luminosity?: number | null
+          name?: string
+          radius?: number | null
+        }
+        Update: {
+          constellation_id?: number | null
+          ext_id?: string
+          id?: number
+          luminosity?: number | null
+          name?: string
+          radius?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: 'stars_constellation_id_fkey'
+            columns: ['constellation_id']
+            isOneToOne: false
+            referencedRelation: 'constellations'
+            referencedColumns: ['id']
+          },
+        ]
+      }
       users: {
         Row: {
           avatar: string | null

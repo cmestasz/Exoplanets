@@ -5,7 +5,7 @@ import {
 import { useTranslation } from 'react-i18next';
 import { UGUIElements } from '@reactunity/renderer/ugui';
 import { ReactUnity } from '@reactunity/renderer';
-import { AlertContext } from '@components/alerts/AlertContext';
+import { AlertContext } from '@components/modals/AlertContext';
 import Options from './Options';
 
 type InputProps = UGUIElements['input'] & {
@@ -19,8 +19,8 @@ export default function Input({
   label, name, send, defaultValue = '', disabled, ...props
 }: InputProps) {
   const { t } = useTranslation();
-  const SUCCESS_UPLOADING = t('components.form.input.success-update') as string;
-  const SENDIND_MESSAGE = t('components.form.input.sending') as string;
+  const SUCCESS_UPLOADING = t('components.form.input.success-update');
+  const SENDIND_MESSAGE = t('components.form.input.sending');
   const showAlert = useContext(AlertContext);
   const [stateInput, setStateInput] = useState<'normal' | 'editing' | 'sending'>('normal');
   const [savedValue, setSavedValue] = useState<string>(defaultValue);
@@ -91,7 +91,7 @@ export default function Input({
         />
         {
           !disabled && stateInput === 'sending' && (
-            <p className="font-exo text-sm">{SENDIND_MESSAGE}</p>
+            <p className="font-exo text-3xl">{SENDIND_MESSAGE}</p>
           )
         }
         {

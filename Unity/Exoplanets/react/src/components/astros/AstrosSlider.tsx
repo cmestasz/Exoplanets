@@ -2,28 +2,22 @@ import {
   useCallback, useEffect, useRef, useState,
 } from 'react';
 import { ArrayInfIterator } from '@lib/utils';
-import AstroCard, { AstroCardProps } from './AstroCard';
+import { Astro } from '@mytypes/astros';
+import AstroCard from './AstroCard';
 import ArrowSlider from './ArrowSlider';
 
-interface AstroSliderProps {
-  astros: Omit<AstroCardProps, 'invertedStyle' | 'handExHover'>[];
+interface AstroSliderProps<T extends Astro> {
+  astros: T[];
+  current?: T;
+  onCardClick: (astro: T) => void;
 }
 
-export default function AstrosSlider({
-  astros,
-}: AstroSliderProps) {
-  const iterator = useRef<ArrayInfIterator<
-  Omit<AstroCardProps, 'invertedStyle' | 'handExHover'>
-  > | null>(null);
-  const [currentAstro, setCurrentAstro] = useState<Omit<AstroCardProps, 'invertedStyle' | 'handExHover'> | null>(null);
+export default function AstrosSlider<T extends Astro>({
+  astros, current, onCardClick,
+}: AstroSliderProps<T>) {
+  const iterator = useRef<ArrayInfIterator<T>>(null);
+  const [currentAstro, setCurrentAstro] = useState<T>(null);
   const [cardHover, setCardHover] = useState<boolean>(false);
-
-  useEffect(() => {
-    if (astros.length > 0) {
-      iterator.current = new ArrayInfIterator(astros);
-      setCurrentAstro(iterator.current.next());
-    }
-  }, [astros]);
 
   const handleHover = useCallback((isHover: boolean) => {
     setCardHover(isHover);
@@ -41,18 +35,25 @@ export default function AstrosSlider({
     }
   }, [iterator]);
 
+  useEffect(() => {
+    if (astros.length > 0) {
+      iterator.current = new ArrayInfIterator(astros, current);
+      setCurrentAstro(iterator.current.next());
+    }
+  }, [astros, current]);
+
   return (
-    <div className="flex flex-row w-fit">
+    <div className="flex flex-row flex-initial basis-1/4">
       <ArrowSlider toLeft onClick={handleBefore} cardHover={cardHover} />
       <div
-        className="size-48 relative border-transparent border-t-primary hover:border-t-secondary border-b-primary hover:border-b-secondary border-2"
+        className="flex-auto min-h-[30%] relative border-transparent border-t-primary hover:border-t-secondary border-b-primary hover:border-b-secondary border-2"
       >
         {currentAstro && (
           <AstroCard
-            key={currentAstro.astro.name}
-            astro={currentAstro.astro}
-            onClick={currentAstro.onClick}
-            className="rounded-none border-none px-6 absolute size-full transition-all duration-700 enter:opacity-0 enter:state-duration-0 state-duration-700 leave:opacity-0"
+            key={currentAstro.name}
+            astro={currentAstro}
+            onClick={() => onCardClick(currentAstro)}
+            className="absolute inset-0 rounded-none border-none px-6 transition-all duration-700 enter:opacity-0 enter:state-duration-0 state-duration-700 leave:opacity-0"
             handExHover={handleHover}
           />
         )}

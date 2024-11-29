@@ -2,11 +2,11 @@ import {
   useState, useCallback, useEffect, useMemo,
   useContext,
 } from 'react';
-import { AlertOptions } from '@components/alerts/types';
+import { AlertOptions, ModalContent } from '@components/modals/types';
 import { useTranslation } from 'react-i18next';
 import { UserAPI } from '@mytypes/user';
 import { User } from '@supabase/supabase-js';
-import { AlertContext } from '@components/alerts/AlertContext';
+import { AlertContext } from '@components/modals/AlertContext';
 import { useNavigate } from 'react-router';
 import { AsyncData } from '@mytypes/index';
 import { useGlobals } from '@reactunity/renderer';
@@ -14,7 +14,7 @@ import { AuthServer } from '@mytypes/UnityTypes';
 import { supabase } from './supabase';
 import { DEFAULT_ALERT_DURATION } from './constants';
 
-export function useAlert() {
+function useAlert() {
   const [isVisible, setIsVisible] = useState<boolean>(false);
   const [alertOptions, setAlertOptions] = useState<AlertOptions>({
     message: '',
@@ -47,7 +47,23 @@ export function useAlert() {
   };
 }
 
-export const useUserActions = () => {
+function useModal({
+  title,
+}: ModalContent | undefined) {
+  const [modalVisible, setModalVisible] = useState<boolean>(false);
+  const [content, setContent] = useState<ModalContent>({ title });
+  const cancel = useCallback(() => setModalVisible(false), []);
+  const accept = useCallback(() => {
+    cancel();
+  }, [content, cancel]);
+  const open = () => setModalVisible(true);
+
+  return {
+    modalVisible, accept, cancel, open, content, setContent,
+  };
+}
+
+function useUserActions() {
   const { t } = useTranslation();
   const authServer = useGlobals().AuthServer as AuthServer;
   const showAlert = useContext(AlertContext);
@@ -147,4 +163,6 @@ export const useUserActions = () => {
   return useMemo(() => ({
     current: userFetched, fetchUser, logout, login,
   }), [fetchUser, userFetched, logout, login]);
-};
+}
+
+export { useAlert, useModal, useUserActions };

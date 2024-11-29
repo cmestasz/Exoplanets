@@ -145,6 +145,7 @@ public class SpaceController : MonoBehaviour
             yield break;
         }
 
+        /*
         CurrentReference = new SpaceCoord(ra, dec, dist);
         ActiveConstellationsRequest request1 = new()
         {
@@ -168,10 +169,11 @@ public class SpaceController : MonoBehaviour
             yield return WarpFadeOut(ColorAdjustments);
             yield break;
         }
+        */
 
         ClearStars();
         BuildStars(stars);
-        BuildConstellations(constellations);
+        // BuildConstellations(constellations);
         BuildExoplanet(id != null);
         PlayerController.Instance.transform.position = new(0, 0, -40);
         PlayerController.Instance.transform.rotation = Quaternion.identity;

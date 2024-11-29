@@ -38,8 +38,7 @@
   },
   "pages": {
     "subtitle": "Descubre el universo cercano",
-    "exoplanets-option": "Exoplanetas",
-    "stars-option": "Estrellas",
+    "start": "Vamos a un exoplaneta!",
     "about": "Acerca de",
     "help": "Ayuda",
     "repo": "Repositorio",
@@ -108,6 +107,30 @@
         }
       },
       "help": "¿Tienes problemas? Envíanos un correo"
+    },
+    "exoplanets": {
+      "title": "Selecciona un exoplaneta y empieza a explorar",
+      "search": "Busca exoplanetas en el espacio",
+      "no-results": {
+        "main": "Sin resultados",
+        "sub": "Intenta con otra frase"
+      },
+      "card": {
+        "button": "Visualizar en 3D",
+        "mass": "Masa",
+        "radius": "Radio",
+        "year": "Año de descubrimiento"
+      }
+    },
+    "see-exoplanet": {
+      "create-const": {
+        "button": "Crear constelación",
+        "accept": "Aceptar",
+        "cancel": "Cancelar",
+        "title": "¿Cómo quieres llamar a tu constelación?",
+        "empty-name": "El campo no debe estar vacío",
+        "success": "Se ha creado correctamente la constelación"
+      }
     }
   }
 }

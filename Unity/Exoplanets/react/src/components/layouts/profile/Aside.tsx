@@ -1,11 +1,10 @@
 import Scroll from '@components/ui/Scroll';
 import { Text } from '@components/ui/Text';
-import { UserContext } from '@components/user/UserContext';
 import { ProfileRoutes, routes } from '@pages/profile/ProfileRoutes';
 import clsx from 'clsx';
-import { useContext } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router';
+import { useUser } from 'src/providers/UserProvider';
 import AsideBottom from './AsideBottom';
 
 interface AsideProps {
@@ -17,7 +16,7 @@ export default function Aside({
 }: AsideProps) {
   const { t } = useTranslation();
   const nav = useNavigate();
-  const userAction = useContext(UserContext);
+  const userAction = useUser();
   const auth = userAction.current.state === 'loaded';
   return (
     <aside

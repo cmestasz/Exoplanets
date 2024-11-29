@@ -1562,9 +1562,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   moveSpeed: 10
-  rotateSpeed: 2
-  updateDelay: 1
-  webcamInputActive: 0
+  rotateSpeed: 0.02
+  cursorSpeed: 10
+  zoomSpeed: 0.005
+  updateDelay: 0
+  webcamInputActive: 1
 --- !u!1 &1192304280
 GameObject:
   m_ObjectHideFlags: 0

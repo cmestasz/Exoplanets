@@ -1,7 +1,7 @@
-import AstroCard from '@components/astros/AstroCard';
 import { Text } from '@components/ui/Text';
-import { Astro } from '@mytypes/astros';
-import { useMemo } from 'react';
+import { MainStar } from '@mytypes/UnityTypes';
+import { ReactUnity, useGlobals } from '@reactunity/renderer';
+import { useEffect, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { FaGithub } from 'react-icons/fa6';
 import { useNavigate } from 'react-router';
@@ -9,17 +9,20 @@ import { useNavigate } from 'react-router';
 export default function MainMenu() {
   const nav = useNavigate();
   const { t } = useTranslation();
-  const astros = useMemo<Pick<Astro, 'imageUrl' | 'name'>[]>(() => [
-    { imageUrl: '/img/kepler.jpeg', name: t('pages.exoplanets-option') as string },
-    { imageUrl: '/img/proximaCentauri.jpeg', name: t('pages.stars-option') as string },
-  ], [t]);
+  const mainStar = useGlobals().MainStar as MainStar;
+  const prefabRef = useRef<ReactUnity.UGUI.PrefabComponent>();
+  useEffect(() => {
+    if (prefabRef.current) {
+      mainStar.Insert(prefabRef.current);
+    }
+  }, [prefabRef.current]);
   return (
-    <>
-      <div
+    <view className="flex flex-col flex-auto gap-10 portrait:gap-20">
+      <view
         className="flex flex-col flex-auto justify-center gap-20"
       >
-        <div
-          className="flex flex-col items-center justify-center"
+        <view
+          className="flex flex-col items-center flex-initial justify-center"
         >
           <h1
             className="text-primary font-orbitron text-[6.5rem] leading-[3rem]"
@@ -31,19 +34,29 @@ export default function MainMenu() {
           >
             {t('pages.subtitle')}
           </h2>
-        </div>
-        <div
-          className="flex flex-col landscape:flex-row gap-24 flex-none self-center"
+        </view>
+        <prefab
+          ref={prefabRef}
+          className="flex-initial basis-40"
+        />
+        <view
+          className="flex flex-col flex-initial landscape:flex-row gap-24 self-center max-w-6xl max-h-[70rem]"
         >
-          <AstroCard invertedStyle astro={astros[0]} onClick={() => nav('exoplanets')} />
-          <AstroCard invertedStyle astro={astros[1]} onClick={() => nav('stars')} />
-        </div>
-      </div>
-      <div
-        className="flex flex-row justify-between flex-none"
+          <Text
+            className="text-5xl leading-10 -mt-7 p-6 rounded-lg"
+            asButton
+            onClick={() => nav('exoplanets')}
+          >
+            <h2>{t('pages.start')}</h2>
+            <icon className="text-5xl">open_in_new</icon>
+          </Text>
+        </view>
+      </view>
+      <view
+        className="flex flex-row flex-initial justify-between"
         style={{ flexGrow: '0' }}
       >
-        <div
+        <view
           className="flex flex-row gap-4"
         >
           <Text
@@ -64,7 +77,7 @@ export default function MainMenu() {
             <icon className="text-3xl">help</icon>
             {t('pages.help')}
           </Text>
-        </div>
+        </view>
         <Text
           invertedStyle
           asLink
@@ -76,7 +89,7 @@ export default function MainMenu() {
           />
           {t('pages.repo')}
         </Text>
-      </div>
-    </>
+      </view>
+    </view>
   );
 }

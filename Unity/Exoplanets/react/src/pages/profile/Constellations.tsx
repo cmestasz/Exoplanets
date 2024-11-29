@@ -1,7 +1,5 @@
+import Visualization from '@components/astros/Visualization';
 import { Text } from '@components/ui/Text';
-import {
-  Alpha_Centauri_A, Alpha_Centauri_B, Kepler_21, Kepler_22, ProximaCentauri,
-} from '@lib/mock';
 import { Constellation } from '@mytypes/astros';
 import { AsyncData } from '@mytypes/index';
 import { useCallback, useEffect, useState } from 'react';
@@ -24,11 +22,11 @@ export default function Constellations() {
     setUserConst({
       state: 'loaded',
       data: [
-        { name: 'SampleConstellation1', stars: [Kepler_22, ProximaCentauri] },
-        { name: 'SampleConstellation2', stars: [Kepler_21, Alpha_Centauri_A, Alpha_Centauri_B] },
+        { name: 'SampleConstellation1', id: 1 },
+        { name: 'SampleConstellation2', id: 2 },
       ],
     });
-    setSelectedConst({ name: 'SampleConstellation1', stars: [Kepler_22, ProximaCentauri] });
+    setSelectedConst({ name: 'SampleConstellation1', id: 1 });
   }, []);
   useEffect(() => {
     // Is caching the constellations a good idea?
@@ -55,11 +53,7 @@ export default function Constellations() {
         >
           {selectedConstellation.name}
         </h2>
-        <view
-          className="flex-auto border-primary border-2 rounded-lg"
-        >
-          Visualization
-        </view>
+        <Visualization />
       </view>
       <view
         className="gap-5"
@@ -71,7 +65,7 @@ export default function Constellations() {
           <Text
             invertedStyle
             asButton
-            onClick={() => nav('/profile/help')}
+            onClick={() => nav('/profile/help', { replace: true })}
             className="text-3xl"
           >
             <span>{t('pages.profile.constellations.howto')}</span>

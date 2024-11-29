@@ -1,12 +1,12 @@
 import Input from '@components/form/input/Input';
-import { UserContext } from '@components/user/UserContext';
 import { supabase } from '@lib/supabase';
-import { useCallback, useContext } from 'react';
+import { useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useUser } from 'src/providers/UserProvider';
 
 export default function AccountProfile() {
   const { t } = useTranslation();
-  const userAction = useContext(UserContext);
+  const userAction = useUser();
   const send = useCallback(async (field: string, value: string) => {
     if (userAction.current.state === 'loaded') {
       const data = await supabase.from('users').update({ [field]: value }).eq('id', userAction.current.data.id);
@@ -14,6 +14,7 @@ export default function AccountProfile() {
         console.error(data.error.details.toString());
         throw new Error(`${t('components.form.input.error-update')}${data.error.code}`);
       }
+      userAction.fetchUser();
     }
   }, [userAction, t]);
   if (userAction.current.state !== 'loaded') return null;

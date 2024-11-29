@@ -5,7 +5,7 @@ import { useState } from 'react';
 import clsx from 'clsx';
 
 export interface AstroCardProps {
-  astro: Pick<Astro, 'imageUrl' | 'name'>;
+  astro: Astro;
   invertedStyle?: boolean;
   onClick: () => void;
   className?: string;
@@ -17,7 +17,7 @@ export default function AstroCard({
   astro, onClick, invertedStyle, className, onDoubleClick, handExHover,
 }: AstroCardProps) {
   const [isHover, setIsHover] = useState<boolean>(false);
-  const buttonBaseStyle = 'relative font-exo flex flex-col items-center transition-all duration-200 hover:ease-out border-2 rounded-2xl ease-in-out active:scale-[0.98] active:ease-out flex-auto max-w-sm max-h-sm py-8 px-10 gap-1';
+  const buttonBaseStyle = 'relative font-exo flex flex-col items-center transition-all duration-200 hover:ease-out border-2 rounded-2xl ease-in-out active:scale-[0.98] active:ease-out py-6 px-10 gap-1 text-5xl flex-initial';
   const buttonColorStyle = invertedStyle ? `${INVERTED_COLOR} border-secondary hover:border-primary` : `${DEFAULT_COLOR} border-primary hover:border-secondary`;
   const handleHover = (ishover: boolean) => {
     setIsHover(ishover);
@@ -34,19 +34,14 @@ export default function AstroCard({
         buttonColorStyle,
         className,
       )}
+      style={{ aspectRatio: '1' }}
     >
-      <div
-        className={clsx(
-          'rounded-full flex-auto p-5',
-        )}
-      >
-        <img
-          src={astro.imageUrl}
-          alt={astro.name || ''}
-          className="w-full"
-        />
-      </div>
-      <p className="text-ellipsis overflow-hidden whitespace-nowrap flex-auto text-5xl leading-[4rem]">
+      <img
+        src={astro.imageUrl}
+        alt={astro.name || ''}
+        className="flex-auto"
+      />
+      <p className="text-ellipsis overflow-hidden whitespace-nowrap leading-[4rem] max-w-full">
         {astro.name}
       </p>
       {
