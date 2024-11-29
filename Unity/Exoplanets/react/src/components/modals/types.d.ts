@@ -3,3 +3,7 @@ export interface AlertOptions {
   type?: 'error' | 'success';
   duration?: number;
 }
+export interface ModalContent {
+  title: string;
+  onAccept: () => void;
+}

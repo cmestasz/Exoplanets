@@ -14,7 +14,7 @@ export default function Modal({
   const { t } = useTranslation();
   console.log('modal rendered');
   return (
-    <view
+    <portal
       className="absolute inset-0 z-50 flex items-center justify-center bg-gray-950 bg-opacity-40"
     >
       <article
@@ -42,6 +42,6 @@ export default function Modal({
           </Text>
         </view>
       </article>
-    </view>
+    </portal>
   );
 }

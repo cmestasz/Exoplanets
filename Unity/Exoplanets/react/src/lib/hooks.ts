@@ -2,7 +2,7 @@ import {
   useState, useCallback, useEffect, useMemo,
   useContext,
 } from 'react';
-import { AlertOptions } from '@components/modals/types';
+import { AlertOptions, ModalContent } from '@components/modals/types';
 import { useTranslation } from 'react-i18next';
 import { UserAPI } from '@mytypes/user';
 import { User } from '@supabase/supabase-js';
@@ -47,25 +47,20 @@ function useAlert() {
   };
 }
 
-function useModal() {
+function useModal({
+  title, onAccept,
+}: ModalContent | undefined) {
   const [modalVisible, setModalVisible] = useState<boolean>(false);
-  const [content, setContent] = useState<{ title: string, children?: React.ReactNode, onAccept:() => void }>({ title: '', onAccept: () => console.log('Modal setted') });
+  const [content, setContent] = useState<ModalContent>({ title, onAccept });
   const cancel = useCallback(() => setModalVisible(false), []);
   const accept = useCallback(() => {
     content.onAccept();
     cancel();
   }, [content, cancel]);
   const open = () => setModalVisible(true);
-  const showModal = useCallback((
-    { title, children, onAccept }:
-    { title: string, children?: React.ReactNode, onAccept: () => void },
-  ) => {
-    open();
-    setContent({ title, children, onAccept });
-  }, []);
 
   return {
-    modalVisible, accept, cancel, showModal, content,
+    modalVisible, accept, cancel, open, content, setContent,
   };
 }
 

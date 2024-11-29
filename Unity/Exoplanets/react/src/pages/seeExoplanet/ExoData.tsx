@@ -1,7 +1,8 @@
+import Modal from '@components/modals/Modal';
 import { Text } from '@components/ui/Text';
+import { useModal } from '@lib/hooks';
 import { Exoplanet } from '@mytypes/astros';
 import { useTranslation } from 'react-i18next';
-import { useModals } from 'src/providers/ModalProvider';
 
 interface ExoDataProps {
   exo: Exoplanet;
@@ -11,7 +12,15 @@ export default function ExoData({
   exo,
 }: ExoDataProps) {
   const { t } = useTranslation();
-  const showModal = useModals();
+  const onAccept = () => {
+    console.log('Accepted content');
+  };
+  const {
+    open, accept, cancel, content, modalVisible,
+  } = useModal({
+    title: t('pages.see-exoplanet.create-const.title'),
+    onAccept,
+  });
   if (!exo) {
     return (
       <view className="size-7 animate-spin" />
@@ -22,15 +31,8 @@ export default function ExoData({
     { key: t('pages.exoplanets.card.mass'), val: exo.mass },
     { key: t('pages.exoplanets.card.year'), val: exo.disc_date },
   ];
-  const onAccept = () => {
-    console.log('Accepted content');
-  };
   const handleClick = () => {
-    showModal({
-      title: t('pages.see-exoplanet.create-const.title'),
-      onAccept,
-      children: <h1>Proving</h1>,
-    });
+    open();
     console.log(exo.name);
   };
   return (
@@ -70,6 +72,17 @@ export default function ExoData({
           ))
         }
       </view>
+      {
+        modalVisible && (
+          <Modal
+            onAccept={accept}
+            onCancel={cancel}
+            title={content.title}
+          >
+            Hello
+          </Modal>
+        )
+      }
     </view>
   );
 }

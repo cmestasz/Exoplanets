@@ -6,7 +6,6 @@ import { MemoryRouter } from 'react-router-dom';
 import { useAlert } from '@lib/hooks';
 import Alert from '@components/modals/Alert';
 import { AlertContext } from '@components/modals/AlertContext';
-import ModalProvider from 'src/providers/ModalProvider';
 import AppRoutes from './routes';
 
 function App() {
@@ -23,9 +22,7 @@ function App() {
         {
           isVisible && <Alert alertOptions={alertOptions} hideAlert={hideAlert} />
         }
-        <ModalProvider>
-          <AppRoutes />
-        </ModalProvider>
+        <AppRoutes />
       </AlertContext.Provider>
     </MemoryRouter>
   );
