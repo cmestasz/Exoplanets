@@ -5,5 +5,4 @@ export interface AlertOptions {
 }
 export interface ModalContent {
   title: string;
-  onAccept: () => void;
 }

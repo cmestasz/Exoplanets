@@ -127,7 +127,9 @@
         "button": "Create constellation",
         "accept": "Accept",
         "cancel": "Cancel",
-        "title": "What do you want to call your constellation?"
+        "title": "What do you want to call your constellation?",
+        "empty-name": "The field must not be empty",
+        "success": "Constellation has been created succesfully"
       }
     }
   }

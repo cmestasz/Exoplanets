@@ -18,12 +18,12 @@ export default function Modal({
       className="absolute inset-0 z-50 flex items-center justify-center bg-gray-950 bg-opacity-40"
     >
       <article
-        className="flex flex-col bg-tertiary rounded-xl p-6 gap-4"
+        className="flex flex-col bg-tertiary rounded-xl py-6 px-12 gap-12"
       >
         <h2 className="font-audiowide text-4xl leading-10 text-primary">{title}</h2>
         {children}
         <view
-          className="flex flex-row gap-5 text-3xl"
+          className="flex flex-row justify-center gap-5 text-3xl"
         >
           <Text
             asButton

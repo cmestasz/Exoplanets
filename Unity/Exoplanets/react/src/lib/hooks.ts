@@ -48,13 +48,12 @@ function useAlert() {
 }
 
 function useModal({
-  title, onAccept,
+  title,
 }: ModalContent | undefined) {
   const [modalVisible, setModalVisible] = useState<boolean>(false);
-  const [content, setContent] = useState<ModalContent>({ title, onAccept });
+  const [content, setContent] = useState<ModalContent>({ title });
   const cancel = useCallback(() => setModalVisible(false), []);
   const accept = useCallback(() => {
-    content.onAccept();
     cancel();
   }, [content, cancel]);
   const open = () => setModalVisible(true);

@@ -1,7 +1,9 @@
+import { AlertContext } from '@components/modals/AlertContext';
 import Modal from '@components/modals/Modal';
 import { Text } from '@components/ui/Text';
 import { useModal } from '@lib/hooks';
 import { Exoplanet } from '@mytypes/astros';
+import { useContext, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 interface ExoDataProps {
@@ -12,15 +14,30 @@ export default function ExoData({
   exo,
 }: ExoDataProps) {
   const { t } = useTranslation();
-  const onAccept = () => {
-    console.log('Accepted content');
-  };
+  const showAlert = useContext(AlertContext);
+  const [nameConst, setNameConst] = useState<string>();
+
   const {
     open, accept, cancel, content, modalVisible,
   } = useModal({
     title: t('pages.see-exoplanet.create-const.title'),
-    onAccept,
   });
+  const onAccept = () => {
+    if (!nameConst) {
+      showAlert({
+        message: t('pages.see-exoplanet.create-const.empty-name'),
+        type: 'error',
+      });
+      console.log('Vacío');
+      return;
+    }
+    accept();
+    setNameConst('');
+    showAlert({
+      message: t('pages.see-exoplanet.create-const.success'),
+    });
+    console.log('Accepted content: ', nameConst);
+  };
   if (!exo) {
     return (
       <view className="size-7 animate-spin" />
@@ -75,11 +92,16 @@ export default function ExoData({
       {
         modalVisible && (
           <Modal
-            onAccept={accept}
+            onAccept={onAccept}
             onCancel={cancel}
             title={content.title}
           >
-            Hello
+            <input
+              className="border-2 border-primary py-2 px-4 font-exo text-secondary text-3xl bg-transparent"
+              value={nameConst}
+              onChange={(val) => setNameConst(val)}
+              onSubmit={onAccept}
+            />
           </Modal>
         )
       }
