@@ -121,6 +121,16 @@
         "radius": "Radio",
         "year": "Año de descubrimiento"
       }
+    },
+    "see-exoplanet": {
+      "create-const": {
+        "button": "Crear constelación",
+        "accept": "Aceptar",
+        "cancel": "Cancelar",
+        "title": "¿Cómo quieres llamar a tu constelación?",
+        "empty-name": "El campo no debe estar vacío",
+        "success": "Se ha creado correctamente la constelación"
+      }
     }
   }
 }

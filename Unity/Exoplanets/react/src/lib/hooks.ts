@@ -2,11 +2,11 @@ import {
   useState, useCallback, useEffect, useMemo,
   useContext,
 } from 'react';
-import { AlertOptions } from '@components/alerts/types';
+import { AlertOptions, ModalContent } from '@components/modals/types';
 import { useTranslation } from 'react-i18next';
 import { UserAPI } from '@mytypes/user';
 import { User } from '@supabase/supabase-js';
-import { AlertContext } from '@components/alerts/AlertContext';
+import { AlertContext } from '@components/modals/AlertContext';
 import { useNavigate } from 'react-router';
 import { AsyncData } from '@mytypes/index';
 import { useGlobals } from '@reactunity/renderer';
@@ -44,6 +44,22 @@ function useAlert() {
 
   return {
     isVisible, alertOptions, showAlert, hideAlert,
+  };
+}
+
+function useModal({
+  title,
+}: ModalContent | undefined) {
+  const [modalVisible, setModalVisible] = useState<boolean>(false);
+  const [content, setContent] = useState<ModalContent>({ title });
+  const cancel = useCallback(() => setModalVisible(false), []);
+  const accept = useCallback(() => {
+    cancel();
+  }, [content, cancel]);
+  const open = () => setModalVisible(true);
+
+  return {
+    modalVisible, accept, cancel, open, content, setContent,
   };
 }
 
@@ -149,4 +165,4 @@ function useUserActions() {
   }), [fetchUser, userFetched, logout, login]);
 }
 
-export { useAlert, useUserActions };
+export { useAlert, useModal, useUserActions };

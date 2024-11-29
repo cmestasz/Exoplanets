@@ -1,3 +1,4 @@
+import Scroll from '@components/ui/Scroll';
 import { Text } from '@components/ui/Text';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router';
@@ -13,8 +14,8 @@ export default function Navigation({
   const nav = useNavigate();
   if (routes.length === 0) return null;
   return (
-    <nav
-      className="flex flex-row portrait:self-center text-3xl items-center gap-2 text-secondary"
+    <Scroll
+      className="flex flex-row portrait:self-center text-3xl items-center gap-2 text-secondary flex-initial"
     >
       <Text
         invertedStyle
@@ -43,6 +44,6 @@ export default function Navigation({
           </>
         ))
       }
-    </nav>
+    </Scroll>
   );
 }

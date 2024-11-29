@@ -4,6 +4,7 @@ import Scroll from '@components/ui/Scroll';
 import { Exoplanet } from '@mytypes/astros';
 import { AsyncData } from '@mytypes/index';
 import { useTranslation } from 'react-i18next';
+import { useNavigate } from 'react-router';
 
 interface ShowExoplanetsProps {
   handleSelect: (exo: Exoplanet) => void;
@@ -16,6 +17,7 @@ export default function ShowExoplanets({
   handleSelect, filterExos, leakedExos, changeLeakedExos,
 }: ShowExoplanetsProps) {
   const { t } = useTranslation();
+  const nav = useNavigate();
   const handleClick = (exo: Exoplanet) => {
     handleSelect(exo);
   };
@@ -72,6 +74,7 @@ export default function ShowExoplanets({
                 key={exo.name}
                 astro={exo}
                 onClick={() => handleClick(exo)}
+                onDoubleClick={() => nav(exo.name)}
                 className="text-3xl basis-80"
               />
 

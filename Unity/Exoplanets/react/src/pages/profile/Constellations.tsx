@@ -65,7 +65,7 @@ export default function Constellations() {
           <Text
             invertedStyle
             asButton
-            onClick={() => nav('/profile/help')}
+            onClick={() => nav('/profile/help', { replace: true })}
             className="text-3xl"
           >
             <span>{t('pages.profile.constellations.howto')}</span>

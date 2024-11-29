@@ -4,7 +4,7 @@ import { AsyncData, AsyncResponse } from '@mytypes/index';
 import {
   createContext, useCallback, useContext, useEffect, useMemo, useState,
 } from 'react';
-import { Outlet, useNavigate } from 'react-router';
+import { Outlet, useNavigate, useParams } from 'react-router';
 
 const ExoplanetsCont = createContext<{
   exoplanets: AsyncData<Exoplanet[]>,
@@ -18,6 +18,7 @@ export function useExoplanets() {
 
 export default function ExoplanetsProvider() {
   const nav = useNavigate();
+  const { name } = useParams();
   const [exoplanets, setExoplanets] = useState<AsyncData<Exoplanet[]>>({ state: 'loading' });
 
   const [selectedExo, setSelectedExo] = useState<Exoplanet>();
@@ -27,12 +28,14 @@ export default function ExoplanetsProvider() {
       data: [kepler22b, proximaCentauriB],
     };
     setExoplanets(data);
-    setSelectedExo(kepler22b);
-  }, []);
+    const exoRoute = data.data.find((exo) => exo.name === name);
+    if (exoRoute) setSelectedExo(exoRoute);
+    else setSelectedExo(kepler22b);
+  }, [name]);
   const changeSelectedExo = useCallback((exo: Exoplanet, redir?: boolean) => {
     setSelectedExo(exo);
     if (redir) nav(exo.name, { replace: true });
-  }, []);
+  }, [nav]);
   const exoData = useMemo(() => ({
     exoplanets, selectedExo, changeSelectedExo,
   }), [exoplanets, selectedExo, changeSelectedExo]);

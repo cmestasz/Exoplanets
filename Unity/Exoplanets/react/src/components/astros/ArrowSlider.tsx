@@ -12,7 +12,7 @@ interface ArrowSliderProps {
 export default function ArrowSlider({
   toLeft, onClick, cardHover,
 }: ArrowSliderProps) {
-  const baseStyle = 'border-primary hover:border-secondary border-2 w-10 max-h-48 group';
+  const baseStyle = 'flex flex-row items-center flex-initial border-primary hover:border-secondary border-2 group';
   const colors = DEFAULT_COLOR;
   const leftArrow: Style = {
     borderTopLeftRadius: 8,
@@ -32,7 +32,7 @@ export default function ArrowSlider({
       <button
         onClick={onClick}
         className={clsx(
-          'h-full w-full flex items-center justify-center m-duration-300 m-ease-in active:scale-90',
+          'h-full flex items-center justify-center m-duration-300 m-ease-in active:scale-90',
           {
             'active:trans-x-4': !toLeft,
             'active:-trans-x-4': toLeft,
@@ -41,12 +41,12 @@ export default function ArrowSlider({
       >
         {
           toLeft ? (
-            <icon className="text-primary group-hover:text-secondary transition-colors duration-300 ease-out">
+            <icon className="text-primary group-hover:text-secondary transition-colors duration-300 ease-out text-4xl">
               chevron_left
             </icon>
 
           ) : (
-            <icon className="text-primary group-hover:text-secondary transition-colors duration-300 ease-out">
+            <icon className="text-primary group-hover:text-secondary transition-colors duration-300 ease-out text-4xl">
               chevron_right
             </icon>
           )
