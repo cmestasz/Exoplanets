@@ -185,6 +185,17 @@ public class SpaceController : MonoBehaviour
             DialogueController.Instance.ShowDialogue("warp_posonly");
     }
 
+    public void BuildRandomStars()
+    {
+        ClearStars();
+        for (int i = 0; i < 100; i++)
+        {
+            int prefabIdx = Random.Range(0, starPrefabs.Length);
+            Vector3 pos = new(Random.Range(-100, 100), Random.Range(-100, 100), Random.Range(-100, 100));
+            StarController.CreateStar(i.ToString(), starPrefabs[prefabIdx], pos, StarsParent);
+        }
+    }
+
 
     private void ClearStars()
     {

@@ -67,6 +67,16 @@ public class UIInteractor : MonoBehaviour
         crosshair.rectTransform.anchoredPosition = position;
     }
 
+    public Vector2 GetCrosshairPosition()
+    {
+        return crosshair.rectTransform.anchoredPosition;
+    }
+
+    public float GetScaleFactor()
+    {
+        return GetComponent<Canvas>().scaleFactor;
+    }
+
     public Vector2 GetCanvasSize()
     {
         RectTransform rt = GetComponent<RectTransform>();

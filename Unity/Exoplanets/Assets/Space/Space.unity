@@ -1561,12 +1561,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2d52c2a37b2beb94198b51c6e696cb26, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveSpeed: 10
-  rotateSpeed: 0.02
-  cursorSpeed: 10
-  zoomSpeed: 0.005
+  normMoveSpeed: 10
+  normRotateSpeed: 5
+  capRotateSpeed: 0.02
+  capCursorSpeed: 10
+  capZoomSpeed: 0.005
   updateDelay: 0
-  webcamInputActive: 1
+  webcamInputActive: 0
 --- !u!1 &1192304280
 GameObject:
   m_ObjectHideFlags: 0
@@ -3496,11 +3497,11 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 1735534480}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 381.62085, y: 206.62085}
   m_SizeDelta: {x: 36.7583, y: 36.7583}
-  m_Pivot: {x: 0.5, y: 0.5}
+  m_Pivot: {x: 0, y: 0}
 --- !u!114 &1955161698
 MonoBehaviour:
   m_ObjectHideFlags: 0
