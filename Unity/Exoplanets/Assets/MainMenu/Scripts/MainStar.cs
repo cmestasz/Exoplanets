@@ -61,8 +61,11 @@ public class MainStar : MonoBehaviour, IReactInsertable
 
     void Update()
     {
-        AutoRotate();
-        HandleMouseDrag();
+        if (instance != null)
+        {
+            AutoRotate();
+            HandleMouseDrag();
+        }
     }
 
     void HandleMouseDrag()
@@ -85,10 +88,8 @@ public class MainStar : MonoBehaviour, IReactInsertable
 
     void AutoRotate()
     {
-        if (instance != null)
-        {
-            Vector3 inclinedAxis = new Vector3(0.3f, 1f, 0f).normalized;
-            instance.transform.Rotate(inclinedAxis, rotationSpeed * Time.deltaTime);
-        }
+
+        Vector3 inclinedAxis = new Vector3(0.3f, 1f, 0f).normalized;
+        instance.transform.Rotate(inclinedAxis, rotationSpeed * Time.deltaTime);
     }
 }
