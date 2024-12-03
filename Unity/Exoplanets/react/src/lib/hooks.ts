@@ -63,7 +63,7 @@ function useModal({
 }
 
 function useUserActions() {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const showAlert = useContext(AlertContext);
   const nav = useNavigate();
   const [userFetched, setUserFetched] = useState<UserManager>({ state: UserStates.ANON });
@@ -123,7 +123,8 @@ function useUserActions() {
   }, [t, nav, showAlert]);
   const login = useCallback(() => {
     // Redirect to api endpoint for login
-    Interop.UnityEngine.Application.OpenURL(`${API_URL}/login`);
+    Interop.UnityEngine.Application.OpenURL(`${API_URL}/login?lang=${i18n.language}`);
+    console.log(`${API_URL}/login?lang=${i18n.language}`);
     // Initilize web socket connection
     const socket = AuthSocket();
     socket.addEventListener('message', async (e) => {
