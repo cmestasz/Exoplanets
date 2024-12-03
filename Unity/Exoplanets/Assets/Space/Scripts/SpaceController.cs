@@ -13,6 +13,8 @@ public class SpaceController : MonoBehaviour
     [SerializeField] private GameObject connectionPrefab;
     [SerializeField] private GameObject constellationPrefab;
     [SerializeField] private GameObject postProcessing;
+    [SerializeField] private RenderTexture resultingTexture;
+    public GameObject ResultingVisual { get; private set; }
     public static SpaceController Instance { get; private set; }
     private static int idCounter = 0;
     public GameObject CurrentPlanet { get; private set; }
@@ -29,6 +31,7 @@ public class SpaceController : MonoBehaviour
     private void Start()
     {
         InitVariables();
+        InitConfig();
         TestOnStart();
     }
 
@@ -38,7 +41,15 @@ public class SpaceController : MonoBehaviour
         ConstellationParent = transform.Find("Constellations");
         ColorAdjustments = postProcessing.GetComponent<Volume>().profile.components[1] as ColorAdjustments;
         CurrentPlanet = transform.Find("Planet").gameObject;
+        ResultingVisual = transform.Find("ResultingVisual").gameObject;
+    }
+
+    private void InitConfig()
+    {
         CurrentReference = new(0, 0, 0);
+        resultingTexture.width = Screen.width;
+        resultingTexture.height = Screen.height;
+        ResultingVisual.transform.localScale = new(Screen.width / 100, 1, Screen.height / 100);
     }
 
 
@@ -53,6 +64,7 @@ public class SpaceController : MonoBehaviour
         {
             int prefabIdx = Random.Range(0, starPrefabs.Length);
             Vector3 pos = new(star.x * 15, star.y * 15, star.z * 15);
+            pos += transform.position;
             StarController.CreateStar(star.id, starPrefabs[prefabIdx], pos, StarsParent);
         }
     }
@@ -194,6 +206,7 @@ public class SpaceController : MonoBehaviour
         {
             int prefabIdx = Random.Range(0, starPrefabs.Length);
             Vector3 pos = new(Random.Range(-100, 100), Random.Range(-100, 100), Random.Range(-100, 100));
+            pos += transform.position;
             StarController.CreateStar(idCounter++.ToString(), starPrefabs[prefabIdx], pos, StarsParent);
         }
     }
