@@ -15,7 +15,7 @@ export default function MainMenu() {
     if (prefabRef.current) {
       mainStar.Insert(prefabRef.current);
     }
-  }, [prefabRef.current]);
+  }, [prefabRef, mainStar]);
   return (
     <view className="flex flex-col flex-auto gap-10 portrait:gap-20">
       <view

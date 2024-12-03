@@ -5,6 +5,7 @@ import clsx from 'clsx';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router';
 import { useUser } from 'src/providers/UserProvider';
+import { UserStates } from '@lib/utils';
 import AsideBottom from './AsideBottom';
 
 interface AsideProps {
@@ -17,7 +18,7 @@ export default function Aside({
   const { t } = useTranslation();
   const nav = useNavigate();
   const userAction = useUser();
-  const auth = userAction.current.state === 'loaded';
+  const auth = userAction.current.state === UserStates.LOGGED;
   return (
     <aside
       className="flex flex-col rounded-lg landscape:py-4 landscape:px-7 landscape:border-2 landscape:border-primary min-w-48 gap-7"

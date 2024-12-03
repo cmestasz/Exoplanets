@@ -1,5 +1,6 @@
 using UnityEngine;
 using CandyCoded.env;
+using System.Collections.Generic;
 
 public class LoadEnv : MonoBehaviour
 {
@@ -14,6 +15,11 @@ public class LoadEnv : MonoBehaviour
         {
             System.Environment.SetEnvironmentVariable("DATABASE_KEY", dbKey);
             Debug.Log("DATABASE_KEY has been loaded");
+        }
+        if (env.TryParseEnvironmentVariable("API_DOMAIN", out string apiDomain))
+        {
+            System.Environment.SetEnvironmentVariable("API_DOMAIN", apiDomain);
+            Debug.Log("API_DOMAIN has been loaded");
         }
     }
 

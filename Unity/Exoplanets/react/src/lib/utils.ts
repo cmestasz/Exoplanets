@@ -1,6 +1,8 @@
 // Warning: No usar este iterador en ciclos
 
-export class ArrayInfIterator<T> {
+import { API_SOCKET } from 'src/config';
+
+class ArrayInfIterator<T> {
   private arr: T[];
 
   private index: number;
@@ -25,3 +27,26 @@ export class ArrayInfIterator<T> {
     this.index = -1;
   }
 }
+
+const AuthSocket = () => {
+  // @ts-ignore
+  const socket = new WebSocket(`${API_SOCKET}/login_flow`);
+  socket.addEventListener('open', () => {
+    console.log('Se estableció la conexión');
+    socket.send('Hello!!');
+  });
+  socket.addEventListener('error', (e) => {
+    console.log('Y este error?: ', e);
+  });
+  socket.addEventListener('close', (e) => {
+    console.log('Se ha cerrado la conexión: ', e.code, e.reason);
+  });
+  return socket;
+};
+
+const UserStates = {
+  ANON: 'anon',
+  LOGGED: 'logged',
+} as const;
+
+export { ArrayInfIterator, UserStates, AuthSocket };

@@ -1,13 +1,16 @@
 import { useUserActions } from '@lib/hooks';
-import { AsyncData } from '@mytypes/index';
-import { UserAPI } from '@mytypes/user';
-import { User } from '@supabase/supabase-js';
+import { UserAPI, UserManager } from '@mytypes/user';
+import { AuthError, PostgrestError } from '@supabase/supabase-js';
 import { createContext, useContext } from 'react';
 import { Outlet } from 'react-router';
 
 const UserContext = createContext<{
-  current: AsyncData<UserAPI>,
-  fetchUser:(userGetted?: User, withAlert?: boolean) => void,
+  current: UserManager,
+  getUser:(session?: { token: string, refresh_token: string }, withAlert?: boolean) =>
+  Promise<
+  { error: AuthError, data?: undefined }
+  | { error: PostgrestError, data?: undefined }
+  | { error: undefined, data: UserAPI }>,
   logout: (redirectTo?: string) => void,
   login: () => void,
 }>(null);
