@@ -35,8 +35,6 @@ export default function ShowExoplanets({
       />
       <Scroll
         className="flex flex-row flex-auto flex-wrap gap-5"
-        thumbClassName="bg-primary border-secondary border-4 border-solid rounded-full"
-        scrollBarClassName="bg-transparent w-2 -right-9"
       >
         {
           leakedExos.state === 'loading' && (

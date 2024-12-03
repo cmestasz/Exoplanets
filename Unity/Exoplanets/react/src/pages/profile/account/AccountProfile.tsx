@@ -5,6 +5,7 @@ import { UserStates } from '@lib/utils';
 import { useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useUser } from 'src/providers/UserProvider';
+import UpdatePhoto from './UpdatePhoto';
 
 export default function AccountProfile() {
   const { t } = useTranslation();
@@ -23,23 +24,9 @@ export default function AccountProfile() {
   return (
     <Scroll
       className="flex flex-col gap-10"
-      thumbClassName="bg-primary border-secondary border-4 border-solid rounded-full"
-      scrollBarClassName="bg-transparent h-2"
+      scrollBarClassName="-right-8"
     >
-      <button
-        className="self-center relative border-2 border-primary flex-grow flex-shrink-0 basis-60"
-      >
-        <img
-          className="flex-auto"
-          src={userAction.current.user.avatar}
-          alt="User Avatar"
-        />
-        <icon
-          className="absolute bottom-0 -right-14 text-secondary text-5xl"
-        >
-          edit
-        </icon>
-      </button>
+      <UpdatePhoto />
       <Input
         name="username"
         label={t('pages.profile.account.username.label')}

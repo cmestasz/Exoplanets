@@ -64,14 +64,29 @@ public class ProfilePictureSelector : MonoBehaviour
         {
             byte[] imageBytes = File.ReadAllBytes(filePath);
             string base64Image = System.Convert.ToBase64String(imageBytes);
+            string mimeType = GetMimeType(filePath);
+            string dataUrl = $"data:{mimeType};base64,{base64Image}";
             var callback = Callback.From(setProfilePictureOnReact);
-            callback.Call(base64Image);
+            callback.Call(dataUrl);
             Debug.Log("Imagen enviada a React en formato base64.");
         }
         catch (System.Exception ex)
         {
             Debug.LogError("Error al convertir o enviar la imagen: " + ex.Message);
         }
+    }
+    private string GetMimeType(string filePath)
+    {
+        string extension = Path.GetExtension(filePath).ToLower();
+        return extension switch
+        {
+            ".png" => "image/png",
+            ".jpg" => "image/jpeg",
+            ".jpeg" => "image/jpeg",
+            ".gif" => "image/gif",
+            ".bmp" => "image/bmp",
+            _ => "application/octet-stream",
+        };
     }
 
 }
