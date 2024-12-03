@@ -211,14 +211,8 @@ public class PlayerController : MonoBehaviour
         if (CurrentStar != null)
         {
             ConnectionLine.SetPosition(0, CurrentStar.transform.position);
-            Vector2 canvasSize = UIInteractor.Instance.GetCanvasSize();
-            Vector2 anchoredPosition = UIInteractor.Instance.GetCrosshairPosition();
-            Vector2 screenPosition = new(
-                anchoredPosition.x / canvasSize.x * Screen.width,
-                anchoredPosition.y / canvasSize.y * Screen.height
-            );
-            Ray ray = Camera.main.ScreenPointToRay(screenPosition);
-            ConnectionLine.SetPosition(1, ray.direction * 10);
+            Ray ray = GetCrosshairRay();
+            ConnectionLine.SetPosition(1, transform.position + ray.direction * 100);
         }
     }
 
@@ -254,22 +248,23 @@ public class PlayerController : MonoBehaviour
 
     private void RaycastCheckType<ToCheck>(System.Action<ToCheck> isType, System.Action isntType = null)
     {
-        Vector2 canvasSize = UIInteractor.Instance.GetCanvasSize();
-        Vector2 anchoredPosition = UIInteractor.Instance.GetCrosshairPosition();
-        Vector2 screenPosition = new(
-            anchoredPosition.x / canvasSize.x * Screen.width,
-            anchoredPosition.y / canvasSize.y * Screen.height
-        );
-        Ray ray = Camera.main.ScreenPointToRay(screenPosition);
-        Debug.DrawRay(transform.position, ray.direction);
-        if (Physics.Raycast(ray, out RaycastHit hit))
-        {
-            if (hit.collider.TryGetComponent<ToCheck>(out var obj))
-                isType(obj);
-            else
-                isntType?.Invoke();
-        }
+        Ray ray = GetCrosshairRay();
+        Debug.DrawRay(transform.position, ray.direction * 100, Color.red, 5);
+        if (Physics.Raycast(ray, out RaycastHit hit) && hit.collider.TryGetComponent<ToCheck>(out var obj))
+            isType(obj);
+        else
+            isntType?.Invoke();
+    }
 
+    private Ray GetCrosshairRay()
+    {
+        Vector2 pos = UIInteractor.Instance.GetCrosshairPosition();
+        Vector2 canvasSize = UIInteractor.Instance.GetCanvasSize();
+        Vector2 screenPos = new(
+            pos.x / canvasSize.x * Screen.width,
+            pos.y / canvasSize.y * Screen.height
+        );
+        return Camera.main.ScreenPointToRay(screenPos);
     }
 
     private void ToggleInput()
