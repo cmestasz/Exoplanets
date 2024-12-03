@@ -10,8 +10,7 @@ export default function About() {
   return (
     <Scroll
       className="flex flex-col gap-7 text-secondary font-exo text-3xl"
-      thumbClassName="bg-primary border-secondary border-4 border-solid rounded-full"
-      scrollBarClassName="bg-transparent h-2"
+      scrollBarClassName="-right-8"
     >
       <p>{t('pages.profile.about.introduction')}</p>
       <AboutSection

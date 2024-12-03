@@ -6,7 +6,7 @@ import SeeExoplanet from '@pages/seeExoplanet/SeeExoplanet';
 import { Route, Routes } from 'react-router-dom';
 import MainLayout from '@pages/layouts/MainLayout';
 import ProfileLayout from '@pages/layouts/ProfileLayout';
-import AccountProfile from '@pages/profile/AccountProfile';
+import AccountProfile from '@pages/profile/account/AccountProfile';
 import Constellations from '@pages/profile/Constellations';
 import About from '@pages/profile/about/About';
 import Settings from '@pages/profile/Settings';
