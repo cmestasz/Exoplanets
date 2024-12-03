@@ -15,7 +15,7 @@ export default function AccountProfile() {
         console.error(data.error.details.toString());
         throw new Error(`${t('components.form.input.error-update')}${data.error.code}`);
       }
-      userAction.fetchUser();
+      await userAction.getUser();
     }
   }, [userAction, t]);
   if (userAction.current.state !== UserStates.LOGGED) return null;

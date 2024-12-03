@@ -8,6 +8,7 @@ import { UserManager } from '@mytypes/user';
 import { AlertContext } from '@components/modals/AlertContext';
 import { useNavigate } from 'react-router';
 import { API_URL } from 'src/config';
+import { AuthError, User } from '@supabase/supabase-js';
 import { supabase } from './supabase';
 import { DEFAULT_ALERT_DURATION } from './constants';
 import { AuthSocket, UserStates } from './utils';
@@ -66,13 +67,26 @@ function useUserActions() {
   const showAlert = useContext(AlertContext);
   const nav = useNavigate();
   const [userFetched, setUserFetched] = useState<UserManager>({ state: UserStates.ANON });
-  const getUser = useCallback(async (jwt?: string, withAlert?: boolean) => {
-    const { data: { user: userAuth }, error } = await supabase.auth.getUser(jwt);
-    if (error || !userAuth) {
-      console.log('Auth error: ', error);
+  const getUser = useCallback(async (session?:
+  { token: string, refresh_token: string }, withAlert?: boolean) => {
+    let userAuth: User; let sessionError: AuthError;
+    if (session) {
+      const { data: { user }, error } = await supabase.auth.setSession({
+        access_token: session.token,
+        refresh_token: session.refresh_token,
+      });
+      userAuth = user;
+      sessionError = error;
+    } else {
+      const { data: { user }, error } = await supabase.auth.getUser();
+      userAuth = user;
+      sessionError = error;
+    }
+    if (sessionError || !userAuth) {
+      console.log('Auth error: ', sessionError);
       if (withAlert) showAlert({ message: t('components.user.get-user-error'), type: 'error' });
       setUserFetched({ state: UserStates.ANON });
-      return { error };
+      return { error: sessionError };
     }
     const { data, error: err } = await supabase.from('users').select().eq('id', userAuth.id).maybeSingle();
     if (err) {
@@ -115,7 +129,7 @@ function useUserActions() {
     socket.addEventListener('message', async (e) => {
       console.log('Mensaje recibido: ', e.data);
       if (e.data) {
-        const { error } = await getUser(e.data);
+        const { error } = await getUser(JSON.parse(e.data));
         if (error) {
           showAlert({ message: t('components.user.login-error'), type: 'error' });
         }
