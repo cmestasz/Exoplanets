@@ -3,6 +3,7 @@ import { Text } from '@components/ui/Text';
 import { useState } from 'react';
 import { useNavigate } from 'react-router';
 import { useUser } from 'src/providers/UserProvider';
+import { UserStates } from '@lib/utils';
 import HeaderUserBox from './HeaderUserBox';
 
 export default function UserBox() {
@@ -14,12 +15,12 @@ export default function UserBox() {
     nav('profile/account');
     setOpened(false);
   };
-  if (userAction.current.state !== 'loaded') return null;
+  if (userAction.current.state !== UserStates.LOGGED) return null;
   return (
     <view className="relative w-fit flex-grow-0">
       <HeaderUserBox
-        username={userAction.current.data.username}
-        photo={userAction.current.data.avatar}
+        username={userAction.current.user.username}
+        photo={userAction.current.user.avatar}
         opened={opened}
         onClick={() => setOpened((p) => !p)}
       />

@@ -1,3 +1,5 @@
+import { UserStates } from '@lib/utils';
+
 interface UserAPI {
   avatar: string | null
   created_at: string
@@ -8,4 +10,13 @@ interface UserAPI {
   username: string | null
 }
 
-export { UserAPI };
+type UserState = typeof UserStates[keyof typeof UserStates];
+
+type UserManager = {
+  state: typeof UserStates.ANON;
+} | {
+  state: typeof UserStates.LOGGED;
+  user: UserAPI;
+};
+
+export { UserAPI, UserState, UserManager };

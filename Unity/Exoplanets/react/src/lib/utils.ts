@@ -1,6 +1,6 @@
 // Warning: No usar este iterador en ciclos
 
-export class ArrayInfIterator<T> {
+class ArrayInfIterator<T> {
   private arr: T[];
 
   private index: number;
@@ -25,3 +25,10 @@ export class ArrayInfIterator<T> {
     this.index = -1;
   }
 }
+
+const UserStates = {
+  ANON: 'anon',
+  LOGGED: 'logged',
+} as const;
+
+export { ArrayInfIterator, UserStates };

@@ -1,6 +1,7 @@
 import { Text } from '@components/ui/Text';
 import Login from '@components/user/Login';
 import Logout from '@components/user/Logout';
+import { UserStates } from '@lib/utils';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router';
 import { useUser } from 'src/providers/UserProvider';
@@ -35,7 +36,7 @@ export default function AsideBottom() {
       >
         <hr className="border-primary border-[1px] landscape:w-full portrait:h-full" />
         {
-          userAction.current.state !== 'loaded' ? (
+          userAction.current.state === UserStates.ANON ? (
             <Login asideMenu />
           ) : (
             <Logout />
