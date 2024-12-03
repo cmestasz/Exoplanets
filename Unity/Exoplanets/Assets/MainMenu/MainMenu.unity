@@ -206,7 +206,6 @@ GameObject:
   - component: {fileID: 635399860}
   - component: {fileID: 635399859}
   - component: {fileID: 635399865}
-  - component: {fileID: 635399866}
   - component: {fileID: 635399867}
   - component: {fileID: 635399868}
   m_Layer: 5
@@ -238,11 +237,9 @@ MonoBehaviour:
     ResourcesPath: 
     UseDevServer: 1
     DevServer: http://localhost:3005
-  EngineType: 0
+  EngineType: 3
   globals:
     Entries:
-    - Key: AuthServer
-      Value: {fileID: 635399866}
     - Key: MainStar
       Value: {fileID: 635399867}
   AdvancedOptions:
@@ -353,18 +350,6 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 8bd590029ae250172bacf57c8133c2fa, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &635399866
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 635399858}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 16e9c7afd3d7fe01ba4548efa418c89a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!114 &635399867

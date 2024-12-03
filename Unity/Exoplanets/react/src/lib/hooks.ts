@@ -5,13 +5,12 @@ import {
 import { AlertOptions, ModalContent } from '@components/modals/types';
 import { useTranslation } from 'react-i18next';
 import { UserManager } from '@mytypes/user';
-import { User } from '@supabase/supabase-js';
 import { AlertContext } from '@components/modals/AlertContext';
 import { useNavigate } from 'react-router';
 import { API_URL } from 'src/config';
 import { supabase } from './supabase';
 import { DEFAULT_ALERT_DURATION } from './constants';
-import { UserStates } from './utils';
+import { AuthSocket, UserStates } from './utils';
 
 function useAlert() {
   const [isVisible, setIsVisible] = useState<boolean>(false);
@@ -67,33 +66,25 @@ function useUserActions() {
   const showAlert = useContext(AlertContext);
   const nav = useNavigate();
   const [userFetched, setUserFetched] = useState<UserManager>({ state: UserStates.ANON });
-  const getUser = useCallback(async (userGetted?: User, withAlert?: boolean) => {
-    if (!userGetted) {
-      const { data: { user: userAuth }, error } = await supabase.auth.getUser();
-      if (error || !userAuth) {
-        console.log('Auth error: ', error);
-        if (withAlert) showAlert({ message: t('components.user.get-user-error'), type: 'error' });
-        setUserFetched({ state: UserStates.ANON });
-        return;
-      }
-      userGetted = userAuth;
+  const getUser = useCallback(async (jwt?: string, withAlert?: boolean) => {
+    const { data: { user: userAuth }, error } = await supabase.auth.getUser(jwt);
+    if (error || !userAuth) {
+      console.log('Auth error: ', error);
+      if (withAlert) showAlert({ message: t('components.user.get-user-error'), type: 'error' });
+      setUserFetched({ state: UserStates.ANON });
+      return { error };
     }
-    const { data, error: err } = await supabase.from('users').select().eq('id', userGetted.id).maybeSingle();
+    const { data, error: err } = await supabase.from('users').select().eq('id', userAuth.id).maybeSingle();
     if (err) {
       console.error('Send by supabase', err.message);
       if (withAlert) showAlert({ message: t('components.user.get-user-error'), type: 'error' });
       setUserFetched({ state: UserStates.ANON });
-      return;
+      return { error: err };
     }
 
     setUserFetched({ state: UserStates.LOGGED, user: data });
+    return { error: null, data };
   }, [showAlert, t]);
-  const fetchUser = useCallback((userGetted?: User, withAlert?: boolean) => {
-    getUser(userGetted, withAlert).catch((r) => {
-      console.log('Error thowed by me: ', r);
-      setUserFetched({ state: UserStates.ANON });
-    });
-  }, [getUser]);
   const logout = useCallback((redirectTo?: string) => {
     // Logout using API
     fetch(`${API_URL}/logout`, {
@@ -120,6 +111,19 @@ function useUserActions() {
     // Redirect to api endpoint for login
     Interop.UnityEngine.Application.OpenURL(`${API_URL}/login`);
     // Initilize web socket connection
+    const socket = AuthSocket();
+    socket.addEventListener('message', async (e) => {
+      console.log('Mensaje recibido: ', e.data);
+      if (e.data) {
+        const { error } = await getUser(e.data);
+        if (error) {
+          showAlert({ message: t('components.user.login-error'), type: 'error' });
+        }
+        socket.send('token_received');
+      } else {
+        console.log('Sin mensaje');
+      }
+    });
   }, []);
   useEffect(() => {
     let isMounted = true;
@@ -132,8 +136,8 @@ function useUserActions() {
     return () => { isMounted = false; };
   }, [getUser]);
   return useMemo(() => ({
-    current: userFetched, fetchUser, logout, login,
-  }), [fetchUser, userFetched, logout, login]);
+    current: userFetched, getUser, logout, login,
+  }), [getUser, userFetched, logout, login]);
 }
 
 export { useAlert, useModal, useUserActions };
