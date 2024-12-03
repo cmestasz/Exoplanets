@@ -102,7 +102,6 @@ function useUserActions() {
   const logout = useCallback((redirectTo?: string) => {
     // Logout using API
     fetch(`${API_URL}/logout`, {
-      method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
@@ -118,7 +117,7 @@ function useUserActions() {
       })
       .catch((e) => {
         showAlert({ message: t('components.user.logout-error'), type: 'error' });
-        console.log(e);
+        console.log(e.message);
       });
   }, [t, nav, showAlert]);
   const login = useCallback(() => {
