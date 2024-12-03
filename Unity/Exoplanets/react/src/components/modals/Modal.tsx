@@ -15,7 +15,7 @@ export default function Modal({
   console.log('modal rendered');
   return (
     <portal
-      className="absolute inset-0 z-50 flex items-center justify-center bg-gray-950 bg-opacity-40"
+      className="absolute inset-0 z-50 flex items-center justify-center bg-black bg-opacity-80"
     >
       <article
         className="flex flex-col bg-tertiary rounded-xl py-6 px-12 gap-12"
