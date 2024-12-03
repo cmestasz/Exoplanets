@@ -208,6 +208,7 @@ GameObject:
   - component: {fileID: 635399865}
   - component: {fileID: 635399867}
   - component: {fileID: 635399868}
+  - component: {fileID: 635399869}
   m_Layer: 5
   m_Name: React Canvas
   m_TagString: Untagged
@@ -235,13 +236,15 @@ MonoBehaviour:
     SourcePath: react/index
     SourceText: 
     ResourcesPath: 
-    UseDevServer: 1
+    UseDevServer: 2
     DevServer: http://localhost:3005
   EngineType: 3
   globals:
     Entries:
     - Key: MainStar
       Value: {fileID: 635399867}
+    - Key: PictureSelector
+      Value: {fileID: 635399869}
   AdvancedOptions:
     Pooling: 1
     MediaUpdateInterval: 0.5
@@ -382,6 +385,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   canvas: {fileID: 635399862}
+--- !u!114 &635399869
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 635399858}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dbed06f35946eb543a6dcde18ac7df6c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1323256005
 GameObject:
   m_ObjectHideFlags: 0

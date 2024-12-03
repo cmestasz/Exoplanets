@@ -64,7 +64,7 @@ export default function Input({
       inputRef.current.Focus();
     }
   }, [stateInput]);
-  const baseStyle = 'flex flex-col gap-4 justify-center w-fit p-3';
+  const baseStyle = 'flex flex-col gap-4 justify-center p-3';
   return (
     <div
       className={baseStyle}
