@@ -102,6 +102,7 @@ function useUserActions() {
   const logout = useCallback((redirectTo?: string) => {
     // Logout using API
     fetch(`${API_URL}/logout`, {
+      method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
