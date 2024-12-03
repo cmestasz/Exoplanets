@@ -236,7 +236,7 @@ MonoBehaviour:
     SourceText: 
     ResourcesPath: 
     UseDevServer: 1
-    DevServer: http://localhost:3005
+    DevServer: http://localhost:3000
   EngineType: 3
   globals:
     Entries:

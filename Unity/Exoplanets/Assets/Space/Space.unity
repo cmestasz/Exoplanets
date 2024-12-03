@@ -1693,9 +1693,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   normMoveSpeed: 10
   normRotateSpeed: 5
-  capRotateSpeed: 0.02
-  capCursorSpeed: 10
-  capZoomSpeed: 0.005
+  capRotateSpeed: 0.5
+  capCursorSpeed: 200
+  capZoomSpeed: 0.05
   updateDelay: 0
   webcamInputActive: 0
 --- !u!1 &1192304280

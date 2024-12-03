@@ -11,12 +11,13 @@ public class PlayerController : MonoBehaviour
     public static PlayerController Instance { get; private set; }
     public LineRenderer ConnectionLine { get; private set; }
     public StarController CurrentStar { get; private set; }
-    public Vector3Int CurrentSector { get; private set; }
     private bool InputActive { get; set; }
+    private int unselectedTolerance;
     private WebCamTexture webcamTexture;
     private InputResponse currentAction;
     private Vector2 cursorPos;
-    private const float borderOffset = 50;
+    private const float BORDER_OFFSET = 50;
+    private const int BASE_UNSELECTED_TOLERANCE = 5;
 
     private void Awake()
     {
@@ -38,13 +39,13 @@ public class PlayerController : MonoBehaviour
         CheckInteractions();
         CheckAlwaysActive();
         UpdateConstellationConnection();
-        ProcessCurrentAction();
+        ConstantProcessCurrentAction();
     }
 
     private void InitVariables()
     {
         ConnectionLine = transform.Find("ConnectionLine").GetComponent<LineRenderer>();
-        CurrentSector = Vector3Int.zero;
+        unselectedTolerance = BASE_UNSELECTED_TOLERANCE;
     }
 
     private void InitConfig()
@@ -67,43 +68,49 @@ public class PlayerController : MonoBehaviour
                 APIConnector.PostBytes<InputResponse>("get_action", bytes, response =>
                 {
                     currentAction = response;
-                });
+                    WhenReceivedProcessCurrentAction();
+                }, false);
             yield return new WaitForSeconds(updateDelay);
         }
     }
 
-    private void ProcessCurrentAction()
+    private void WhenReceivedProcessCurrentAction()
     {
-        if (currentAction == null) return;
-        if (currentAction.cursor.IsValid())
-        {
-            // TODO: reescale this, the cursor now has the anchor in the bottom left
-            Vector2 canvasSize = UIInteractor.Instance.GetCanvasSize();
-            float x = Mathf.Clamp(cursorPos.x + (currentAction.cursor.x - 0.5f) * capCursorSpeed, -canvasSize.x / 2 + borderOffset, canvasSize.x / 2 - borderOffset);
-            float y = Mathf.Clamp(cursorPos.y + (currentAction.cursor.y - 0.5f) * capCursorSpeed, -canvasSize.y / 2 + borderOffset, canvasSize.y / 2 - borderOffset);
-            cursorPos = new Vector2(x, y);
-            UIInteractor.Instance.MoveCrosshair(cursorPos);
-        }
-        if (currentAction.rotation.IsValid())
-        {
-            transform.Rotate(Vector3.up, currentAction.rotation.dx * capRotateSpeed);
-            transform.Rotate(Vector3.left, currentAction.rotation.dy * capRotateSpeed);
-        }
-        if (currentAction.zoom != 0)
-        {
-            transform.Translate(currentAction.zoom * capZoomSpeed * Vector3.forward);
-        }
         switch (currentAction.right_gesture)
         {
             case "click":
                 TryGetInfo();
                 break;
             case "select":
-                TryStartConnection();
+                if (CurrentStar == null)
+                    TryStartConnection();
                 break;
-            case "deselect":
-                TryEndConnection(); // TODO: maybe we should try to end it after a bit
+            case "none":
+                if (CurrentStar != null)
+                    TryEndConnection();
                 break;
+        }
+    }
+
+    private void ConstantProcessCurrentAction()
+    {
+        if (currentAction == null) return;
+        if (currentAction.cursor.IsValid() && CurrentStar == null)
+        {
+            Vector2 canvasSize = UIInteractor.Instance.GetCanvasSize();
+            float x = Mathf.Clamp(cursorPos.x + (currentAction.cursor.x - 0.5f) * capCursorSpeed * Time.deltaTime, BORDER_OFFSET, canvasSize.x - BORDER_OFFSET);
+            float y = Mathf.Clamp(cursorPos.y + (currentAction.cursor.y - 0.5f) * capCursorSpeed * Time.deltaTime, BORDER_OFFSET, canvasSize.y - BORDER_OFFSET);
+            cursorPos = new Vector2(x, y);
+            UIInteractor.Instance.MoveCrosshair(cursorPos);
+        }
+        if (currentAction.rotation.IsValid())
+        {
+            transform.Rotate(Vector3.up, Time.deltaTime * currentAction.rotation.dx * capRotateSpeed);
+            transform.Rotate(Vector3.left, Time.deltaTime * currentAction.rotation.dy * capRotateSpeed);
+        }
+        if (currentAction.zoom != 0)
+        {
+            transform.Translate(Time.deltaTime * currentAction.zoom * capZoomSpeed * Vector3.forward);
         }
     }
 

@@ -11,7 +11,7 @@ public class StarController : MonoBehaviour, IHasInfo
     public static StarController CreateStar(string id, GameObject prefab, Vector3 position, Transform parent)
     {
         GameObject star = Instantiate(prefab, position, Quaternion.identity, parent);
-        star.transform.localScale = Vector3.one * 2.5f;
+        star.transform.localScale = Vector3.one * 4f;
         StarController starController = star.GetComponent<StarController>();
         starController.Id = id;
         stars.Add(id, starController);
