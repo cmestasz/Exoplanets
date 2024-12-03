@@ -2656,7 +2656,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1565456591}
   m_Layer: 0
-  m_Name: ConstellationConnections
+  m_Name: Constellations
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
