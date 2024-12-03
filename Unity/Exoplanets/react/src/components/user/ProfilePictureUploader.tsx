@@ -42,7 +42,7 @@ const ImageUploader: React.FC = () => {
       const fileName = `image_${Date.now()}.${fileExtension}`;
   
       const { data, error } = await supabase.storage
-        .from("bucketdeimagenes")
+        .from("avatars")
         .upload(fileName, blob, {
           cacheControl: "3600",
           upsert: false,
