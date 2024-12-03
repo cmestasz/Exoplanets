@@ -18,6 +18,7 @@ public class ConstellationController : MonoBehaviour, IHasInfo
         Current = constellationObj.GetComponent<ConstellationController>();
         Current.Constellation = new() { id = 0, ra = relative.ra, dec = relative.dec, dist = relative.dist };
         Current.Stars = new();
+        Current.Parent = constellationObj.transform;
         return Current;
     }
 
@@ -66,10 +67,12 @@ public class ConstellationController : MonoBehaviour, IHasInfo
         Debug.Log("trying to save");
         Debug.Log(JsonUtility.ToJson(Current.Constellation));
         CreateConstellationRequest request = new() { user_id = 1, constellation = Current.Constellation };
-        yield return APIConnector.Post<CreateConstellationRequest, CreateConstellationResponse>("create_constellation", request,
+        yield return null;
+        Current = null;
+        /*yield return APIConnector.Post<CreateConstellationRequest, CreateConstellationResponse>("create_constellation", request,
         response => {
             Debug.Log("yay");
-        });
+        });*/
     }
 
 

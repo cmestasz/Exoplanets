@@ -4,10 +4,8 @@ using static KeyboardBindings;
 
 public class PlayerController : MonoBehaviour
 {
-    [SerializeField] private float moveSpeed;
-    [SerializeField] private float rotateSpeed;
-    [SerializeField] private float cursorSpeed;
-    [SerializeField] private float zoomSpeed;
+    [SerializeField] private float normMoveSpeed, normRotateSpeed;
+    [SerializeField] private float capRotateSpeed, capCursorSpeed, capZoomSpeed;
     [SerializeField] private float updateDelay;
     [SerializeField] private bool webcamInputActive;
     public static PlayerController Instance { get; private set; }
@@ -43,13 +41,13 @@ public class PlayerController : MonoBehaviour
         ProcessCurrentAction();
     }
 
-    void InitVariables()
+    private void InitVariables()
     {
         ConnectionLine = transform.Find("ConnectionLine").GetComponent<LineRenderer>();
         CurrentSector = Vector3Int.zero;
     }
 
-    void InitConfig()
+    private void InitConfig()
     {
         webcamTexture = new();
         webcamTexture.Play();
@@ -79,20 +77,21 @@ public class PlayerController : MonoBehaviour
         if (currentAction == null) return;
         if (currentAction.cursor.IsValid())
         {
+            // TODO: reescale this, the cursor now has the anchor in the bottom left
             Vector2 canvasSize = UIInteractor.Instance.GetCanvasSize();
-            float x = Mathf.Clamp(cursorPos.x + (currentAction.cursor.x - 0.5f) * cursorSpeed, -canvasSize.x / 2 + borderOffset, canvasSize.x / 2 - borderOffset);
-            float y = Mathf.Clamp(cursorPos.y + (currentAction.cursor.y - 0.5f) * cursorSpeed, -canvasSize.y / 2 + borderOffset, canvasSize.y / 2 - borderOffset);
+            float x = Mathf.Clamp(cursorPos.x + (currentAction.cursor.x - 0.5f) * capCursorSpeed, -canvasSize.x / 2 + borderOffset, canvasSize.x / 2 - borderOffset);
+            float y = Mathf.Clamp(cursorPos.y + (currentAction.cursor.y - 0.5f) * capCursorSpeed, -canvasSize.y / 2 + borderOffset, canvasSize.y / 2 - borderOffset);
             cursorPos = new Vector2(x, y);
             UIInteractor.Instance.MoveCrosshair(cursorPos);
         }
         if (currentAction.rotation.IsValid())
         {
-            transform.Rotate(Vector3.up, currentAction.rotation.dx * rotateSpeed);
-            transform.Rotate(Vector3.left, currentAction.rotation.dy * rotateSpeed);
+            transform.Rotate(Vector3.up, currentAction.rotation.dx * capRotateSpeed);
+            transform.Rotate(Vector3.left, currentAction.rotation.dy * capRotateSpeed);
         }
         if (currentAction.zoom != 0)
         {
-            transform.Translate(currentAction.zoom * zoomSpeed * Vector3.forward);
+            transform.Translate(currentAction.zoom * capZoomSpeed * Vector3.forward);
         }
         switch (currentAction.right_gesture)
         {
@@ -108,7 +107,7 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    void CheckMovement()
+    private void CheckMovement()
     {
         if (!InputActive) return;
 
@@ -137,36 +136,20 @@ public class PlayerController : MonoBehaviour
             dir *= 2;
         }
 
-        transform.Translate(Time.deltaTime * moveSpeed * dir);
+        transform.Translate(Time.deltaTime * normMoveSpeed * dir);
     }
 
-    void CheckInteractions()
+    private void CheckInteractions()
     {
         if (!InputActive) return;
 
         if (Input.GetKeyDown(ADD_TO_CONSTELLATION))
         {
-            if (Physics.Raycast(transform.position, transform.forward, out RaycastHit hit))
-            {
-                if (hit.collider.TryGetComponent<StarController>(out var star))
-                {
-                    StartConnection(star);
-                }
-            }
+            TryStartConnection();
         }
         if (Input.GetKeyUp(ADD_TO_CONSTELLATION))
         {
-            if (Physics.Raycast(transform.position, transform.forward, out RaycastHit hit))
-            {
-                if (hit.collider.TryGetComponent<StarController>(out var star))
-                {
-                    EndConnection(star);
-                }
-            }
-            else
-            {
-                EndConnection();
-            }
+            TryEndConnection();
         }
         if (Input.GetKeyDown(SAVE_CONSTELLATION))
         {
@@ -180,46 +163,32 @@ public class PlayerController : MonoBehaviour
         {
             SpaceController.Instance.WarpToId(UIInteractor.Instance.GetWarpId());
         }
-        if (Physics.Raycast(transform.position, transform.forward, out RaycastHit hit2)
-            && hit2.collider.TryGetComponent<IHasInfo>(out var hasInfo)
-            && Input.GetKeyDown(GET_INFO))
+        if (Input.GetKeyDown(RANDOM_STARS))
         {
-            UIInteractor.Instance.SetInfoText(hasInfo.Info);
+            SpaceController.Instance.BuildRandomStars();
+        }
+        if (Input.GetKeyDown(GET_INFO))
+        {
+            TryGetInfo();
         }
     }
 
     private void TryGetInfo()
     {
-        if (Physics.Raycast(transform.position, transform.forward, out RaycastHit hit)
-            && hit.collider.TryGetComponent<IHasInfo>(out var hasInfo))
-        {
-            UIInteractor.Instance.SetInfoText(hasInfo.Info);
-        }
+        RaycastCheckType<IHasInfo>((hasInfo) => UIInteractor.Instance.SetInfoText(hasInfo.Info));
     }
 
     private void TryStartConnection()
     {
-        if (Physics.Raycast(transform.position, transform.forward, out RaycastHit hit)
-            && hit.collider.TryGetComponent<StarController>(out var star))
-        {
-            StartConnection(star);
-        }
+        RaycastCheckType<StarController>((star) => StartConnection(star));
     }
 
     private void TryEndConnection()
     {
-        if (Physics.Raycast(transform.position, transform.forward, out RaycastHit hit)
-            && hit.collider.TryGetComponent<StarController>(out var star))
-        {
-            EndConnection(star);
-        }
-        else
-        {
-            EndConnection();
-        }
+        RaycastCheckType<StarController>((star) => EndConnection(star), () => EndConnection());
     }
 
-    void CheckAlwaysActive()
+    private void CheckAlwaysActive()
     {
         if (Input.GetKeyDown(TOGGLE_INPUT))
         {
@@ -231,22 +200,23 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    void StartConnection(StarController star)
+    private void StartConnection(StarController star)
     {
         CurrentStar = star;
         ConnectionLine.positionCount = 2;
     }
 
-    void UpdateConstellationConnection()
+    private void UpdateConstellationConnection()
     {
         if (CurrentStar != null)
         {
             ConnectionLine.SetPosition(0, CurrentStar.transform.position);
-            ConnectionLine.SetPosition(1, Camera.main.transform.position + Camera.main.transform.forward * 100);
+            Ray ray = GetCrosshairRay();
+            ConnectionLine.SetPosition(1, transform.position + ray.direction * 100);
         }
     }
 
-    void EndConnection(StarController star)
+    private void EndConnection(StarController star)
     {
         if (CurrentStar != null)
         {
@@ -256,7 +226,7 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    void EndConnection()
+    private void EndConnection()
     {
         if (CurrentStar != null)
         {
@@ -265,18 +235,39 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    void CheckRotation()
+    private void CheckRotation()
     {
         if (!InputActive) return;
 
         float mouseX = Input.GetAxis("Mouse X");
         float mouseY = Input.GetAxis("Mouse Y");
 
-        transform.Rotate(Vector3.up, mouseX * rotateSpeed);
-        transform.Rotate(Vector3.left, mouseY * rotateSpeed);
+        transform.Rotate(Vector3.up, mouseX * normRotateSpeed);
+        transform.Rotate(Vector3.left, mouseY * normRotateSpeed);
     }
 
-    void ToggleInput()
+    private void RaycastCheckType<ToCheck>(System.Action<ToCheck> isType, System.Action isntType = null)
+    {
+        Ray ray = GetCrosshairRay();
+        Debug.DrawRay(transform.position, ray.direction * 100, Color.red, 5);
+        if (Physics.Raycast(ray, out RaycastHit hit) && hit.collider.TryGetComponent<ToCheck>(out var obj))
+            isType(obj);
+        else
+            isntType?.Invoke();
+    }
+
+    private Ray GetCrosshairRay()
+    {
+        Vector2 pos = UIInteractor.Instance.GetCrosshairPosition();
+        Vector2 canvasSize = UIInteractor.Instance.GetCanvasSize();
+        Vector2 screenPos = new(
+            pos.x / canvasSize.x * Screen.width,
+            pos.y / canvasSize.y * Screen.height
+        );
+        return Camera.main.ScreenPointToRay(screenPos);
+    }
+
+    private void ToggleInput()
     {
         InputActive = !InputActive;
         UnityEngine.Cursor.lockState = InputActive ? CursorLockMode.Locked : CursorLockMode.None;

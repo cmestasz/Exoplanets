@@ -14,6 +14,7 @@ public class SpaceController : MonoBehaviour
     [SerializeField] private GameObject constellationPrefab;
     [SerializeField] private GameObject postProcessing;
     public static SpaceController Instance { get; private set; }
+    private static int idCounter = 0;
     public GameObject CurrentPlanet { get; private set; }
     public Transform ConstellationParent { get; private set; }
     public Transform StarsParent { get; private set; }
@@ -37,6 +38,7 @@ public class SpaceController : MonoBehaviour
         ConstellationParent = transform.Find("Constellations");
         ColorAdjustments = postProcessing.GetComponent<Volume>().profile.components[1] as ColorAdjustments;
         CurrentPlanet = transform.Find("Planet").gameObject;
+        CurrentReference = new(0, 0, 0);
     }
 
 
@@ -183,6 +185,17 @@ public class SpaceController : MonoBehaviour
         UIInteractor.Instance.ShowTitle(name);
         if (pos != null)
             DialogueController.Instance.ShowDialogue("warp_posonly");
+    }
+
+    public void BuildRandomStars()
+    {
+        ClearStars();
+        for (int i = 0; i < 100; i++)
+        {
+            int prefabIdx = Random.Range(0, starPrefabs.Length);
+            Vector3 pos = new(Random.Range(-100, 100), Random.Range(-100, 100), Random.Range(-100, 100));
+            StarController.CreateStar(idCounter++.ToString(), starPrefabs[prefabIdx], pos, StarsParent);
+        }
     }
 
 
