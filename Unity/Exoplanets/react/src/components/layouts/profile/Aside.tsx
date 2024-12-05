@@ -39,8 +39,6 @@ export default function Aside({
       </div>
       <Scroll
         className="flex flex-col portrait:flex-row flex-auto overflow-hidden gap-5 portrait:border-2 portrait:border-primary portrait:py-3 portrait:px-2"
-        thumbClassName="bg-primary border-secondary border-4 border-solid rounded-full"
-        scrollBarClassName="bg-transparent h-2"
       >
         {
           routes.filter((route) => route.auth === auth || !route.auth).map((route, i) => (

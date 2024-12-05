@@ -66,6 +66,7 @@ function useUserActions() {
   const { t, i18n } = useTranslation();
   const showAlert = useContext(AlertContext);
   const nav = useNavigate();
+  const [avatarKey, setAvatarKey] = useState<number>(Date.now());
   const [userFetched, setUserFetched] = useState<UserManager>({ state: UserStates.ANON });
   const getUser = useCallback(async (session?:
   { token: string, refresh_token: string }, withAlert?: boolean) => {
@@ -139,7 +140,20 @@ function useUserActions() {
         console.log('Sin mensaje');
       }
     });
+  }, [getUser, i18n.language, showAlert, t]);
+  const updateAvatar = useCallback(() => {
+    setAvatarKey(Date.now());
   }, []);
+  useEffect(() => {
+    setUserFetched((data) => {
+      if (data.state !== UserStates.ANON && data?.user) {
+        return {
+          state: data.state, user: { ...data.user, avatar: `${data.user.avatar}?nocache=${avatarKey}` },
+        };
+      }
+      return data;
+    });
+  }, [avatarKey]);
   useEffect(() => {
     let isMounted = true;
     getUser().catch((r) => {
@@ -151,8 +165,8 @@ function useUserActions() {
     return () => { isMounted = false; };
   }, [getUser]);
   return useMemo(() => ({
-    current: userFetched, getUser, logout, login,
-  }), [getUser, userFetched, logout, login]);
+    current: userFetched, getUser, logout, login, updateAvatar,
+  }), [getUser, userFetched, logout, login, updateAvatar]);
 }
 
 export { useAlert, useModal, useUserActions };

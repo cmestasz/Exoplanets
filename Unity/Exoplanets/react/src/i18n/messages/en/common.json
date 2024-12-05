@@ -73,6 +73,11 @@
         "back": "Back"
       },
       "account": {
+        "avatar": {
+          "label": "Update your profile photo",
+          "placeholder": "Select a picture",
+          "selected": "Looks great!"
+        },
         "username": {
           "label": "Username",
           "placeholder": "Identify yourself with the universe"

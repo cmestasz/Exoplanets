@@ -4,39 +4,21 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using SimpleFileBrowser;
-public static class Globals
-{
-    private static Dictionary<string, object> globalVars = new Dictionary<string, object>();
-
-    public static void Set(string key, object value)
-    {
-        globalVars[key] = value;
-    }
-
-    public static object Get(string key)
-    {
-        return globalVars.ContainsKey(key) ? globalVars[key] : null;
-    }
-}
+using ReactUnity.Helpers;
 
 public class ProfilePictureSelector : MonoBehaviour
 {
-    public RawImage profilePicture; 
+    private RawImage profilePicture;
 
-    void Start()
-    {
-        Globals.Set("openFileBrowser", (System.Action)OpenFileBrowser);
-    }
-
-    public void OpenFileBrowser()
+    public void OpenFileBrowser(object setProfilePictureOnReact)
     {
         FileBrowser.SetFilters(true, new FileBrowser.Filter("Images", ".jpg", ".png", ".jpeg"));
         FileBrowser.SetDefaultFilter(".jpg");
 
-        StartCoroutine(ShowLoadDialogCoroutine());
+        StartCoroutine(ShowLoadDialogCoroutine(setProfilePictureOnReact));
     }
 
-    private IEnumerator ShowLoadDialogCoroutine()
+    private IEnumerator ShowLoadDialogCoroutine(object setProfilePictureOnReact)
     {
         yield return FileBrowser.WaitForLoadDialog(FileBrowser.PickMode.Files, false, null, null, "Seleccionar Imagen", "Cargar");
 
@@ -47,50 +29,66 @@ public class ProfilePictureSelector : MonoBehaviour
 
             LoadProfilePicture(filePath);
 
-            SendImageToReact(filePath);
+            SendImageToReact(filePath, setProfilePictureOnReact);
         }
         else
         {
             Debug.Log("No se seleccionó ningún archivo.");
+            var callback = Callback.From(setProfilePictureOnReact);
+            callback.Call("", "");
         }
     }
 
     private void LoadProfilePicture(string filePath)
-{
-    try
     {
-        byte[] imageBytes = File.ReadAllBytes(filePath);
-        Texture2D texture = new Texture2D(2, 2);
-
-        if (!texture.LoadImage(imageBytes))
+        try
         {
-            Debug.LogError("No se pudo cargar la imagen como textura.");
-            return;
+            byte[] imageBytes = File.ReadAllBytes(filePath);
+            Texture2D texture = new Texture2D(2, 2);
+
+            if (!texture.LoadImage(imageBytes))
+            {
+                Debug.LogError("No se pudo cargar la imagen como textura.");
+                return;
+            }
+
+            profilePicture.texture = texture;
         }
+        catch (System.Exception ex)
+        {
+            Debug.LogError("Error al cargar la imagen: " + ex.Message);
+        }
+    }
 
-        profilePicture.texture = texture;
-    }
-    catch (System.Exception ex)
+    private void SendImageToReact(string filePath, object setProfilePictureOnReact)
     {
-        Debug.LogError("Error al cargar la imagen: " + ex.Message);
+        try
+        {
+            byte[] imageBytes = File.ReadAllBytes(filePath);
+            string base64Image = System.Convert.ToBase64String(imageBytes);
+            string mimeType = GetMimeType(filePath);
+            var callback = Callback.From(setProfilePictureOnReact);
+            callback.Call(mimeType, base64Image);
+            Debug.Log("Imagen enviada a React en formato base64.");
+        }
+        catch (System.Exception ex)
+        {
+            Debug.LogError("Error al convertir o enviar la imagen: " + ex.Message);
+        }
     }
-}
-
-private void SendImageToReact(string filePath)
-{
-    try
+    private string GetMimeType(string filePath)
     {
-        byte[] imageBytes = File.ReadAllBytes(filePath);
-        string base64Image = System.Convert.ToBase64String(imageBytes);
-
-        Globals.Set("imageData", base64Image);
-        Debug.Log("Imagen enviada a React en formato base64.");
+        string extension = Path.GetExtension(filePath).ToLower();
+        return extension switch
+        {
+            ".png" => "image/png",
+            ".jpg" => "image/jpeg",
+            ".jpeg" => "image/jpeg",
+            ".gif" => "image/gif",
+            ".bmp" => "image/bmp",
+            _ => "application/octet-stream",
+        };
     }
-    catch (System.Exception ex)
-    {
-        Debug.LogError("Error al convertir o enviar la imagen: " + ex.Message);
-    }
-}
 
 }
 

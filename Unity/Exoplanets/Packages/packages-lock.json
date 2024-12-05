@@ -1,14 +1,14 @@
 {
   "dependencies": {
     "com.reactunity.core": {
-      "version": "0.19.9",
+      "version": "https://github.com/gusCreator/ReactUnity__core.git#main",
       "depth": 0,
-      "source": "registry",
+      "source": "git",
       "dependencies": {
         "com.unity.editorcoroutines": "1.0.0",
         "com.unity.nuget.newtonsoft-json": "3.0.2"
       },
-      "url": "https://package.openupm.com"
+      "hash": "16b1de290c7876582564a820cb931b5e970a1607"
     },
     "com.reactunity.quickjs": {
       "version": "0.19.0",

@@ -1,9 +1,11 @@
 import Input from '@components/form/input/Input';
+import Scroll from '@components/ui/Scroll';
 import { supabase } from '@lib/supabase';
 import { UserStates } from '@lib/utils';
 import { useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useUser } from 'src/providers/UserProvider';
+import UpdatePhoto from './UpdatePhoto';
 
 export default function AccountProfile() {
   const { t } = useTranslation();
@@ -20,9 +22,11 @@ export default function AccountProfile() {
   }, [userAction, t]);
   if (userAction.current.state !== UserStates.LOGGED) return null;
   return (
-    <div
-      className="flex flex-col gap-5"
+    <Scroll
+      className="flex flex-col gap-10"
+      scrollBarClassName="-right-8"
     >
+      <UpdatePhoto />
       <Input
         name="username"
         label={t('pages.profile.account.username.label')}
@@ -53,6 +57,6 @@ export default function AccountProfile() {
         disabled
       />
 
-    </div>
+    </Scroll>
   );
 }

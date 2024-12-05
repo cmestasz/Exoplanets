@@ -18,7 +18,7 @@ export default function SeeExoplanet() {
     >
       <Visualization />
       <view
-        className="flex flex-row gap-16 flex-initial"
+        className="flex flex-row portrait:flex-col-reverse gap-16 flex-initial"
       >
         {
           exoplanets.state === 'loaded' && (

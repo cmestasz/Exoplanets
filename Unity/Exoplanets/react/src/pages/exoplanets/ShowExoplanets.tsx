@@ -1,4 +1,5 @@
 import AstroCard from '@components/astros/AstroCard';
+import Spin from '@components/loading/Spin';
 import Search from '@components/search/Search';
 import Scroll from '@components/ui/Scroll';
 import { Exoplanet } from '@mytypes/astros';
@@ -35,18 +36,10 @@ export default function ShowExoplanets({
       />
       <Scroll
         className="flex flex-row flex-auto flex-wrap gap-5"
-        thumbClassName="bg-primary border-secondary border-4 border-solid rounded-full"
-        scrollBarClassName="bg-transparent w-2 -right-9"
       >
         {
           leakedExos.state === 'loading' && (
-            <view
-              className="flex flex-auto items-center justify-center self-center h-full"
-            >
-              <view
-                className="rounded-full animate-spin-f size-20 border-4 border-primary border-l-0 border-b-0"
-              />
-            </view>
+            <Spin />
           )
         }
         {

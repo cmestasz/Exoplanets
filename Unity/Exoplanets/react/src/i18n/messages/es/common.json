@@ -73,6 +73,11 @@
         "back": "Volver"
       },
       "account": {
+        "avatar": {
+          "label": "Actualiza tu foto de perfil",
+          "placeholder": "Selecciona una imagen",
+          "selected": "Luce genial!"
+        },
         "username": {
           "label": "Nombre de usuario",
           "placeholder": "Idéntificate con el universo"
