@@ -14,6 +14,7 @@
     "@reactunity/renderer": "^0.18.1",
     "@supabase/supabase-js": "^2.46.1",
     "clsx": "^2.1.1",
+    "crypto-js": "^4.2.0",
     "i18next": "^23.16.4",
     "postcss": "^8.4.47",
     "react": "^18.3.1",
@@ -25,6 +26,7 @@
   },
   "devDependencies": {
     "@reactunity/scripts": "^0.18.4",
+    "@types/crypto-js": "^4.2.2",
     "@types/react": "^18.3.12",
     "@typescript-eslint/eslint-plugin": "^7",
     "@typescript-eslint/parser": "^7",

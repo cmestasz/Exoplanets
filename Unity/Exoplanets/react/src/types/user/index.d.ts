@@ -13,9 +13,10 @@ interface UserAPI {
 type UserState = typeof UserStates[keyof typeof UserStates];
 
 type UserManager = {
-  state: typeof UserStates.ANON;
+  state: typeof UserStates.ANON | typeof UserStates.UPDATING;
+  user?: undefined;
 } | {
-  state: typeof UserStates.LOGGED;
+  state: typeof UserStates.LOGGED | typeof UserStates.UPDATING;
   user: UserAPI;
 };
 

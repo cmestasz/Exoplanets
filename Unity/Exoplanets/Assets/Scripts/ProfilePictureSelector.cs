@@ -65,9 +65,8 @@ public class ProfilePictureSelector : MonoBehaviour
             byte[] imageBytes = File.ReadAllBytes(filePath);
             string base64Image = System.Convert.ToBase64String(imageBytes);
             string mimeType = GetMimeType(filePath);
-            string dataUrl = $"data:{mimeType};base64,{base64Image}";
             var callback = Callback.From(setProfilePictureOnReact);
-            callback.Call(dataUrl);
+            callback.Call(mimeType, base64Image);
             Debug.Log("Imagen enviada a React en formato base64.");
         }
         catch (System.Exception ex)

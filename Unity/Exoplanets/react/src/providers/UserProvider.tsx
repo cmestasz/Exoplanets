@@ -13,6 +13,7 @@ const UserContext = createContext<{
   | { error: undefined, data: UserAPI }>,
   logout: (redirectTo?: string) => void,
   login: () => void,
+  updateAvatar: () => void,
 }>(null);
 
 export function useUser() {

@@ -47,6 +47,7 @@ const AuthSocket = () => {
 const UserStates = {
   ANON: 'anon',
   LOGGED: 'logged',
+  UPDATING: 'updating',
 } as const;
 
 export { ArrayInfIterator, UserStates, AuthSocket };

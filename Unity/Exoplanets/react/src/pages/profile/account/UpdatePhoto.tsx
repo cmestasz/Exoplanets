@@ -11,11 +11,15 @@ import { useContext, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useUser } from 'src/providers/UserProvider';
 import { twMerge } from 'tailwind-merge';
+import sha256 from 'crypto-js/sha256';
+import { SALT } from 'src/config';
 
 export default function UpdatePhoto() {
   const { t } = useTranslation();
   const userAction = useUser();
-  const [selectedPhoto, setSelectedPhoto] = useState<string>();
+  const [selectedPhoto, setSelectedPhoto] = useState<{
+    base64: string, mimeType: string,
+  } | null>();
   const pictureSelector = useGlobals().PictureSelector as ProfilePictureSelector;
   const showAlert = useContext(AlertContext);
   const {
@@ -23,26 +27,60 @@ export default function UpdatePhoto() {
   } = useModal({
     title: t('pages.profile.account.avatar.label'),
   });
-  const uploadImage = async () => {
-    const { error } = await supabase.storage.from('avatars').upload()
+  const getPhotoData = (mimeType: string, base64: string) => {
+    setSelectedPhoto({ mimeType, base64 });
   };
-  const onAccept = () => {
-    if (userAction.current.state === UserStates.LOGGED) {
-      supabase.from('users').update({ avatar: selectedPhoto }).eq('id', userAction.current.user.id)
-        .then(({ error }) => {
-          if (error) {
-            showAlert({ message: t('components.form.input.error-update'), type: 'error' });
-          } else {
-            showAlert({ message: t('components.form.input.success-update') });
-            accept();
-            setSelectedPhoto('');
-            userAction.getUser();
-          }
+  const uploadImage = async () => {
+    if (userAction.current.state === UserStates.LOGGED && selectedPhoto) {
+      const identifierImage = `${userAction.current.user.email}--${SALT}`;
+      const hash = sha256(identifierImage).toString();
+
+      const { error: storageError, data: { path } } = await supabase.storage
+        .from('avatars')
+        .upload(`private/image_${hash}.${selectedPhoto.mimeType.split('/')[1]}`, selectedPhoto.base64, {
+          contentType: selectedPhoto.mimeType,
+          upsert: true,
         });
+      if (storageError) {
+        showAlert({ message: t('components.form.input.error-update'), type: 'error' });
+        console.log('Error  uploading bytes to storage: ', storageError);
+        throw storageError;
+      }
+
+      const { data: { publicUrl } } = await supabase.storage
+        .from('avatars')
+        .getPublicUrl(path);
+
+      const { error: updateError } = await supabase
+        .from('users')
+        .update({ avatar: publicUrl })
+        .eq('id', userAction.current.user.id);
+
+      if (updateError) {
+        showAlert({ message: t('components.form.input.error-update'), type: 'error' });
+        console.log('Error updating avatar: ', updateError);
+        throw updateError;
+      }
+
+      showAlert({ message: t('components.form.input.success-update') });
+      setSelectedPhoto(null);
+      const { error: updateUserError } = await userAction.getUser();
+
+      if (updateUserError) {
+        console.log('Error updating local user: ', updateUserError);
+        throw updateUserError;
+      }
+
+      userAction.updateAvatar();
     }
   };
+  const onAccept = () => {
+    uploadImage()
+      .then(() => accept())
+      .catch((e) => console.log(e.message));
+  };
   const handlePictureSelection = () => {
-    pictureSelector.OpenFileBrowser(setSelectedPhoto);
+    pictureSelector.OpenFileBrowser(getPhotoData);
   };
   if (userAction.current.state !== UserStates.LOGGED) return null;
   return (
@@ -82,9 +120,9 @@ export default function UpdatePhoto() {
                 {
                   selectedPhoto ? (
                     <img
-                      src={selectedPhoto}
+                      src={`data:${selectedPhoto.mimeType};base64,${selectedPhoto.base64}`}
                       alt="New selected avatar"
-                      className="flex-initial basis-3/4"
+                      className="flex-initial basis-96"
                     />
                   ) : (
                     <icon className="text-7xl m-20">image</icon>

@@ -1,6 +1,5 @@
 using UnityEngine;
 using CandyCoded.env;
-using System.Collections.Generic;
 
 public class LoadEnv : MonoBehaviour
 {
@@ -20,6 +19,11 @@ public class LoadEnv : MonoBehaviour
         {
             System.Environment.SetEnvironmentVariable("API_DOMAIN", apiDomain);
             Debug.Log("API_DOMAIN has been loaded");
+        }
+        if (env.TryParseEnvironmentVariable("SALT", out string salt))
+        {
+            System.Environment.SetEnvironmentVariable("SALT", salt);
+            Debug.Log("SALT has been loaded");
         }
     }
 

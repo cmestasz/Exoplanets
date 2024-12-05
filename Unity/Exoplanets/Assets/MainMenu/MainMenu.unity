@@ -238,7 +238,7 @@ MonoBehaviour:
     ResourcesPath: 
     UseDevServer: 2
     DevServer: http://localhost:3005
-  EngineType: 3
+  EngineType: 0
   globals:
     Entries:
     - Key: MainStar
