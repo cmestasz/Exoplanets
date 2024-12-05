@@ -71,7 +71,6 @@ function useUserActions() {
   const getUser = useCallback(async (session?:
   { token: string, refresh_token: string }, withAlert?: boolean) => {
     let userAuth: User; let sessionError: AuthError;
-    setUserFetched((user) => ({ ...user, state: UserStates.UPDATING }));
     if (session) {
       const { data: { user }, error } = await supabase.auth.setSession({
         access_token: session.token,
