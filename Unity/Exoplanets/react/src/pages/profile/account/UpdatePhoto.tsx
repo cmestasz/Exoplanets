@@ -7,16 +7,26 @@ import { ProfilePictureSelector } from '@mytypes/UnityTypes';
 import { useGlobals } from '@reactunity/renderer';
 import { INVERTED_COLOR } from '@styles/colors';
 import clsx from 'clsx';
-import { useContext, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useUser } from 'src/providers/UserProvider';
 import { twMerge } from 'tailwind-merge';
 import sha256 from 'crypto-js/sha256';
 import { SALT } from 'src/config';
+import Spin from '@components/loading/Spin';
+
+const UpdateStates = {
+  NORMAL: 'normal',
+  SEARCHING: 'searching',
+  UPDATING: 'updating',
+};
+
+type UpdateState = typeof UpdateStates[keyof typeof UpdateStates];
 
 export default function UpdatePhoto() {
   const { t } = useTranslation();
   const userAction = useUser();
+  const [updateState, setUpdateState] = useState<UpdateState>(UpdateStates.NORMAL);
   const [selectedPhoto, setSelectedPhoto] = useState<{
     base64: string, mimeType: string,
   } | null>();
@@ -28,10 +38,16 @@ export default function UpdatePhoto() {
     title: t('pages.profile.account.avatar.label'),
   });
   const getPhotoData = (mimeType: string, base64: string) => {
-    setSelectedPhoto({ mimeType, base64 });
+    if (mimeType && base64) {
+      setSelectedPhoto({ mimeType, base64 });
+    } else {
+      setSelectedPhoto(undefined);
+    }
+    setUpdateState(UpdateStates.NORMAL);
   };
   const uploadImage = async () => {
     if (userAction.current.state === UserStates.LOGGED && selectedPhoto) {
+      setUpdateState(UpdateStates.UPDATING);
       const identifierImage = `${userAction.current.user.email}--${SALT}`;
       const hash = sha256(identifierImage).toString();
 
@@ -42,7 +58,6 @@ export default function UpdatePhoto() {
           upsert: true,
         });
       if (storageError) {
-        showAlert({ message: t('components.form.input.error-update'), type: 'error' });
         console.log('Error  uploading bytes to storage: ', storageError);
         throw storageError;
       }
@@ -57,52 +72,67 @@ export default function UpdatePhoto() {
         .eq('id', userAction.current.user.id);
 
       if (updateError) {
-        showAlert({ message: t('components.form.input.error-update'), type: 'error' });
         console.log('Error updating avatar: ', updateError);
         throw updateError;
       }
 
       showAlert({ message: t('components.form.input.success-update') });
+      accept();
       setSelectedPhoto(null);
-      const { error: updateUserError } = await userAction.getUser();
-
-      if (updateUserError) {
-        console.log('Error updating local user: ', updateUserError);
-        throw updateUserError;
-      }
-
       userAction.updateAvatar();
     }
   };
   const onAccept = () => {
     uploadImage()
-      .then(() => accept())
-      .catch((e) => console.log(e.message));
+      .catch(() => {
+        showAlert({ message: t('components.form.input.error-update'), type: 'error' });
+        setUpdateState(UpdateStates.NORMAL);
+      });
+  };
+  const onCancel = () => {
+    cancel();
+    setUpdateState(UpdateStates.NORMAL);
   };
   const handlePictureSelection = () => {
     pictureSelector.OpenFileBrowser(getPhotoData);
+    setUpdateState(UpdateStates.SEARCHING);
   };
+  useEffect(() => {
+    if (updateState === UpdateStates.UPDATING) {
+      setUpdateState(UpdateStates.NORMAL);
+    }
+  }, [userAction.current]);
+
   if (userAction.current.state !== UserStates.LOGGED) return null;
   return (
     <button
       className={twMerge('self-center relative flex-grow flex-shrink-0 basis-60 text-secondary hover:text-primary', INVERTED_COLOR)}
       onClick={open}
+      disabled={updateState === UpdateStates.UPDATING}
     >
-      <img
-        className="flex-auto"
-        src={userAction.current.user.avatar}
-        alt="User Avatar"
-      />
-      <icon
-        className="absolute bottom-0 -right-14 text-5xl"
-      >
-        edit
-      </icon>
+      {
+        updateState !== UpdateStates.UPDATING ? (
+          <>
+            <img
+              className="flex-auto"
+              src={userAction.current.user.avatar}
+              alt="User Avatar"
+            />
+            <icon
+              className="absolute bottom-0 -right-14 text-5xl"
+            >
+              edit
+            </icon>
+          </>
+        ) : (
+          <Spin />
+        )
+      }
       {
         modalVisible && (
           <Modal
             onAccept={onAccept}
-            onCancel={cancel}
+            onCancel={onCancel}
             title={content.title}
           >
             <button
@@ -118,14 +148,17 @@ export default function UpdatePhoto() {
                 )}
               >
                 {
-                  selectedPhoto ? (
+                  !selectedPhoto && updateState === UpdateStates.NORMAL && (
+                    <icon className="text-7xl m-20">image</icon>
+                  )
+                }
+                {
+                  selectedPhoto && updateState !== UpdateStates.SEARCHING && (
                     <img
                       src={`data:${selectedPhoto.mimeType};base64,${selectedPhoto.base64}`}
                       alt="New selected avatar"
                       className="flex-initial basis-96"
                     />
-                  ) : (
-                    <icon className="text-7xl m-20">image</icon>
                   )
                 }
               </view>
@@ -133,9 +166,13 @@ export default function UpdatePhoto() {
                 className="shrink flex-grow-0 basis-48 text-left text-balance"
               >
                 {
-                  selectedPhoto
-                    ? t('pages.profile.account.avatar.selected')
-                    : t('pages.profile.account.avatar.placeholder')
+                  !selectedPhoto && updateState === UpdateStates.NORMAL && t('pages.profile.account.avatar.placeholder')
+                }
+                {
+                  selectedPhoto && updateState === UpdateStates.NORMAL && t('pages.profile.account.avatar.selected')
+                }
+                {
+                  selectedPhoto && updateState === UpdateStates.UPDATING && t('components.form.input.sending')
                 }
               </p>
             </button>

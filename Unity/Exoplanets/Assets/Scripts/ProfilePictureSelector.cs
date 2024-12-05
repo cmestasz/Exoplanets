@@ -34,6 +34,8 @@ public class ProfilePictureSelector : MonoBehaviour
         else
         {
             Debug.Log("No se seleccionó ningún archivo.");
+            var callback = Callback.From(setProfilePictureOnReact);
+            callback.Call("", "");
         }
     }
 
