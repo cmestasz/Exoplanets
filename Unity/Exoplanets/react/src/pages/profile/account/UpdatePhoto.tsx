@@ -134,6 +134,7 @@ export default function UpdatePhoto() {
             onAccept={onAccept}
             onCancel={onCancel}
             title={content.title}
+            disabledButtons={updateState === UpdateStates.UPDATING}
           >
             <button
               className="flex flex-row flex-initial gap-10 text-secondary hover:text-quaternary group font-exo text-3xl"

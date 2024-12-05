@@ -5,11 +5,12 @@ interface ModalProps {
   title: string;
   onAccept: () => void;
   onCancel: () => void;
+  disabledButtons?: boolean;
   children?: React.ReactNode;
 }
 
 export default function Modal({
-  title, onAccept, onCancel, children,
+  title, onAccept, onCancel, disabledButtons, children,
 }: ModalProps) {
   const { t } = useTranslation();
   console.log('modal rendered');
@@ -28,6 +29,7 @@ export default function Modal({
           <Text
             asButton
             onClick={onAccept}
+            disabled={disabledButtons}
             className="hover:text-quaternary border-2 border-primary hover:border-quaternary"
           >
             {t('pages.see-exoplanet.create-const.accept')}
@@ -35,6 +37,7 @@ export default function Modal({
           <Text
             asButton
             onClick={onCancel}
+            disabled={disabledButtons}
             invertedStyle
             className="hover:text-quaternary"
           >
