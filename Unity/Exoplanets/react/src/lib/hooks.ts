@@ -66,6 +66,7 @@ function useUserActions() {
   const { t, i18n } = useTranslation();
   const showAlert = useContext(AlertContext);
   const nav = useNavigate();
+  const [rendered, setRendered] = useState<boolean>(false);
   const [avatarKey, setAvatarKey] = useState<number>(Date.now());
   const [userFetched, setUserFetched] = useState<UserManager>({ state: UserStates.ANON });
   const getUser = useCallback(async (session?:
@@ -156,14 +157,17 @@ function useUserActions() {
   }, [avatarKey]);
   useEffect(() => {
     let isMounted = true;
-    getUser().catch((r) => {
-      if (isMounted) {
-        console.log('Error thowed by me: ', r);
-        setUserFetched({ state: UserStates.ANON });
-      }
-    });
+    if (!rendered) {
+      getUser().catch((r) => {
+        if (isMounted) {
+          console.log('Error thowed by me: ', r);
+          setUserFetched({ state: UserStates.ANON });
+        }
+      });
+      setRendered(true);
+    }
     return () => { isMounted = false; };
-  }, [getUser]);
+  }, [getUser, rendered]);
   return useMemo(() => ({
     current: userFetched, getUser, logout, login, updateAvatar,
   }), [getUser, userFetched, logout, login, updateAvatar]);
