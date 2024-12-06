@@ -51,8 +51,8 @@ export default function Preview({
         <hr className="border-primary border-[1px] portrait:hidden" />
         <PreviewData
           radius={currentExoplanet.radius}
-          mass={currentExoplanet.mass}
-          disc_date={currentExoplanet.disc_date}
+          distance={currentExoplanet.dist}
+          disc_date={currentExoplanet.discovery_year}
         />
       </article>
     </view>

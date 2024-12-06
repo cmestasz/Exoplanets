@@ -44,9 +44,11 @@ export default function ExoData({
     );
   }
   const data = [
-    { key: t('pages.exoplanets.card.radius'), val: exo.radius },
-    { key: t('pages.exoplanets.card.mass'), val: exo.mass },
-    { key: t('pages.exoplanets.card.year'), val: exo.disc_date },
+    { key: t('pages.see-exoplanet.data.radius'), val: `${exo.radius} 🌎` },
+    { key: t('pages.see-exoplanet.data.distance'), val: `${exo.dist} parsecs` },
+    { key: t('pages.see-exoplanet.data.year'), val: exo.discovery_year },
+    { key: t('pages.see-exoplanet.data.host_star'), val: exo.host_star },
+    { key: t('pages.see-exoplanet.data.amount_stars'), val: exo.stars_amount },
   ];
   const handleClick = () => {
     open();

@@ -123,9 +123,9 @@
       "fetch-error": "Failed exoplanet petition",
       "card": {
         "button": "View in 3D",
-        "mass": "Mass",
+        "distance": "Distance from Earth",
         "radius": "Radius",
-        "year": "Year of discovery"
+        "year": "Discovery Year"
       }
     },
     "see-exoplanet": {
@@ -136,6 +136,13 @@
         "title": "What do you want to call your constellation?",
         "empty-name": "The field must not be empty",
         "success": "Constellation has been created succesfully"
+      },
+      "data": {
+        "distance": "Distance from Earth",
+        "radius": "Radius",
+        "year": "Discovery year",
+        "host_star": "Host Star",
+        "amount_stars": "Stars in its system"
       }
     }
   }
