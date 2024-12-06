@@ -120,6 +120,7 @@
         "main": "No results",
         "sub": "Try another phrase"
       },
+      "fetch-error": "Failed exoplanet petition",
       "card": {
         "button": "View in 3D",
         "mass": "Mass",

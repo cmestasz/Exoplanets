@@ -120,6 +120,7 @@
         "main": "Sin resultados",
         "sub": "Intenta con otra frase"
       },
+      "fetch-error": "Petición de exoplanetas fallida",
       "card": {
         "button": "Visualizar en 3D",
         "mass": "Masa",

@@ -1,15 +1,18 @@
-import { kepler22b, proximaCentauriB } from '@lib/mock';
+import { AlertContext } from '@components/modals/AlertContext';
 import { Exoplanet } from '@mytypes/astros';
-import { AsyncData, AsyncResponse } from '@mytypes/index';
+import { AsyncData } from '@mytypes/index';
 import {
   createContext, useCallback, useContext, useEffect, useMemo, useState,
 } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Outlet, useNavigate, useParams } from 'react-router';
+import { API_URL } from 'src/config';
 
 const ExoplanetsCont = createContext<{
   exoplanets: AsyncData<Exoplanet[]>,
   selectedExo: Exoplanet,
-  changeSelectedExo:(exo: Exoplanet, redir?: boolean) => void
+  changeSelectedExo:(exo: Exoplanet, redir?: boolean) => void,
+  get_next_exos: (amount?: number) => void
 }>(null);
 
 export function useExoplanets() {
@@ -18,27 +21,61 @@ export function useExoplanets() {
 
 export default function ExoplanetsProvider() {
   const nav = useNavigate();
-  const { name } = useParams();
+  const { t } = useTranslation();
+  const { param } = useParams();
   const [exoplanets, setExoplanets] = useState<AsyncData<Exoplanet[]>>({ state: 'loading' });
-
+  const showAlert = useContext(AlertContext);
   const [selectedExo, setSelectedExo] = useState<Exoplanet>();
-  useEffect(() => {
-    const data: AsyncResponse<Exoplanet[]> = {
-      state: 'loaded',
-      data: [kepler22b, proximaCentauriB],
-    };
-    setExoplanets(data);
-    const exoRoute = data.data.find((exo) => exo.name === name);
-    if (exoRoute) setSelectedExo(exoRoute);
-    else setSelectedExo(kepler22b);
-  }, [name]);
+  const [rendered, setRendered] = useState<boolean>(false);
+  const [index, setIndex] = useState<number>(0);
   const changeSelectedExo = useCallback((exo: Exoplanet, redir?: boolean) => {
     setSelectedExo(exo);
     if (redir) nav(exo.name, { replace: true });
   }, [nav]);
+  const get_next_exos = useCallback((amount: number = 20) => {
+    const url = `${API_URL}/get_some_exoplanets`;
+    fetch(url, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        index,
+        amount,
+      }),
+    })
+      .then((res) => res.json())
+      .then((exos: Exoplanet[]) => {
+        setExoplanets((oldExos) => {
+          const data = oldExos.data ? [...oldExos.data, ...exos] : exos;
+          return {
+            state: 'loaded',
+            data,
+          };
+        });
+        setIndex((prevIndex) => prevIndex + amount);
+      })
+      .catch((e) => {
+        showAlert({ message: t('pages.exoplanets.fetch-error'), type: 'error' });
+        console.log(e.message);
+      });
+  }, [t, index, showAlert]);
+  useEffect(() => {
+    if (!rendered) {
+      get_next_exos();
+      setRendered(true);
+    }
+  }, [rendered, get_next_exos]);
+  useEffect(() => {
+    if (!selectedExo && exoplanets.data) {
+      const exoRoute = exoplanets.data.find((exo) => exo.name === param);
+      if (exoRoute) setSelectedExo(exoRoute);
+      else setSelectedExo(exoplanets.data[0]);
+    }
+  }, [exoplanets, selectedExo, param]);
   const exoData = useMemo(() => ({
-    exoplanets, selectedExo, changeSelectedExo,
-  }), [exoplanets, selectedExo, changeSelectedExo]);
+    exoplanets, selectedExo, changeSelectedExo, get_next_exos,
+  }), [exoplanets, selectedExo, changeSelectedExo, get_next_exos]);
   return (
     <ExoplanetsCont.Provider
       value={exoData}

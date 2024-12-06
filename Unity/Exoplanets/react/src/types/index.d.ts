@@ -1,12 +1,13 @@
-export type AsyncLoad = {
+export type AsyncLoad<T> = {
   state: 'loading' | 'error';
+  data?: T;
 };
 
 export type AsyncResponse<T> = {
   state: 'loaded';
-  data: T
+  data: T;
 };
 
-type AsyncData<T> = AsyncLoad | AsyncResponse<T>;
+type AsyncData<T> = AsyncLoad<T> | AsyncResponse<T>;
 
 export type { AsyncData };
