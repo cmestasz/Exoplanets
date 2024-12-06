@@ -12,7 +12,7 @@ export default function Exoplanets() {
   const { t } = useTranslation();
   const [leakedExos, setLeakedExos] = useState<AsyncData<Exoplanet[]>>({ state: 'loading' });
   const {
-    exoplanets, selectedExo, changeSelectedExo,
+    exoplanets, selectedExo, changeSelectedExo, get_next_exos,
   } = useExoplanets();
   const showAlert = useContext(AlertContext);
   const changeLeakedExos = (data: AsyncData<Exoplanet[]>) => {
@@ -60,6 +60,7 @@ export default function Exoplanets() {
           filterExos={filterExos}
           leakedExos={leakedExos}
           exos={exoplanets}
+          get_next_exos={get_next_exos}
           changeLeakedExos={changeLeakedExos}
         />
         <Preview

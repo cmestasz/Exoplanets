@@ -2,6 +2,7 @@ import AstroCard from '@components/astros/AstroCard';
 import Spin from '@components/loading/Spin';
 import Search from '@components/search/Search';
 import Scroll from '@components/ui/Scroll';
+import { Text } from '@components/ui/Text';
 import { Exoplanet } from '@mytypes/astros';
 import { AsyncData } from '@mytypes/index';
 import { useEffect, useState } from 'react';
@@ -14,10 +15,11 @@ interface ShowExoplanetsProps {
   leakedExos: AsyncData<Exoplanet[]>;
   exos: AsyncData<Exoplanet[]>;
   changeLeakedExos: (data: AsyncData<Exoplanet[]>) => void;
+  get_next_exos: (amount?: number) => void;
 }
 
 export default function ShowExoplanets({
-  handleSelect, filterExos, leakedExos, exos, changeLeakedExos,
+  handleSelect, filterExos, leakedExos, exos, changeLeakedExos, get_next_exos,
 }: ShowExoplanetsProps) {
   const { t } = useTranslation();
   const nav = useNavigate();
@@ -77,17 +79,37 @@ export default function ShowExoplanets({
           )
         }
         {
-          currentExos.state === 'loaded' && currentExos.data.length > 0 && (
-            currentExos.data.map((exo) => (
-              <AstroCard
-                key={`${exo.name}-card`}
-                astro={exo}
-                onClick={() => handleClick(exo)}
-                onDoubleClick={() => nav(exo.name)}
-                className="text-3xl flex-grow shrink-0 basis-80"
-              />
-
-            ))
+          currentExos.data && (
+            <>
+              {
+                currentExos.data.length > 0 && currentExos.data.map((exo) => (
+                  <AstroCard
+                    key={`${exo.name}-card`}
+                    astro={exo}
+                    onClick={() => handleClick(exo)}
+                    onDoubleClick={() => nav(exo.name)}
+                    className="text-3xl flex-grow shrink-0 basis-80"
+                  />
+                ))
+              }
+              {
+                !usingFilter && (
+                  <Text
+                    asButton
+                    onClick={() => get_next_exos()}
+                    disabled={currentExos.state === 'loading'}
+                    className="flex-auto flex flex-col gap-4 border-2 border-primary hover:border-secondary text-4xl"
+                  >
+                    <icon className="text-5xl">add</icon>
+                    {
+                      currentExos.state === 'loading'
+                        ? t('pages.exoplanets.loading')
+                        : t('pages.exoplanets.load-more')
+                    }
+                  </Text>
+                )
+              }
+            </>
           )
         }
       </Scroll>

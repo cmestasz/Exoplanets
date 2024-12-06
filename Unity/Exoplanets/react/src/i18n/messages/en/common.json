@@ -116,6 +116,8 @@
     "exoplanets": {
       "title": "Select an exoplanet and start exploring",
       "search": "Busca exoplanetas en el espacio",
+      "load-more": "Load more",
+      "loading": "Loading",
       "no-results": {
         "main": "No results",
         "sub": "Try another phrase"

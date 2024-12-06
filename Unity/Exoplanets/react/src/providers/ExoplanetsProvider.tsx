@@ -34,6 +34,10 @@ export default function ExoplanetsProvider() {
   }, [nav]);
   const get_next_exos = useCallback((amount: number = 20) => {
     const url = `${API_URL}/get_some_exoplanets`;
+    setExoplanets((oldExos) => ({
+      state: 'loading',
+      data: oldExos.data,
+    }));
     fetch(url, {
       method: 'POST',
       headers: {
