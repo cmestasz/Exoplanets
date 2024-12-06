@@ -27,6 +27,7 @@ export default function UpdatePhoto() {
   const { t } = useTranslation();
   const userAction = useUser();
   const [updateState, setUpdateState] = useState<UpdateState>(UpdateStates.NORMAL);
+  const [userAvatar, setUserAvatar] = useState<string>();
   const [selectedPhoto, setSelectedPhoto] = useState<{
     base64: string, mimeType: string,
   } | null>();
@@ -48,6 +49,7 @@ export default function UpdatePhoto() {
   const uploadImage = async () => {
     if (userAction.current.state === UserStates.LOGGED && selectedPhoto) {
       setUpdateState(UpdateStates.UPDATING);
+      setUserAvatar('');
       const identifierImage = `${userAction.current.user.email}--${SALT}`;
       const hash = sha256(identifierImage).toString();
 
@@ -86,6 +88,8 @@ export default function UpdatePhoto() {
     uploadImage()
       .catch(() => {
         showAlert({ message: t('components.form.input.error-update'), type: 'error' });
+      })
+      .finally(() => {
         setUpdateState(UpdateStates.NORMAL);
       });
   };
@@ -97,11 +101,12 @@ export default function UpdatePhoto() {
     pictureSelector.OpenFileBrowser(getPhotoData);
     setUpdateState(UpdateStates.SEARCHING);
   };
+
   useEffect(() => {
-    if (updateState === UpdateStates.UPDATING) {
-      setUpdateState(UpdateStates.NORMAL);
+    if (userAction.current.state === UserStates.LOGGED) {
+      setUserAvatar(userAction.current.user.avatar);
     }
-  }, [userAction.current]);
+  }, [userAction]);
 
   if (userAction.current.state !== UserStates.LOGGED) return null;
   return (
@@ -111,11 +116,11 @@ export default function UpdatePhoto() {
       disabled={updateState === UpdateStates.UPDATING}
     >
       {
-        updateState !== UpdateStates.UPDATING ? (
+        userAvatar || updateState === UpdateStates.UPDATING ? (
           <>
             <img
               className="flex-auto"
-              src={userAction.current.user.avatar}
+              src={userAvatar}
               alt="User Avatar"
             />
             <icon
