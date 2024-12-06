@@ -4,6 +4,7 @@ import Search from '@components/search/Search';
 import Scroll from '@components/ui/Scroll';
 import { Exoplanet } from '@mytypes/astros';
 import { AsyncData } from '@mytypes/index';
+import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router';
 
@@ -11,21 +12,36 @@ interface ShowExoplanetsProps {
   handleSelect: (exo: Exoplanet) => void;
   filterExos: (name: string) => void;
   leakedExos: AsyncData<Exoplanet[]>;
+  exos: AsyncData<Exoplanet[]>;
   changeLeakedExos: (data: AsyncData<Exoplanet[]>) => void;
 }
 
 export default function ShowExoplanets({
-  handleSelect, filterExos, leakedExos, changeLeakedExos,
+  handleSelect, filterExos, leakedExos, exos, changeLeakedExos,
 }: ShowExoplanetsProps) {
   const { t } = useTranslation();
   const nav = useNavigate();
+  const [usingFilter, setUsingFilter] = useState<boolean>(false);
+  const [currentExos, setCurrentExos] = useState<AsyncData<Exoplanet[]>>(exos);
   const handleClick = (exo: Exoplanet) => {
     handleSelect(exo);
   };
   const onSearch = (name: string) => {
-    changeLeakedExos({ state: 'loading' });
-    filterExos(name);
+    if (name) {
+      setUsingFilter(true);
+      changeLeakedExos({ state: 'loading' });
+      filterExos(name);
+    } else {
+      setUsingFilter(false);
+    }
   };
+  useEffect(() => {
+    if (usingFilter) {
+      setCurrentExos(leakedExos);
+    } else {
+      setCurrentExos(exos);
+    }
+  }, [usingFilter, leakedExos, exos]);
   return (
     <view
       className="flex flex-col flex-auto gap-7"
@@ -38,12 +54,12 @@ export default function ShowExoplanets({
         className="flex flex-row flex-auto flex-wrap gap-5"
       >
         {
-          leakedExos.state === 'loading' && (
+          currentExos.state === 'loading' && (
             <Spin />
           )
         }
         {
-          leakedExos.state === 'loaded' && leakedExos.data.length === 0 && (
+          currentExos.state === 'loaded' && currentExos.data.length === 0 && (
             <view
               className="flex flex-auto items-center justify-center self-center h-full text-primary"
             >
@@ -61,14 +77,14 @@ export default function ShowExoplanets({
           )
         }
         {
-          leakedExos.state === 'loaded' && leakedExos.data.length > 0 && (
-            leakedExos.data.map((exo) => (
+          currentExos.state === 'loaded' && currentExos.data.length > 0 && (
+            currentExos.data.map((exo) => (
               <AstroCard
-                key={exo.name}
+                key={`${exo.name}-card`}
                 astro={exo}
                 onClick={() => handleClick(exo)}
                 onDoubleClick={() => nav(exo.name)}
-                className="text-3xl basis-80"
+                className="text-3xl flex-grow shrink-0 basis-80"
               />
 
             ))

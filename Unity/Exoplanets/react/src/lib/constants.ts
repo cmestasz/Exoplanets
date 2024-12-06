@@ -23,3 +23,5 @@ export const AVAILABLE_LANGUAGES: Language[] = [
 ];
 
 export const DEFAULT_ALERT_DURATION = 3000;
+
+export const MATERIAL_AMOUNT = 5;

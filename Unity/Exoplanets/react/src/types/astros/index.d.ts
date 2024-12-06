@@ -2,7 +2,6 @@ interface Astro {
   id: number;
   name: string;
   radius: number; // Ratio relative to Sun
-  imageUrl: string; // Not in DB
 }
 
 interface Exoplanet extends Astro {

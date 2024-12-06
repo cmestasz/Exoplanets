@@ -1,6 +1,6 @@
 import { AlertContext } from '@components/modals/AlertContext';
 import { Exoplanet } from '@mytypes/astros';
-import { AsyncData } from '@mytypes/index';
+import { AsyncData, AsyncResponse } from '@mytypes/index';
 import {
   createContext, useCallback, useContext, useEffect, useMemo, useState,
 } from 'react';
@@ -45,13 +45,14 @@ export default function ExoplanetsProvider() {
       }),
     })
       .then((res) => res.json())
-      .then((exos: Exoplanet[]) => {
+      .then((exos: string) => {
+        const normalizedExos = JSON.parse(exos);
         setExoplanets((oldExos) => {
-          const data = oldExos.data ? [...oldExos.data, ...exos] : exos;
+          const data = oldExos.data ? [...oldExos.data, ...normalizedExos] : normalizedExos;
           return {
             state: 'loaded',
             data,
-          };
+          } as AsyncResponse<Exoplanet[]>;
         });
         setIndex((prevIndex) => prevIndex + amount);
       })
@@ -67,10 +68,13 @@ export default function ExoplanetsProvider() {
     }
   }, [rendered, get_next_exos]);
   useEffect(() => {
-    if (!selectedExo && exoplanets.data) {
-      const exoRoute = exoplanets.data.find((exo) => exo.name === param);
+    console.log('Exoplanets.data es una array?: ', Array.isArray(exoplanets.data));
+    if (!selectedExo && Array.isArray(exoplanets.data)) {
+      console.log('Se seleccionará un planeta: ', exoplanets.data);
+      const exoRoute = exoplanets.data.find((exo) => param && exo.name === param);
+      console.log('Se pasó el método find, exoRoute value: ', exoRoute);
       if (exoRoute) setSelectedExo(exoRoute);
-      else setSelectedExo(exoplanets.data[0]);
+      else if (exoplanets.data.length > 0) setSelectedExo(exoplanets.data[0]);
     }
   }, [exoplanets, selectedExo, param]);
   const exoData = useMemo(() => ({

@@ -18,7 +18,7 @@ export default function PreviewData({
   ];
   return (
     <Scroll
-      className="flex flex-row portrait:flex-col gap-6 mb-8 justify-center"
+      className="flex flex-row portrait:flex-col gap-10 mb-8"
       scrollBarClassName="-bottom-9"
     >
       {

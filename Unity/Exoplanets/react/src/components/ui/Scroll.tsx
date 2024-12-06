@@ -24,6 +24,8 @@ export default function Scroll({
   }, [scrollBarClassName, thumbClassName]);
   return (
     <scroll
+      // eslint-disable-next-line react/no-unknown-property
+      sensitivity={100}
       ref={scrollRef}
       {...props}
     >
