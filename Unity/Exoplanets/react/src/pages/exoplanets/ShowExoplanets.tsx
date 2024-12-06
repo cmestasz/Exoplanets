@@ -61,7 +61,8 @@ export default function ShowExoplanets({
           )
         }
         {
-          currentExos.state === 'loaded' && currentExos.data.length === 0 && (
+          ((currentExos.state === 'loaded' && currentExos.data.length === 0)
+          || currentExos.state === 'error') && (
             <view
               className="flex flex-auto items-center justify-center self-center h-full text-primary"
             >

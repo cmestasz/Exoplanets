@@ -1,6 +1,6 @@
 import { useTranslation } from 'react-i18next';
 import { useCallback, useContext, useState } from 'react';
-import { AsyncData, AsyncResponse } from '@mytypes/index';
+import { AsyncData } from '@mytypes/index';
 import { Exoplanet } from '@mytypes/astros';
 import { API_URL } from 'src/config';
 import { AlertContext } from '@components/modals/AlertContext';
@@ -31,12 +31,18 @@ export default function Exoplanets() {
         body: JSON.stringify({ name }),
       })
         .then((res) => res.json())
-        .then((exos: Exoplanet[]) => {
-          setLeakedExos({ state: 'loaded', data: exos } as AsyncResponse<Exoplanet[]>);
+        .then((exos: string) => {
+          if (exos) {
+            const normalizedExos = JSON.parse(exos);
+            setLeakedExos({ state: 'loaded', data: normalizedExos });
+          } else {
+            setLeakedExos({ state: 'loaded', data: [] });
+          }
         })
         .catch((e) => {
           showAlert({ message: t('pages.exoplanets.fetch-error'), type: 'error' });
-          console.log(e.message);
+          console.log(e);
+          setLeakedExos({ state: 'error' });
         });
     }
   }, [exoplanets, setLeakedExos, showAlert, t]);

@@ -7,12 +7,7 @@ using UnityEngine;
 public class AstroPrefab : MonoBehaviour, IReactInsertable
 {
 
-    private GameObject instance;
-
     private Material selectedMaterial;
-
-    public GameObject prefab;
-
 
     public void SetMaterial(Material mat)
     {
@@ -21,42 +16,32 @@ public class AstroPrefab : MonoBehaviour, IReactInsertable
 
     public void Insert(PrefabComponent Component)
     {
-        if (prefab != null)
+        gameObject.transform.SetParent(Component.RectTransform, false);
+        gameObject.transform.localScale = new Vector3(250f, 250f, 250f);
+        RectTransform rectTransform = gameObject.GetComponent<RectTransform>();
+        if (rectTransform != null)
         {
-            instance = Instantiate(prefab, Vector3.zero, Quaternion.identity);
-            instance.transform.SetParent(Component.RectTransform, false);
-            instance.transform.localScale = new Vector3(250f, 250f, 250f);
-            RectTransform rectTransform = instance.GetComponent<RectTransform>();
-            if (rectTransform != null)
+            rectTransform.anchorMin = new Vector2(0.5f, 0.5f); // Centro
+            rectTransform.anchorMax = new Vector2(0.5f, 0.5f); // Centro
+            rectTransform.anchoredPosition = Vector2.zero;
+        }
+        Renderer renderer = gameObject.GetComponent<Renderer>();
+        if (renderer != null)
+        {
+            if (selectedMaterial != null)
             {
-                rectTransform.anchorMin = new Vector2(0.5f, 0.5f); // Centro
-                rectTransform.anchorMax = new Vector2(0.5f, 0.5f); // Centro
-                rectTransform.anchoredPosition = Vector2.zero;
-            }
-            Renderer renderer = instance.GetComponent<Renderer>();
-            if (renderer != null)
-            {
-                if (selectedMaterial != null)
-                {
-                    renderer.material = selectedMaterial;
-                    Debug.Log("Material assigned successfully");
-                }
-                else
-                {
-                    Debug.LogError("Failed to load material");
-                }
+                renderer.material = selectedMaterial;
             }
             else
             {
-                Debug.LogError("No Renderer found on the prefab");
+                Debug.LogError("Failed to load material");
             }
-
-            Debug.Log("Prefab instantiated successfully");
         }
         else
         {
-            Debug.Log("Prefab is null");
+            Debug.LogError("No Renderer found on the prefab");
         }
+
     }
     void Start()
     {
