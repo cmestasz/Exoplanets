@@ -1,6 +1,6 @@
 import { ReactUnity } from '@reactunity/renderer';
 import { UGUIElements } from '@reactunity/renderer/ugui';
-import { useEffect, useRef } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { twMerge } from 'tailwind-merge';
 
 type ScrollProps = UGUIElements['scroll'] & {
@@ -8,10 +8,18 @@ type ScrollProps = UGUIElements['scroll'] & {
   thumbClassName?: string;
 };
 
-export default function Scroll({
+const Scroll = React.forwardRef<ReactUnity.UGUI.ScrollComponent, ScrollProps>(({
   scrollBarClassName, thumbClassName, children, ...props
-}: ScrollProps) {
+}, ref) => {
   const scrollRef = useRef<ReactUnity.UGUI.ScrollComponent>();
+  const setCombinedRef = (node: ReactUnity.UGUI.ScrollComponent | null) => {
+    scrollRef.current = node;
+    if (typeof ref === 'function') {
+      ref(node);
+    } else if (ref) {
+      (ref as React.MutableRefObject<ReactUnity.UGUI.ScrollComponent | null>).current = node;
+    }
+  };
   const defaultThumb = 'bg-primary border-secondary border-4 border-solid rounded-full';
   const defaultScrollbar = 'bg-transparent h-[0.4rem] w-[0.4rem]';
   useEffect(() => {
@@ -26,10 +34,14 @@ export default function Scroll({
     <scroll
       // eslint-disable-next-line react/no-unknown-property
       sensitivity={100}
-      ref={scrollRef}
+      ref={setCombinedRef}
       {...props}
     >
       {children}
     </scroll>
   );
-}
+});
+
+Scroll.displayName = 'Scroll';
+
+export default Scroll;

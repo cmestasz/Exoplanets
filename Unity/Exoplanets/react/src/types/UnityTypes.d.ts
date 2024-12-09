@@ -1,6 +1,6 @@
 //
 // Types in assemblies: Assembly-CSharp, SimpleFileBrowser.Runtime
-// Generated 06/12/2024 8:51:40
+// Generated 08/12/2024 22:23:01
 //
 /* eslint-disable */
 
@@ -178,6 +178,11 @@ export declare class AdjustCamera {
   name: string;
   hideFlags: UnityEngine.HideFlags;
   canvas: UnityEngine.Canvas;
+  auxiliarCamera1: UnityEngine.Camera;
+  auxiliarCamera2: UnityEngine.Camera;
+  AdjustToCanvas(): void;
+  AdjustFirstAuxiliar(comp: ReactUnity.UGUI.UGUIComponent, orthographic?: boolean): void;
+  AdjustSecondAuxiliar(comp: ReactUnity.UGUI.UGUIComponent, orthographic?: boolean): void;
   IsInvoking(): boolean;
   CancelInvoke(): void;
   Invoke(methodName: string, time: number): void;
@@ -249,7 +254,6 @@ export declare class AstroPrefab {
   particleSystem: UnityEngine.Component;
   name: string;
   hideFlags: UnityEngine.HideFlags;
-  prefab: UnityEngine.GameObject;
   SetMaterial(mat: UnityEngine.Material): void;
   Insert(Component: ReactUnity.UGUI.PrefabComponent): void;
   IsInvoking(): boolean;
@@ -324,7 +328,10 @@ export declare class AstroPrefabBuilder {
   name: string;
   hideFlags: UnityEngine.HideFlags;
   materials: UnityEngine.Material[];
-  Build(Component: ReactUnity.UGUI.PrefabComponent, selectedMaterial: number): void;
+  prefab: UnityEngine.GameObject;
+  instances: UnityEngine.GameObject[];
+  Build(Component: ReactUnity.UGUI.PrefabComponent, selectedMaterial: number): number;
+  Destroy(index: number): void;
   IsInvoking(): boolean;
   CancelInvoke(): void;
   Invoke(methodName: string, time: number): void;
