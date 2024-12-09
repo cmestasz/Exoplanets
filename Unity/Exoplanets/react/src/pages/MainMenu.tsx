@@ -1,5 +1,5 @@
 import { Text } from '@components/ui/Text';
-import { MainStar } from '@mytypes/UnityTypes';
+import { AdjustCamera, MainStar } from '@mytypes/UnityTypes';
 import { ReactUnity, useGlobals } from '@reactunity/renderer';
 import { useEffect, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -10,12 +10,16 @@ export default function MainMenu() {
   const nav = useNavigate();
   const { t } = useTranslation();
   const mainStar = useGlobals().MainStar as MainStar;
+  const adjustCamera = useGlobals().AdjustCamera as AdjustCamera;
   const prefabRef = useRef<ReactUnity.UGUI.PrefabComponent>();
   useEffect(() => {
     if (prefabRef.current) {
       mainStar.Insert(prefabRef.current);
     }
   }, [prefabRef, mainStar]);
+  useEffect(() => {
+    adjustCamera.AdjustToCanvas();
+  }, [adjustCamera]);
   return (
     <view className="flex flex-col flex-auto gap-10 portrait:gap-20">
       <view

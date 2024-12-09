@@ -8,6 +8,7 @@ export default function ProfileLayout() {
   const location = useLocation();
   const { t } = useTranslation();
   const route: ProfileRoutes = useMemo(() => location.pathname.split('/').filter((s) => s)[1] as ProfileRoutes, [location]);
+
   return (
     <div
       className="flex flex-row portrait:flex-col gap-6 w-screen h-screen px-10 py-5"

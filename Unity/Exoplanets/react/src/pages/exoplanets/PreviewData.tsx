@@ -4,21 +4,21 @@ import { useTranslation } from 'react-i18next';
 interface PreviewDataProps {
   radius: number;
   disc_date: string;
-  mass: string;
+  distance: string;
 }
 
 export default function PreviewData({
-  radius, disc_date, mass,
+  radius, disc_date, distance,
 }: PreviewDataProps) {
   const { t } = useTranslation();
   const data = [
-    { key: t('pages.exoplanets.card.radius'), val: radius },
-    { key: t('pages.exoplanets.card.mass'), val: mass },
+    { key: t('pages.exoplanets.card.radius'), val: `${radius} 🌎` },
+    { key: t('pages.exoplanets.card.distance'), val: `${distance} parsecs` },
     { key: t('pages.exoplanets.card.year'), val: disc_date },
   ];
   return (
     <Scroll
-      className="flex flex-row portrait:flex-col gap-6 mb-8 justify-center"
+      className="flex flex-row portrait:flex-col gap-10 mb-8"
       scrollBarClassName="-bottom-9"
     >
       {

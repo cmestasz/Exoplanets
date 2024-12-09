@@ -116,13 +116,16 @@
     "exoplanets": {
       "title": "Selecciona un exoplaneta y empieza a explorar",
       "search": "Busca exoplanetas en el espacio",
+      "load-more": "Cargar más",
+      "loading": "Cargando exoplanetas",
       "no-results": {
         "main": "Sin resultados",
         "sub": "Intenta con otra frase"
       },
+      "fetch-error": "Petición de exoplanetas fallida",
       "card": {
         "button": "Visualizar en 3D",
-        "mass": "Masa",
+        "distance": "Distancia desde la Tierra",
         "radius": "Radio",
         "year": "Año de descubrimiento"
       }
@@ -135,6 +138,13 @@
         "title": "¿Cómo quieres llamar a tu constelación?",
         "empty-name": "El campo no debe estar vacío",
         "success": "Se ha creado correctamente la constelación"
+      },
+      "data": {
+        "distance": "Distancia desde la Tierra",
+        "radius": "Radio",
+        "year": "Año de descubrimiento",
+        "host_star": "Estrella anfitriona",
+        "amount_stars": "Estrellas en su sistema"
       }
     }
   }

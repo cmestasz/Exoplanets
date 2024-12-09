@@ -1,5 +1,6 @@
 import Scroll from '@components/ui/Scroll';
 import { Text } from '@components/ui/Text';
+import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router';
 
@@ -27,7 +28,9 @@ export default function Navigation({
       </Text>
       {
         routes.map((route, i) => (
-          <>
+          <React.Fragment
+            key={`${route}-nav`}
+          >
             <span>{'>'}</span>
             <Text
               invertedStyle
@@ -41,7 +44,7 @@ export default function Navigation({
                   : route
               }
             </Text>
-          </>
+          </React.Fragment>
         ))
       }
     </Scroll>

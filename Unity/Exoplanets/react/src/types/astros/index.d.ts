@@ -2,12 +2,15 @@ interface Astro {
   id: number;
   name: string;
   radius: number; // Ratio relative to Sun
-  imageUrl: string; // Not in DB
 }
 
 interface Exoplanet extends Astro {
-  disc_date: string;
-  mass: string;
+  host_star: string;
+  stars_amount: number;
+  discovery_year: string;
+  ra: string;
+  dec: string;
+  dist: string;
 }
 
 interface Star extends Astro {
