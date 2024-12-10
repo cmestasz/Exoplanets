@@ -113,12 +113,12 @@ export default function Constellations() {
                 className="flex flex-auto items-center justify-center self-center h-full text-primary"
               >
                 <h3
-                  className="text-5xl font-audiowide leading-8"
+                  className="text-4xl font-audiowide leading-8"
                 >
                   {t('pages.profile.constellations.no-results.main')}
                 </h3>
                 <h5
-                  className="text-4xl font-exo text-secondary"
+                  className="text-3xl font-exo text-secondary"
                 >
                   {t('pages.profile.constellations.no-results.sub')}
                 </h5>
