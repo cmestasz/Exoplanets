@@ -53,7 +53,7 @@ export default function ShowExoplanets({
   }, [usingFilter, leakedExos, exos]);
   useEffect(() => {
     if (viewRef.current) {
-      adjustCamera.AdjustSecondAuxiliar(viewRef.current, true);
+      adjustCamera.AdjustSecondAuxiliar(viewRef.current);
     }
   }, [adjustCamera, viewRef]);
   return (

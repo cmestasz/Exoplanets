@@ -1,3 +1,4 @@
+using System;
 using ReactUnity.UGUI;
 using UnityEngine;
 
@@ -70,16 +71,17 @@ public class AdjustCamera : MonoBehaviour
         RectTransform compRect = component.GetComponent<RectTransform>();
         camera.transform.SetParent(compRect.transform, false);
         camera.aspect = compRect.rect.width / compRect.rect.height;
+        camera.transform.localPosition = new Vector3(0, 0, -1200);
+        camera.transform.localRotation = Quaternion.identity;
         if (orthographic)
         {
             camera.orthographicSize = (compRect.rect.height * compRect.lossyScale.y) / 2f;
         }
         else
         {
-            camera.fieldOfView = (compRect.rect.height * compRect.lossyScale.y) / 2f;
+            float distance = Mathf.Abs(camera.transform.position.z - compRect.position.z);
+            camera.fieldOfView = 2f * Mathf.Atan((compRect.rect.height * compRect.lossyScale.y) / (2f * distance)) * Mathf.Rad2Deg;
         }
-        camera.transform.localPosition = new Vector3(0, 0, -1000);
-        camera.transform.localRotation = Quaternion.identity;
     }
 
     void PrepareMainForAuxiliars()

@@ -37,7 +37,7 @@ export default function Preview({
     console.log('valor de viewRef.current: ', viewRef.current);
     if (viewRef.current) {
       console.log('Se ajustará la cámara auxiliar en el preview');
-      adjustCamera.AdjustFirstAuxiliar(viewRef.current, true);
+      adjustCamera.AdjustFirstAuxiliar(viewRef.current);
     }
   }, [adjustCamera, viewRef, currentExoplanet]);
   if (!currentExoplanet) {
