@@ -6,10 +6,11 @@ import { useEffect, useRef } from 'react';
 
 interface VisualizationProps {
   coords?: { ra: number, dec: number, dist: number } | null;
+  multicamera?: boolean;
 }
 
 export default function Visualization({
-  coords,
+  coords, multicamera,
 }: VisualizationProps) {
   const adjustCamera = useGlobals().AdjustCamera as AdjustCamera;
   const auxiliarCamera = useGlobals().AuxiliarCamera as UnityEngine.Camera;
@@ -19,9 +20,9 @@ export default function Visualization({
   useEffect(() => {
     if (viewRef.current) {
       adjustCamera.AdjustFirstAuxiliar(viewRef.current);
-      adjustCamera.ResetSecond();
+      if (!multicamera) adjustCamera.ResetSecond();
     }
-  }, [viewRef, adjustCamera]);
+  }, [viewRef, adjustCamera, multicamera]);
   useEffect(() => {
     if (spaceController && coords) {
       const script = spaceController.GetComponent('SpaceController') as unknown as SpaceController;

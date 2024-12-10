@@ -1,7 +1,7 @@
 import Visualization from '@components/astros/Visualization';
-import AstrosSlider from '@components/astros/AstrosSlider';
 import { useCallback } from 'react';
 import { Exoplanet } from '@mytypes/astros';
+import AstrosSlider from '@components/astros/AstrosSlider';
 import { useExoplanets } from '../../providers/ExoplanetsProvider';
 import ExoData from './ExoData';
 
@@ -22,6 +22,7 @@ export default function SeeExoplanet() {
           dec: selectedExo.dec,
           dist: selectedExo.dist,
         }}
+        multicamera
       />
       <view
         className="flex flex-row portrait:flex-col-reverse gap-16 flex-initial"
