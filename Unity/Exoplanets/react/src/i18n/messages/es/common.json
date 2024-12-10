@@ -94,7 +94,12 @@
       },
       "constellations": {
         "howto": "¿Cómo creo una constelación?",
-        "visit": "¡Visita tus constelaciones!"
+        "visit": "¡Visita tus constelaciones!",
+        "error-fetch": "Petición de constelaciones fallida",
+        "no-results": {
+          "main": "No has creado constelaciones",
+          "sub": "Intenta crear una"
+        }
       },
       "about": {
         "introduction": "Exoplanets es un proyecto que busca mostrar de manera fácil y didáctica parte del universo. De esta manera, los estudiantes de educación básica puedan impulsar su aprendizaje espacial mediante su uso.",

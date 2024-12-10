@@ -1,27 +1,30 @@
+interface Coords {
+  ra: number;
+  dec: number;
+  dist: number;
+}
+
 interface Astro {
   id: number;
   name: string;
   radius: number; // Ratio relative to Sun
 }
 
-interface Exoplanet extends Astro {
+type Exoplanet = Astro & Coords & {
   host_star: string;
   stars_amount: number;
   discovery_year: string;
-  ra: string;
-  dec: string;
-  dist: string;
-}
+};
 
 interface Star extends Astro {
   ext_id: string;
   luminosity: number;
 }
 
-interface Constellation {
+type Constellation = {
   id: number;
   name: string;
-}
+} & Coords;
 
 export {
   Astro, Exoplanet, Star, Constellation,

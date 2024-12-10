@@ -27,16 +27,27 @@ public class AdjustCamera : MonoBehaviour
 
     private Vector2 lastAuxiliarSize2;
 
+    public void ResetFirst()
+    {
+        auxiliarCamera1.transform.SetParent(null);
+        auxiliarCamera1.enabled = false;
+    }
+
+    public void ResetSecond()
+    {
+        auxiliarCamera2.transform.SetParent(null);
+        auxiliarCamera2.enabled = false;
+    }
+
+
     public void AdjustToCanvas()
     {
         if (!cameraToCanvas && mainCamera != null && canvas != null)
         {
             cameraToCanvas = true;
             mainCamera.cullingMask = -1;
-            auxiliarCamera1.transform.SetParent(null);
-            auxiliarCamera1.enabled = false;
-            auxiliarCamera2.transform.SetParent(null);
-            auxiliarCamera2.enabled = false;
+            ResetFirst();
+            ResetSecond();
         }
 
     }

@@ -1,6 +1,6 @@
 //
 // Types in assemblies: Assembly-CSharp, SimpleFileBrowser.Runtime
-// Generated 08/12/2024 22:23:01
+// Generated 10/12/2024 15:40:14
 //
 /* eslint-disable */
 
@@ -180,6 +180,8 @@ export declare class AdjustCamera {
   canvas: UnityEngine.Canvas;
   auxiliarCamera1: UnityEngine.Camera;
   auxiliarCamera2: UnityEngine.Camera;
+  ResetFirst(): void;
+  ResetSecond(): void;
   AdjustToCanvas(): void;
   AdjustFirstAuxiliar(comp: ReactUnity.UGUI.UGUIComponent, orthographic?: boolean): void;
   AdjustSecondAuxiliar(comp: ReactUnity.UGUI.UGUIComponent, orthographic?: boolean): void;
@@ -1359,6 +1361,7 @@ export declare class SpaceController {
   particleSystem: UnityEngine.Component;
   name: string;
   hideFlags: UnityEngine.HideFlags;
+  WarpToCoord(ra: number, dec: number, dist: number): void;
   WarpToPos(pos: SpaceCoord): void;
   WarpToId(id: string): void;
   BuildRandomStars(): void;

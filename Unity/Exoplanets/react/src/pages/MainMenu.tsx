@@ -1,5 +1,5 @@
 import { Text } from '@components/ui/Text';
-import { AdjustCamera, MainStar } from '@mytypes/UnityTypes';
+import { AdjustCamera, MainStar } from '@mytypes/unity';
 import { ReactUnity, useGlobals } from '@reactunity/renderer';
 import { useEffect, useRef } from 'react';
 import { useTranslation } from 'react-i18next';

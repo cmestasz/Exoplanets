@@ -16,7 +16,13 @@ export default function SeeExoplanet() {
     <view
       className="flex flex-col flex-auto gap-6"
     >
-      <Visualization />
+      <Visualization
+        coords={{
+          ra: selectedExo.ra,
+          dec: selectedExo.dec,
+          dist: selectedExo.dist,
+        }}
+      />
       <view
         className="flex flex-row portrait:flex-col-reverse gap-16 flex-initial"
       >

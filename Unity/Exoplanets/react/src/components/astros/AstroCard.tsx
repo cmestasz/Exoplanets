@@ -4,7 +4,7 @@ import { twMerge } from 'tailwind-merge';
 import { useEffect, useRef, useState } from 'react';
 import clsx from 'clsx';
 import { ReactUnity, useGlobals } from '@reactunity/renderer';
-import { AstroPrefabBuilder } from '@mytypes/UnityTypes';
+import { AstroPrefabBuilder } from '@mytypes/unity';
 import { MATERIAL_AMOUNT } from '@lib/constants';
 
 export interface AstroCardProps {

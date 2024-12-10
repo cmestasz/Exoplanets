@@ -86,6 +86,11 @@ public class SpaceController : MonoBehaviour
         }
     }
 
+    public void WarpToCoord(float ra, float dec, float dist)
+    {
+        WarpToPos(new(ra, dec, dist));
+    }
+
     public void WarpToPos(SpaceCoord pos)
     {
         StartCoroutine(WarpToAnim(pos, null));
@@ -159,7 +164,6 @@ public class SpaceController : MonoBehaviour
             yield break;
         }
 
-        /*
         CurrentReference = new SpaceCoord(ra, dec, dist);
         ActiveConstellationsRequest request1 = new()
         {
@@ -183,8 +187,6 @@ public class SpaceController : MonoBehaviour
             yield return WarpFadeOut(ColorAdjustments);
             yield break;
         }
-        */
-
         ClearStars();
         BuildStars(stars);
         // BuildConstellations(constellations);

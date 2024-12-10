@@ -1,30 +1,34 @@
 import Visualization from '@components/astros/Visualization';
 import Spin from '@components/loading/Spin';
+import { AlertContext } from '@components/modals/AlertContext';
 import Scroll from '@components/ui/Scroll';
 import { Text } from '@components/ui/Text';
+import { supabase } from '@lib/supabase';
 import { Constellation } from '@mytypes/astros';
 import { AsyncData } from '@mytypes/index';
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router';
 
 export default function Constellations() {
   const { t } = useTranslation();
   const nav = useNavigate();
+  const showAlert = useContext(AlertContext);
   const [userConst, setUserConst] = useState<AsyncData<Constellation[]>>({ state: 'loading' });
   const [selectedConstellation, setSelectedConst] = useState<Constellation>();
   const handleSelected = (constellation: Constellation) => {
     setSelectedConst(constellation);
   };
   const getConstellations = async () => {
+    const { data, error } = await supabase.from('constellations').select('id, name, ra, dec, dist');
+    if (error) {
+      throw error;
+    }
     setUserConst({
       state: 'loaded',
-      data: [
-        { name: 'SampleConstellation1', id: 1 },
-        { name: 'SampleConstellation2', id: 2 },
-      ],
+      data,
     });
-    setSelectedConst({ name: 'SampleConstellation1', id: 1 });
+    setSelectedConst(data.length > 0 ? data[0] : null);
   };
   useEffect(() => {
     // Is caching the constellations a good idea?
@@ -33,10 +37,11 @@ export default function Constellations() {
       if (isMounted) {
         console.log('Error thowed by me: ', r);
         setUserConst({ state: 'error' });
+        showAlert({ message: t('pages.profile.constellations.error-fetch'), type: 'error' });
       }
     });
     return () => { isMounted = false; };
-  }, []);
+  }, [showAlert, t]);
   return (
     <view
       className="flex flex-col gap-8 pt-8 flex-auto"
@@ -45,7 +50,7 @@ export default function Constellations() {
         className="flex-auto gap-5"
       >
         {
-          userConst.state === 'loading' ? (
+          userConst.state === 'loading' || !selectedConstellation ? (
             <Spin />
           ) : (
             <>
@@ -54,7 +59,13 @@ export default function Constellations() {
               >
                 {selectedConstellation.name}
               </h2>
-              <Visualization />
+              <Visualization
+                coords={{
+                  ra: selectedConstellation.ra,
+                  dec: selectedConstellation.dec,
+                  dist: selectedConstellation.dist,
+                }}
+              />
             </>
           )
         }
@@ -80,7 +91,7 @@ export default function Constellations() {
           className="flex flex-col border-2 border-primary py-4 gap-3 rounded-lg max-h-52 px-7"
         >
           {
-            userConst.state === 'loaded' ? userConst.data.map((constellation, i, arr) => (
+            userConst.state === 'loaded' && userConst.data.map((constellation, i, arr) => (
               <React.Fragment
                 key={constellation.name}
               >
@@ -94,7 +105,28 @@ export default function Constellations() {
                 </Text>
                 {i !== arr.length - 1 && <hr className="w-full border-primary border-[1px]" />}
               </React.Fragment>
-            )) : (
+            ))
+          }
+          {
+            userConst.state === 'loaded' && userConst.data.length === 0 && (
+              <view
+                className="flex flex-auto items-center justify-center self-center h-full text-primary"
+              >
+                <h3
+                  className="text-5xl font-audiowide leading-8"
+                >
+                  {t('pages.profile.constellations.no-results.main')}
+                </h3>
+                <h5
+                  className="text-4xl font-exo text-secondary"
+                >
+                  {t('pages.profile.constellations.no-results.sub')}
+                </h5>
+              </view>
+            )
+          }
+          {
+            userConst.state === 'loading' && (
               <Spin />
             )
           }

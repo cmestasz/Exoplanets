@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 interface PreviewDataProps {
   radius: number;
   disc_date: string;
-  distance: string;
+  distance: number;
 }
 
 export default function PreviewData({

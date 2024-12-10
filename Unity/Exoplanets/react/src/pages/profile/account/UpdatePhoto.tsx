@@ -3,7 +3,7 @@ import Modal from '@components/modals/Modal';
 import { useModal } from '@lib/hooks';
 import { supabase } from '@lib/supabase';
 import { UserStates } from '@lib/utils';
-import { ProfilePictureSelector } from '@mytypes/UnityTypes';
+import { ProfilePictureSelector } from '@mytypes/unity';
 import { useGlobals } from '@reactunity/renderer';
 import { INVERTED_COLOR } from '@styles/colors';
 import clsx from 'clsx';

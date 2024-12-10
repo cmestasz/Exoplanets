@@ -6,7 +6,7 @@ import Scroll from '@components/ui/Scroll';
 import { Text } from '@components/ui/Text';
 import { Exoplanet } from '@mytypes/astros';
 import { AsyncData } from '@mytypes/index';
-import { AdjustCamera } from '@mytypes/UnityTypes';
+import { AdjustCamera } from '@mytypes/unity';
 // import { AdjustCamera } from '@mytypes/UnityTypes';
 import { ReactUnity, UnityEngine, useGlobals } from '@reactunity/renderer';
 import { useEffect, useRef, useState } from 'react';
