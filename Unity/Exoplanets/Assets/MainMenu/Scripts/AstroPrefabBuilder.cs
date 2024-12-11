@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using ReactUnity.UGUI;
 using UnityEngine;
@@ -8,7 +9,7 @@ public class AstroPrefabBuilder : MonoBehaviour
     public GameObject prefab;
     public List<GameObject> instances;
 
-    public int Build(PrefabComponent Component, int selectedMaterial)
+    public int Build(PrefabComponent Component, int selectedMaterial, bool firstCamera = true)
     {
         if (prefab == null)
         {
@@ -23,7 +24,7 @@ public class AstroPrefabBuilder : MonoBehaviour
         }
 
         GameObject instance = Instantiate(prefab, Vector3.zero, Quaternion.identity);
-        instance.layer = 7;
+        instance.layer = firstCamera ? 8 : 9;
         AstroPrefab astro = instance.GetComponent<AstroPrefab>();
 
         if (astro == null)

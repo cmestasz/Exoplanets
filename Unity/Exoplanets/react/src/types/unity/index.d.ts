@@ -1,6 +1,6 @@
 //
 // Types in assemblies: Assembly-CSharp, SimpleFileBrowser.Runtime
-// Generated 10/12/2024 15:40:14
+// Generated 11/12/2024 7:46:15
 //
 /* eslint-disable */
 
@@ -332,7 +332,7 @@ export declare class AstroPrefabBuilder {
   materials: UnityEngine.Material[];
   prefab: UnityEngine.GameObject;
   instances: UnityEngine.GameObject[];
-  Build(Component: ReactUnity.UGUI.PrefabComponent, selectedMaterial: number): number;
+  Build(Component: ReactUnity.UGUI.PrefabComponent, selectedMaterial: number, firstCamera?: boolean): number;
   Destroy(index: number): void;
   IsInvoking(): boolean;
   CancelInvoke(): void;
@@ -1252,7 +1252,6 @@ export declare class ConstellationsResponse {
 }
 export declare class ActiveConstellationsRequest {
   constructor();
-  user_id: number;
   ra: number;
   dec: number;
   dist: number;

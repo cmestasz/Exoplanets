@@ -1,5 +1,6 @@
 import { AlertContext } from '@components/modals/AlertContext';
 import Modal from '@components/modals/Modal';
+import Scroll from '@components/ui/Scroll';
 import { Text } from '@components/ui/Text';
 import { useModal } from '@lib/hooks';
 import { Exoplanet } from '@mytypes/astros';
@@ -71,7 +72,7 @@ export default function ExoData({
           {t('pages.see-exoplanet.create-const.button')}
         </Text>
       </header>
-      <view
+      <Scroll
         className="flex flex-row flex-auto items-center border-2 border-primary rounded-lg gap-10 p-6"
       >
         {
@@ -90,7 +91,7 @@ export default function ExoData({
             </view>
           ))
         }
-      </view>
+      </Scroll>
       {
         modalVisible && (
           <Modal

@@ -1,7 +1,5 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Networking;
 using UnityEngine.Rendering;
 using UnityEngine.Rendering.Universal;
 using static Animations;
@@ -164,29 +162,28 @@ public class SpaceController : MonoBehaviour
             yield break;
         }
 
-        CurrentReference = new SpaceCoord(ra, dec, dist);
-        ActiveConstellationsRequest request1 = new()
-        {
-            user_id = 1,
-            ra = ra,
-            dec = dec,
-            dist = dist
-        };
-        yield return APIConnector.Post<ActiveConstellationsRequest, ConstellationsResponse>("list_active_constellations", request1,
-        response =>
-        {
-            constellations = response.constellations;
-        }, err =>
-        {
-            error = err;
-        });
+        // CurrentReference = new SpaceCoord(ra, dec, dist);
+        // ActiveConstellationsRequest request1 = new()
+        // {
+        //     ra = ra,
+        //     dec = dec,
+        //     dist = dist
+        // };
+        // yield return APIConnector.Post<ActiveConstellationsRequest, ConstellationsResponse>("list_active_constellations", request1,
+        // response =>
+        // {
+        //     constellations = response.constellations;
+        // }, err =>
+        // {
+        //     error = err;
+        // });
 
-        if (error != null)
-        {
-            DialogueController.Instance.ShowDialogue("warp_fail");
-            yield return WarpFadeOut(ColorAdjustments);
-            yield break;
-        }
+        // if (error != null)
+        // {
+        //     DialogueController.Instance.ShowDialogue("warp_fail");
+        //     yield return WarpFadeOut(ColorAdjustments);
+        //     yield break;
+        // }
         ClearStars();
         BuildStars(stars);
         // BuildConstellations(constellations);
@@ -195,10 +192,6 @@ public class SpaceController : MonoBehaviour
         PlayerController.Instance.transform.rotation = Quaternion.identity;
 
         yield return WarpFadeOut(ColorAdjustments);
-        DialogueController.Instance.ShowDialogue("warp");
-        UIInteractor.Instance.ShowTitle(name);
-        if (pos != null)
-            DialogueController.Instance.ShowDialogue("warp_posonly");
     }
 
     public void BuildRandomStars()
@@ -218,7 +211,7 @@ public class SpaceController : MonoBehaviour
     {
         foreach (Transform child in StarsParent)
         {
-            Destroy(child.gameObject);
+            StarController.DestroyStar(child.gameObject.GetComponent<StarController>());
         }
     }
 

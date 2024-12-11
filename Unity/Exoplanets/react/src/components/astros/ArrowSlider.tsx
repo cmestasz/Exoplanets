@@ -41,12 +41,12 @@ export default function ArrowSlider({
       >
         {
           toLeft ? (
-            <icon className="text-primary group-hover:text-secondary transition-colors duration-300 ease-out text-4xl">
+            <icon className="text-primary group-hover:text-secondary transition-colors duration-300 ease-out text-5xl">
               chevron_left
             </icon>
 
           ) : (
-            <icon className="text-primary group-hover:text-secondary transition-colors duration-300 ease-out text-4xl">
+            <icon className="text-primary group-hover:text-secondary transition-colors duration-300 ease-out text-5xl">
               chevron_right
             </icon>
           )

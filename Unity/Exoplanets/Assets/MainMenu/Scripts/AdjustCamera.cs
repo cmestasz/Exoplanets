@@ -5,9 +5,10 @@ using UnityEngine;
 public class AdjustCamera : MonoBehaviour
 {
 
-    private int NO_POST_LAYER;
+    private int AUXILIAR_CAMERA_1_LAYER;
 
-    private int DEFAULT_LAYER;
+    private int AUXILIAR_CAMERA_2_LAYER;
+
 
     private bool cameraToCanvas;
 
@@ -46,6 +47,7 @@ public class AdjustCamera : MonoBehaviour
         {
             cameraToCanvas = true;
             mainCamera.cullingMask = -1;
+            PrepareMainForAuxiliars();
             ResetFirst();
             ResetSecond();
         }
@@ -99,24 +101,24 @@ public class AdjustCamera : MonoBehaviour
     {
         if (cameraToCanvas)
         {
-            mainCamera.cullingMask &= ~(1 << NO_POST_LAYER);
-            mainCamera.cullingMask &= ~(1 << DEFAULT_LAYER);
+            mainCamera.cullingMask &= ~(1 << AUXILIAR_CAMERA_1_LAYER);
+            mainCamera.cullingMask &= ~(1 << AUXILIAR_CAMERA_2_LAYER);
             cameraToCanvas = false;
         }
     }
 
     private void ValidateLayers()
     {
-        if (NO_POST_LAYER == -1 || DEFAULT_LAYER == -1)
+        if (AUXILIAR_CAMERA_1_LAYER == -1 || AUXILIAR_CAMERA_2_LAYER == -1)
         {
-            Debug.LogError("Las capas 'No Post' o 'Default' no están configuradas en el proyecto.");
+            Debug.LogError("Las capas 'AuxiliarCamera1' o 'AuxiliarCamera2' no están configuradas en el proyecto.");
         }
     }
 
     void Awake()
     {
-        NO_POST_LAYER = LayerMask.NameToLayer("No Post");
-        DEFAULT_LAYER = LayerMask.NameToLayer("Default");
+        AUXILIAR_CAMERA_1_LAYER = LayerMask.NameToLayer("AuxiliarCamera1");
+        AUXILIAR_CAMERA_2_LAYER = LayerMask.NameToLayer("AuxiliarCamera2");
     }
 
     void Start()

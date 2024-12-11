@@ -54,10 +54,10 @@ export default function AstrosSlider<T extends Astro>({
   }, [viewRef, adjustCamera]);
 
   return (
-    <div className="flex flex-row flex-initial basis-1/4">
+    <div className="flex flex-row flex-initial basis-1/2">
       <ArrowSlider toLeft onClick={handleBefore} cardHover={cardHover} />
       <div
-        className="relative flex-auto min-h-[30%] border-transparent border-t-primary hover:border-t-secondary border-b-primary hover:border-b-secondary border-2"
+        className="relative flex-grow basis-1/3 min-h-[42%] border-transparent border-t-primary hover:border-t-secondary border-b-primary hover:border-b-secondary border-2"
         ref={viewRef}
       >
         <render

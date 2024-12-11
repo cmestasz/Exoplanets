@@ -24,7 +24,7 @@ export default function Preview() {
     if (prefabRef.current && selectedExo) {
       setPreviousAstro((prev) => {
         if (prev !== -1) astroPrefab.Destroy(prev);
-        return astroPrefab.Build(prefabRef.current, selectedExo.id % MATERIAL_AMOUNT);
+        return astroPrefab.Build(prefabRef.current, Number(selectedExo.id.split(' ')[2]) % MATERIAL_AMOUNT, true);
       });
     }
   }, [prefabRef, astroPrefab, selectedExo]);

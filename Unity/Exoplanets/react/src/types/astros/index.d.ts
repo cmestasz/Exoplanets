@@ -5,7 +5,7 @@ interface Coords {
 }
 
 interface Astro {
-  id: number;
+  id: string;
   name: string;
   radius: number; // Ratio relative to Sun
 }

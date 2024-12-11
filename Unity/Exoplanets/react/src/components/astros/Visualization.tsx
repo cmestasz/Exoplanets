@@ -26,12 +26,13 @@ export default function Visualization({
   useEffect(() => {
     if (spaceController && coords) {
       const script = spaceController.GetComponent('SpaceController') as unknown as SpaceController;
+      console.log('Ra: ', coords.ra, 'Dec: ', coords.dec, 'Dist: ', coords.dist);
       script.WarpToCoord(coords.ra, coords.dec, coords.dist);
     }
   }, [spaceController, coords]);
   return (
     <view
-      className="relative flex-auto border-primary border-2 rounded-lg"
+      className="relative flex-auto border-primary border-2 rounded-lg flex items-center justify-center"
       ref={viewRef}
     >
       {
@@ -54,7 +55,7 @@ export default function Visualization({
               className="absolute inset-0"
             />
             <prefab
-              className="m-auto inset-0 z-30"
+              className=""
               target={crossHair}
             />
           </>

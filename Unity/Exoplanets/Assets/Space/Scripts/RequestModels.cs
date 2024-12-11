@@ -43,7 +43,6 @@ public class ConstellationsResponse
 [System.Serializable]
 public class ActiveConstellationsRequest
 {
-    public int user_id;
     public float ra;
     public float dec;
     public float dist;

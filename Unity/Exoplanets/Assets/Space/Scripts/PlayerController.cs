@@ -78,9 +78,6 @@ public class PlayerController : MonoBehaviour
     {
         switch (currentAction.right_gesture)
         {
-            case "click":
-                TryGetInfo();
-                break;
             case "select":
                 if (CurrentStar == null)
                     TryStartConnection();
@@ -158,33 +155,12 @@ public class PlayerController : MonoBehaviour
         {
             TryEndConnection();
         }
-        if (Input.GetKeyDown(SAVE_CONSTELLATION))
-        {
-            SpaceController.Instance.SaveConstellation(UIInteractor.Instance.GetConstellationName());
-        }
-        if (Input.GetKeyDown(WARP_POS))
-        {
-            SpaceController.Instance.WarpToPos(UIInteractor.Instance.GetWarpPosition());
-        }
-        if (Input.GetKeyDown(WARP_ID))
-        {
-            SpaceController.Instance.WarpToId(UIInteractor.Instance.GetWarpId());
-        }
         if (Input.GetKeyDown(RANDOM_STARS))
         {
             SpaceController.Instance.BuildRandomStars();
         }
-        if (Input.GetKeyDown(GET_INFO))
-        {
-            TryGetInfo();
-        }
-    }
 
-    private void TryGetInfo()
-    {
-        RaycastCheckType<IHasInfo>((hasInfo) => UIInteractor.Instance.SetInfoText(hasInfo.Info));
     }
-
     private void TryStartConnection()
     {
         RaycastCheckType<StarController>((star) => StartConnection(star));
