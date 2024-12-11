@@ -111,6 +111,9 @@ public class SpaceController : MonoBehaviour
         string error = null;
         if (pos != null)
         {
+            ra = pos.ra;
+            dec = pos.dec;
+            dist = pos.dist;
             SurroundingsPosRequest request = new()
             {
                 ra = ra,
@@ -126,9 +129,7 @@ public class SpaceController : MonoBehaviour
                 error = err;
             }
             );
-            ra = pos.ra;
-            dec = pos.dec;
-            dist = pos.dist;
+
         }
         else if (id != null)
         {
