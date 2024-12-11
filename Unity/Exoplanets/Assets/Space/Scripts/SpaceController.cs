@@ -207,7 +207,7 @@ public class SpaceController : MonoBehaviour
     }
 
 
-    private void ClearStars()
+    public void ClearStars()
     {
         foreach (Transform child in StarsParent)
         {

@@ -42,14 +42,6 @@ export default function Visualization({
               width={500}
               height={500}
               camera={auxiliarCamera}
-              onScroll={(ev: UnityEngine.EventSystems.PointerEventData) => {
-                auxiliarCamera.transform.Translate(
-                  0,
-                  0,
-                  Math.fround(ev.scrollDelta.y * 10),
-                  Interop.UnityEngine.Space.Self,
-                );
-              }}
               onMount={(ev) => ev.gameObject.SetActive(true)}
               onUnmount={(ev) => ev.gameObject.SetActive(false)}
               className="absolute inset-0"

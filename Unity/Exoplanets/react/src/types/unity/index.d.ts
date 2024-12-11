@@ -1,6 +1,6 @@
 //
 // Types in assemblies: Assembly-CSharp, SimpleFileBrowser.Runtime
-// Generated 11/12/2024 7:46:15
+// Generated 11/12/2024 16:07:05
 //
 /* eslint-disable */
 
@@ -1364,6 +1364,7 @@ export declare class SpaceController {
   WarpToPos(pos: SpaceCoord): void;
   WarpToId(id: string): void;
   BuildRandomStars(): void;
+  ClearStars(): void;
   AddConstellationConnection(star1: StarController, star2: StarController): void;
   SaveConstellation(name: string): void;
   IsInvoking(): boolean;
@@ -1442,6 +1443,7 @@ export declare class StarController {
   static stars: System.Collections.Generic.Dictionary;
   static CreateStar(id: string, prefab: UnityEngine.GameObject, position: UnityEngine.Vector3, parent: UnityEngine.Transform): StarController;
   static GetStar(id: string): StarController;
+  static DestroyStar(star: StarController): void;
   IsInvoking(): boolean;
   CancelInvoke(): void;
   Invoke(methodName: string, time: number): void;
@@ -1514,11 +1516,7 @@ export declare class UIInteractor {
   particleSystem: UnityEngine.Component;
   name: string;
   hideFlags: UnityEngine.HideFlags;
-  GetConstellationName(): string;
-  SetInfoText(text: string): void;
-  GetWarpPosition(): SpaceCoord;
-  GetWarpId(): string;
-  ShowTitle(title: string): void;
+  crosshair: UnityEngine.UI.Image;
   MoveCrosshair(position: UnityEngine.Vector2): void;
   GetCrosshairPosition(): UnityEngine.Vector2;
   GetScaleFactor(): number;

@@ -2,7 +2,7 @@
 import { Text } from '@components/ui/Text';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router';
-import { AdjustCamera, AstroPrefabBuilder } from '@mytypes/unity';
+import { AdjustCamera, AstroPrefabBuilder, SpaceController } from '@mytypes/unity';
 import { ReactUnity, UnityEngine, useGlobals } from '@reactunity/renderer';
 import { useEffect, useRef, useState } from 'react';
 import { MATERIAL_AMOUNT } from '@lib/constants';
@@ -18,6 +18,7 @@ export default function Preview() {
   const astroPrefab = useGlobals().AstroPrefabBuilder as AstroPrefabBuilder;
   const adjustCamera = useGlobals().AdjustCamera as AdjustCamera;
   const auxiliarCamera = useGlobals().AuxiliarCamera as UnityEngine.Camera;
+  const spaceController = useGlobals().SpaceController as UnityEngine.GameObject;
   const prefabRef = useRef<ReactUnity.UGUI.PrefabComponent>();
   const viewRef = useRef<ReactUnity.UGUI.ContainerComponent>();
   useEffect(() => {
@@ -33,9 +34,15 @@ export default function Preview() {
       adjustCamera.AdjustFirstAuxiliar(viewRef.current);
     }
   }, [adjustCamera, viewRef, selectedExo]);
+  useEffect(() => {
+    if (spaceController) {
+      const script = spaceController.GetComponent('SpaceController') as unknown as SpaceController;
+      script.ClearStars();
+    }
+  }, [spaceController]);
   return (
     <view
-      className="relative flex flex-col portrait:flex-row flex-initial basis-1/4 p-6 gap-4 portrait:gap-10 border-2 border-primary rounded-lg"
+      className="relative flex flex-col portrait:flex-row flex-initial basis-1/3 p-6 gap-4 portrait:gap-10 border-2 border-primary rounded-lg"
     >
       {
         selectedExo ? (
@@ -52,14 +59,6 @@ export default function Preview() {
                 width={500}
                 height={500}
                 camera={auxiliarCamera}
-                onScroll={(ev: UnityEngine.EventSystems.PointerEventData) => {
-                  auxiliarCamera.transform.Translate(
-                    0,
-                    0,
-                    Math.fround(ev.scrollDelta.y * 10),
-                    Interop.UnityEngine.Space.Self,
-                  );
-                }}
                 onMount={(ev) => ev.gameObject.SetActive(true)}
                 onUnmount={(ev) => ev.gameObject.SetActive(false)}
                 className="absolute inset-0"

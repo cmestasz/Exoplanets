@@ -16,14 +16,19 @@ export default function SeeExoplanet() {
     <view
       className="flex flex-col flex-auto gap-6"
     >
-      <Visualization
-        coords={{
-          ra: selectedExo.ra,
-          dec: selectedExo.dec,
-          dist: selectedExo.dist,
-        }}
-        multicamera
-      />
+      {
+        selectedExo && (
+          <Visualization
+            coords={{
+              ra: selectedExo.ra,
+              dec: selectedExo.dec,
+              dist: selectedExo.dist,
+            }}
+            multicamera
+          />
+
+        )
+      }
       <view
         className="flex flex-row portrait:flex-col-reverse gap-16 flex-initial"
       >
