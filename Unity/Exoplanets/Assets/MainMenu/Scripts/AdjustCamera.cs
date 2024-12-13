@@ -9,8 +9,9 @@ public class AdjustCamera : MonoBehaviour
 
     private int AUXILIAR_CAMERA_2_LAYER;
 
-
     private bool cameraToCanvas;
+
+    private bool needPlayerController;
 
     public Canvas canvas;
 
@@ -54,7 +55,7 @@ public class AdjustCamera : MonoBehaviour
 
     }
 
-    public void AdjustFirstAuxiliar(UGUIComponent comp, bool orthographic = true)
+    public void AdjustFirstAuxiliar(UGUIComponent comp, bool orthographic = true, bool needPlayerController = false)
     {
         if (auxiliarCamera1 != null)
         {
@@ -62,6 +63,15 @@ public class AdjustCamera : MonoBehaviour
             auxiliarCamera1.enabled = true;
             comp1 = comp;
             AdjustTo(comp, auxiliarCamera1, orthographic);
+            if (needPlayerController)
+            {
+                auxiliarCamera1.transform.SetParent(PlayerController.Instance.transform, false);
+                auxiliarCamera1.transform.position = comp.RectTransform.position;
+                auxiliarCamera1.cullingMask |= 1 << LayerMask.NameToLayer("UI");
+            } else {
+                auxiliarCamera1.cullingMask &= ~(1 << LayerMask.NameToLayer("UI"));
+            }
+            this.needPlayerController = needPlayerController;
             lastAuxiliarSize1 = comp.RectTransform.rect.size;
         }
     }
@@ -151,7 +161,7 @@ public class AdjustCamera : MonoBehaviour
                 Vector2 currentSize = comp1.RectTransform.rect.size;
                 if (currentSize != lastAuxiliarSize1)
                 {
-                    AdjustFirstAuxiliar(comp1, auxiliarCamera1.orthographic);
+                    AdjustFirstAuxiliar(comp1, auxiliarCamera1.orthographic, needPlayerController);
                     lastAuxiliarSize1 = currentSize;
                 }
             }

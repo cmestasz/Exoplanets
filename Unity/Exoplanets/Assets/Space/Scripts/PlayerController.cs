@@ -16,7 +16,7 @@ public class PlayerController : MonoBehaviour
     private WebCamTexture webcamTexture;
     private InputResponse currentAction;
     private Vector2 cursorPos;
-    private const float BORDER_OFFSET = 50;
+    private const float BORDER_OFFSET = 10;
     private const int BASE_UNSELECTED_TOLERANCE = 5;
 
     private void Awake()
@@ -149,14 +149,17 @@ public class PlayerController : MonoBehaviour
 
         if (Input.GetKeyDown(ADD_TO_CONSTELLATION))
         {
+            Debug.Log("Try start connection");
             TryStartConnection();
         }
         if (Input.GetKeyUp(ADD_TO_CONSTELLATION))
         {
+            Debug.Log("Try end connection");
             TryEndConnection();
         }
         if (Input.GetKeyDown(RANDOM_STARS))
         {
+            Debug.Log("Randow stars");
             SpaceController.Instance.BuildRandomStars();
         }
 
@@ -243,12 +246,23 @@ public class PlayerController : MonoBehaviour
     {
         Vector2 pos = UIInteractor.Instance.GetCrosshairPosition();
         Vector2 canvasSize = UIInteractor.Instance.GetCanvasSize();
-        Vector2 screenPos = new(
-            pos.x / canvasSize.x * Screen.width,
-            pos.y / canvasSize.y * Screen.height
-        );
-        return Camera.main.ScreenPointToRay(screenPos);
+
+        RectTransform canvasRect = UIInteractor.Instance.GetCanvasRectTransform();
+
+        Vector3[] worldCorners = new Vector3[4];
+        canvasRect.GetWorldCorners(worldCorners);
+
+        Vector3 bottomLeft = worldCorners[0];
+        Vector3 topRight = worldCorners[2];
+
+        float x = Mathf.Lerp(bottomLeft.x, topRight.x, pos.x / canvasSize.x);
+        float y = Mathf.Lerp(bottomLeft.y, topRight.y, pos.y / canvasSize.y);
+        Vector2 screenPos = new(x, y);
+
+        Camera cam = transform.Find("AuxiliarCamera").GetComponent<Camera>();
+        return cam.ScreenPointToRay(screenPos);
     }
+
 
     private void ToggleInput()
     {

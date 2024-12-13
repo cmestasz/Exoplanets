@@ -15,11 +15,10 @@ export default function Visualization({
   const adjustCamera = useGlobals().AdjustCamera as AdjustCamera;
   const auxiliarCamera = useGlobals().AuxiliarCamera as UnityEngine.Camera;
   const spaceController = useGlobals().SpaceController as UnityEngine.GameObject;
-  const crossHair = useGlobals().CrossHair as UnityEngine.GameObject;
   const viewRef = useRef<ReactUnity.UGUI.ContainerComponent>();
   useEffect(() => {
     if (viewRef.current) {
-      adjustCamera.AdjustFirstAuxiliar(viewRef.current);
+      adjustCamera.AdjustFirstAuxiliar(viewRef.current, false, true);
       if (!multicamera) adjustCamera.ResetSecond();
     }
   }, [viewRef, adjustCamera, multicamera]);
@@ -37,20 +36,14 @@ export default function Visualization({
     >
       {
         coords ? (
-          <>
-            <render
-              width={500}
-              height={500}
-              camera={auxiliarCamera}
-              onMount={(ev) => ev.gameObject.SetActive(true)}
-              onUnmount={(ev) => ev.gameObject.SetActive(false)}
-              className="absolute inset-0"
-            />
-            <prefab
-              className=""
-              target={crossHair}
-            />
-          </>
+          <render
+            width={500}
+            height={500}
+            camera={auxiliarCamera}
+            onMount={(ev) => ev.gameObject.SetActive(true)}
+            onUnmount={(ev) => ev.gameObject.SetActive(false)}
+            className="absolute inset-0"
+          />
         ) : (
           <Spin />
         )

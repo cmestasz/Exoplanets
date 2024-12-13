@@ -39,15 +39,15 @@ public class SpaceController : MonoBehaviour
         ConstellationParent = transform.Find("Constellations");
         ColorAdjustments = postProcessing.GetComponent<Volume>().profile.components[1] as ColorAdjustments;
         CurrentPlanet = transform.Find("Planet").gameObject;
-        ResultingVisual = transform.Find("ResultingVisual").gameObject;
+        // ResultingVisual = transform.Find("ResultingVisual").gameObject;
     }
 
     private void InitConfig()
     {
         CurrentReference = new(0, 0, 0);
-        resultingTexture.width = Screen.width;
-        resultingTexture.height = Screen.height;
-        ResultingVisual.transform.localScale = new(Screen.width / 100, 1, Screen.height / 100);
+        // resultingTexture.width = Screen.width;
+        // resultingTexture.height = Screen.height;
+        // ResultingVisual.transform.localScale = new(Screen.width / 100, 1, Screen.height / 100);
     }
 
 
@@ -189,8 +189,8 @@ public class SpaceController : MonoBehaviour
         BuildStars(stars);
         // BuildConstellations(constellations);
         BuildExoplanet(id != null);
-        PlayerController.Instance.transform.position = new(0, 0, -40);
-        PlayerController.Instance.transform.rotation = Quaternion.identity;
+        // PlayerController.Instance.transform.position = new(0, 0, -40);
+        // PlayerController.Instance.transform.rotation = Quaternion.identity;
 
         yield return WarpFadeOut(ColorAdjustments);
     }

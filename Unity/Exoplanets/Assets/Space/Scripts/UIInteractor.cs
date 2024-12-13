@@ -3,17 +3,53 @@ using UnityEngine.UI;
 
 public class UIInteractor : MonoBehaviour
 {
-    public Image crosshair;
+    private Image crosshair;
     public static UIInteractor Instance { get; private set; }
+
+    private RectTransform rt;
+
+    private float lastWidth;
+
+    private float lastHeight;
 
     private void Awake()
     {
         Instance = this;
     }
 
+    private void Start()
+    {
+        rt = GetComponent<RectTransform>();
+        crosshair = transform.Find("Crosshair").GetComponent<Image>();
+        AdjustCrosshair();
+    }
+
+    private void Update()
+    {
+        if (lastWidth != rt.rect.width || lastHeight != rt.rect.height)
+        {
+            AdjustCrosshair();
+        }
+    }
+
+    public void AdjustCrosshair()
+    {
+        crosshair.GetComponent<RectTransform>().anchoredPosition = new Vector2(
+            rt.rect.width / 2f,
+            rt.rect.height / 2f
+        );
+        lastHeight = rt.rect.height;
+        lastWidth = rt.rect.width;
+    }
+
     public void MoveCrosshair(Vector2 position)
     {
         crosshair.rectTransform.anchoredPosition = position;
+    }
+
+    public RectTransform GetCanvasRectTransform()
+    {
+        return rt;
     }
 
     public Vector2 GetCrosshairPosition()
@@ -28,7 +64,6 @@ public class UIInteractor : MonoBehaviour
 
     public Vector2 GetCanvasSize()
     {
-        RectTransform rt = GetComponent<RectTransform>();
         return new Vector2(rt.rect.width, rt.rect.height);
     }
 }
