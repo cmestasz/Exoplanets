@@ -34,7 +34,11 @@
         "email": "Send us an email"
       }
     },
-    "navigation": "Home"
+    "navigation": "Home",
+    "visualization": {
+      "maximize": "Maximize",
+      "minimize": "Minimize"
+    }
   },
   "pages": {
     "subtitle": "Discover the universe nearby",
@@ -94,7 +98,8 @@
       },
       "constellations": {
         "howto": "How do I create a constellation?",
-        "visit": "Visit your constellations!"
+        "visit": "Visit your constellations!",
+        "error-fetch": "Failed constellation request" 
       },
       "about": {
         "introduction": "Exoplanets is a project that seeks to show in an easy and didactic way part of the universe. In this way, basic education students can boost their spatial learning through its use.",
@@ -115,7 +120,7 @@
     },
     "exoplanets": {
       "title": "Select an exoplanet and start exploring",
-      "search": "Busca exoplanetas en el espacio",
+      "search": "Search exoplanets in the space",
       "load-more": "Load more",
       "loading": "Loading",
       "no-results": {

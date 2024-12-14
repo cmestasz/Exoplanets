@@ -1,7 +1,5 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Networking;
 using UnityEngine.Rendering;
 using UnityEngine.Rendering.Universal;
 using static Animations;
@@ -41,15 +39,15 @@ public class SpaceController : MonoBehaviour
         ConstellationParent = transform.Find("Constellations");
         ColorAdjustments = postProcessing.GetComponent<Volume>().profile.components[1] as ColorAdjustments;
         CurrentPlanet = transform.Find("Planet").gameObject;
-        ResultingVisual = transform.Find("ResultingVisual").gameObject;
+        // ResultingVisual = transform.Find("ResultingVisual").gameObject;
     }
 
     private void InitConfig()
     {
         CurrentReference = new(0, 0, 0);
-        resultingTexture.width = Screen.width;
-        resultingTexture.height = Screen.height;
-        ResultingVisual.transform.localScale = new(Screen.width / 100, 1, Screen.height / 100);
+        // resultingTexture.width = Screen.width;
+        // resultingTexture.height = Screen.height;
+        // ResultingVisual.transform.localScale = new(Screen.width / 100, 1, Screen.height / 100);
     }
 
 
@@ -86,6 +84,11 @@ public class SpaceController : MonoBehaviour
         }
     }
 
+    public void WarpToCoord(float ra, float dec, float dist)
+    {
+        WarpToPos(new(ra, dec, dist));
+    }
+
     public void WarpToPos(SpaceCoord pos)
     {
         StartCoroutine(WarpToAnim(pos, null));
@@ -101,13 +104,16 @@ public class SpaceController : MonoBehaviour
         yield return WarpFadeIn(ColorAdjustments);
 
         Star[] stars = null;
-        Constellation[] constellations = null;
+        Constellation[] constellations  = null;
         string name = null;
         float ra = 0, dec = 0, dist = 0;
 
         string error = null;
         if (pos != null)
         {
+            ra = pos.ra;
+            dec = pos.dec;
+            dist = pos.dist;
             SurroundingsPosRequest request = new()
             {
                 ra = ra,
@@ -123,9 +129,7 @@ public class SpaceController : MonoBehaviour
                 error = err;
             }
             );
-            ra = pos.ra;
-            dec = pos.dec;
-            dist = pos.dist;
+
         }
         else if (id != null)
         {
@@ -159,44 +163,36 @@ public class SpaceController : MonoBehaviour
             yield break;
         }
 
-        /*
-        CurrentReference = new SpaceCoord(ra, dec, dist);
-        ActiveConstellationsRequest request1 = new()
-        {
-            user_id = 1,
-            ra = ra,
-            dec = dec,
-            dist = dist
-        };
-        yield return APIConnector.Post<ActiveConstellationsRequest, ConstellationsResponse>("list_active_constellations", request1,
-        response =>
-        {
-            constellations = response.constellations;
-        }, err =>
-        {
-            error = err;
-        });
+        // CurrentReference = new SpaceCoord(ra, dec, dist);
+        // ActiveConstellationsRequest request1 = new()
+        // {
+        //     ra = ra,
+        //     dec = dec,
+        //     dist = dist
+        // };
+        // yield return APIConnector.Post<ActiveConstellationsRequest, ConstellationsResponse>("list_active_constellations", request1,
+        // response =>
+        // {
+        //     constellations = response.constellations;
+        // }, err =>
+        // {
+        //     error = err;
+        // });
 
-        if (error != null)
-        {
-            DialogueController.Instance.ShowDialogue("warp_fail");
-            yield return WarpFadeOut(ColorAdjustments);
-            yield break;
-        }
-        */
-
+        // if (error != null)
+        // {
+        //     DialogueController.Instance.ShowDialogue("warp_fail");
+        //     yield return WarpFadeOut(ColorAdjustments);
+        //     yield break;
+        // }
         ClearStars();
         BuildStars(stars);
         // BuildConstellations(constellations);
         BuildExoplanet(id != null);
-        PlayerController.Instance.transform.position = new(0, 0, -40);
-        PlayerController.Instance.transform.rotation = Quaternion.identity;
+        // PlayerController.Instance.transform.position = new(0, 0, -40);
+        // PlayerController.Instance.transform.rotation = Quaternion.identity;
 
         yield return WarpFadeOut(ColorAdjustments);
-        DialogueController.Instance.ShowDialogue("warp");
-        UIInteractor.Instance.ShowTitle(name);
-        if (pos != null)
-            DialogueController.Instance.ShowDialogue("warp_posonly");
     }
 
     public void BuildRandomStars()
@@ -212,11 +208,11 @@ public class SpaceController : MonoBehaviour
     }
 
 
-    private void ClearStars()
+    public void ClearStars()
     {
         foreach (Transform child in StarsParent)
         {
-            Destroy(child.gameObject);
+            StarController.DestroyStar(child.gameObject.GetComponent<StarController>());
         }
     }
 

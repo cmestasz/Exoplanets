@@ -50,6 +50,7 @@ export default function ExoplanetsProvider() {
     })
       .then((res) => res.json())
       .then((exos: string) => {
+        console.log('Exos: ', exos);
         const normalizedExos = JSON.parse(exos);
         setExoplanets((oldExos) => {
           const data = oldExos.data ? [...oldExos.data, ...normalizedExos] : normalizedExos;

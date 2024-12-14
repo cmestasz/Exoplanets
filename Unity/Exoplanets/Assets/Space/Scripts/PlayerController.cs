@@ -16,7 +16,7 @@ public class PlayerController : MonoBehaviour
     private WebCamTexture webcamTexture;
     private InputResponse currentAction;
     private Vector2 cursorPos;
-    private const float BORDER_OFFSET = 50;
+    private const float BORDER_OFFSET = 10;
     private const int BASE_UNSELECTED_TOLERANCE = 5;
 
     private void Awake()
@@ -46,6 +46,7 @@ public class PlayerController : MonoBehaviour
     {
         ConnectionLine = transform.Find("ConnectionLine").GetComponent<LineRenderer>();
         unselectedTolerance = BASE_UNSELECTED_TOLERANCE;
+        cursorPos = UIInteractor.Instance.GetRectCrosshairPosition();
     }
 
     private void InitConfig()
@@ -78,9 +79,6 @@ public class PlayerController : MonoBehaviour
     {
         switch (currentAction.right_gesture)
         {
-            case "click":
-                TryGetInfo();
-                break;
             case "select":
                 if (CurrentStar == null)
                     TryStartConnection();
@@ -152,39 +150,21 @@ public class PlayerController : MonoBehaviour
 
         if (Input.GetKeyDown(ADD_TO_CONSTELLATION))
         {
+            Debug.Log("Try start connection");
             TryStartConnection();
         }
         if (Input.GetKeyUp(ADD_TO_CONSTELLATION))
         {
+            Debug.Log("Try end connection");
             TryEndConnection();
-        }
-        if (Input.GetKeyDown(SAVE_CONSTELLATION))
-        {
-            SpaceController.Instance.SaveConstellation(UIInteractor.Instance.GetConstellationName());
-        }
-        if (Input.GetKeyDown(WARP_POS))
-        {
-            SpaceController.Instance.WarpToPos(UIInteractor.Instance.GetWarpPosition());
-        }
-        if (Input.GetKeyDown(WARP_ID))
-        {
-            SpaceController.Instance.WarpToId(UIInteractor.Instance.GetWarpId());
         }
         if (Input.GetKeyDown(RANDOM_STARS))
         {
+            Debug.Log("Randow stars");
             SpaceController.Instance.BuildRandomStars();
         }
-        if (Input.GetKeyDown(GET_INFO))
-        {
-            TryGetInfo();
-        }
-    }
 
-    private void TryGetInfo()
-    {
-        RaycastCheckType<IHasInfo>((hasInfo) => UIInteractor.Instance.SetInfoText(hasInfo.Info));
     }
-
     private void TryStartConnection()
     {
         RaycastCheckType<StarController>((star) => StartConnection(star));
@@ -219,7 +199,7 @@ public class PlayerController : MonoBehaviour
         {
             ConnectionLine.SetPosition(0, CurrentStar.transform.position);
             Ray ray = GetCrosshairRay();
-            ConnectionLine.SetPosition(1, transform.position + ray.direction * 100);
+            ConnectionLine.SetPosition(1, ray.origin + ray.direction * 100);
         }
     }
 
@@ -256,23 +236,25 @@ public class PlayerController : MonoBehaviour
     private void RaycastCheckType<ToCheck>(System.Action<ToCheck> isType, System.Action isntType = null)
     {
         Ray ray = GetCrosshairRay();
-        Debug.DrawRay(transform.position, ray.direction * 100, Color.red, 5);
+        Debug.DrawRay(ray.origin, ray.direction * 100, Color.red, 10);
         if (Physics.Raycast(ray, out RaycastHit hit) && hit.collider.TryGetComponent<ToCheck>(out var obj))
             isType(obj);
         else
             isntType?.Invoke();
     }
-
     private Ray GetCrosshairRay()
     {
-        Vector2 pos = UIInteractor.Instance.GetCrosshairPosition();
-        Vector2 canvasSize = UIInteractor.Instance.GetCanvasSize();
-        Vector2 screenPos = new(
-            pos.x / canvasSize.x * Screen.width,
-            pos.y / canvasSize.y * Screen.height
-        );
-        return Camera.main.ScreenPointToRay(screenPos);
+        RectTransform crossRect = UIInteractor.Instance.GetRectCrosshair();
+        Vector3 worldPosition = crossRect.position;
+        Camera cam = transform.Find("AuxiliarCamera").GetComponent<Camera>();
+        Vector2 screenPoint =  RectTransformUtility.WorldToScreenPoint(cam, worldPosition);
+
+
+        return cam.ScreenPointToRay(screenPoint);
     }
+
+
+
 
     private void ToggleInput()
     {

@@ -4,11 +4,12 @@ import { twMerge } from 'tailwind-merge';
 import { useEffect, useRef, useState } from 'react';
 import clsx from 'clsx';
 import { ReactUnity, useGlobals } from '@reactunity/renderer';
-import { AstroPrefabBuilder } from '@mytypes/UnityTypes';
+import { AstroPrefabBuilder } from '@mytypes/unity';
 import { MATERIAL_AMOUNT } from '@lib/constants';
 
 export interface AstroCardProps {
   astro: Astro;
+  firstCamera?: boolean;
   invertedStyle?: boolean;
   onClick: () => void;
   className?: string;
@@ -17,7 +18,7 @@ export interface AstroCardProps {
 }
 
 export default function AstroCard({
-  astro, onClick, invertedStyle, className, onDoubleClick, handExHover,
+  astro, firstCamera = false, onClick, invertedStyle, className, onDoubleClick, handExHover,
 }: AstroCardProps) {
   const [isHover, setIsHover] = useState<boolean>(false);
   const astroPrefab = useGlobals().AstroPrefabBuilder as AstroPrefabBuilder;
@@ -31,9 +32,9 @@ export default function AstroCard({
   };
   useEffect(() => {
     if (prefabRef.current) {
-      astroPrefab.Build(prefabRef.current, astro.id % MATERIAL_AMOUNT);
+      astroPrefab.Build(prefabRef.current, Number(astro.id.split(' ')[2]) % MATERIAL_AMOUNT, firstCamera);
     }
-  }, [prefabRef, astroPrefab, astro.id]);
+  }, [prefabRef, astroPrefab, astro.id, firstCamera]);
   return (
     <button
       onClick={onClick}

@@ -6,7 +6,7 @@ import Scroll from '@components/ui/Scroll';
 import { Text } from '@components/ui/Text';
 import { Exoplanet } from '@mytypes/astros';
 import { AsyncData } from '@mytypes/index';
-import { AdjustCamera } from '@mytypes/UnityTypes';
+import { AdjustCamera } from '@mytypes/unity';
 // import { AdjustCamera } from '@mytypes/UnityTypes';
 import { ReactUnity, UnityEngine, useGlobals } from '@reactunity/renderer';
 import { useEffect, useRef, useState } from 'react';
@@ -53,7 +53,7 @@ export default function ShowExoplanets({
   }, [usingFilter, leakedExos, exos]);
   useEffect(() => {
     if (viewRef.current) {
-      adjustCamera.AdjustSecondAuxiliar(viewRef.current, true);
+      adjustCamera.AdjustSecondAuxiliar(viewRef.current);
     }
   }, [adjustCamera, viewRef]);
   return (

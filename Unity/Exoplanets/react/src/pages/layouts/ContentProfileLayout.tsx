@@ -1,4 +1,4 @@
-import { AdjustCamera } from '@mytypes/UnityTypes';
+import { AdjustCamera } from '@mytypes/unity';
 import { useGlobals } from '@reactunity/renderer';
 import { useEffect } from 'react';
 import { Outlet } from 'react-router';

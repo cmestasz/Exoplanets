@@ -1,5 +1,5 @@
 import { Text } from '@components/ui/Text';
-import { AdjustCamera, MainStar } from '@mytypes/UnityTypes';
+import { AdjustCamera, MainStar } from '@mytypes/unity';
 import { ReactUnity, useGlobals } from '@reactunity/renderer';
 import { useEffect, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -39,22 +39,24 @@ export default function MainMenu() {
             {t('pages.subtitle')}
           </h2>
         </view>
-        <prefab
-          ref={prefabRef}
-          className="flex-initial basis-40"
-        />
-        <view
-          className="flex flex-col flex-initial landscape:flex-row gap-24 self-center max-w-6xl max-h-[70rem]"
+        <Text
+          className="text-5xl leading-10 gap-20 flex-col self-center hover:scale-105 transition-all duration-700"
+          asButton
+          onClick={() => nav('exoplanets')}
+
         >
-          <Text
-            className="text-5xl leading-10 -mt-7 p-6 rounded-lg"
-            asButton
-            onClick={() => nav('exoplanets')}
+          <prefab
+            ref={prefabRef}
+            className="flex-initial basis-40"
+          />
+          <view
+            className="flex flex-row gap-4"
           >
             <h2>{t('pages.start')}</h2>
             <icon className="text-5xl">open_in_new</icon>
-          </Text>
-        </view>
+          </view>
+
+        </Text>
       </view>
       <view
         className="flex flex-row flex-initial justify-between"

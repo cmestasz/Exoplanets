@@ -11,6 +11,7 @@ public class StarController : MonoBehaviour, IHasInfo
     public static StarController CreateStar(string id, GameObject prefab, Vector3 position, Transform parent)
     {
         GameObject star = Instantiate(prefab, position, Quaternion.identity, parent);
+        star.layer = 8;
         star.transform.localScale = Vector3.one * 4f;
         StarController starController = star.GetComponent<StarController>();
         starController.Id = id;
@@ -23,5 +24,11 @@ public class StarController : MonoBehaviour, IHasInfo
     {
         return stars[id];
     }
+
+    public static void DestroyStar(StarController star)
+    {
+        stars.Remove(star.Id);
+        Destroy(star.gameObject);
+    } 
 
 }

@@ -1,14 +1,17 @@
+using System;
 using ReactUnity.UGUI;
 using UnityEngine;
 
 public class AdjustCamera : MonoBehaviour
 {
 
-    private int NO_POST_LAYER;
+    private int AUXILIAR_CAMERA_1_LAYER;
 
-    private int DEFAULT_LAYER;
+    private int AUXILIAR_CAMERA_2_LAYER;
 
     private bool cameraToCanvas;
+
+    private bool needPlayerController;
 
     public Canvas canvas;
 
@@ -26,21 +29,33 @@ public class AdjustCamera : MonoBehaviour
 
     private Vector2 lastAuxiliarSize2;
 
+    public void ResetFirst()
+    {
+        auxiliarCamera1.transform.SetParent(null);
+        auxiliarCamera1.enabled = false;
+    }
+
+    public void ResetSecond()
+    {
+        auxiliarCamera2.transform.SetParent(null);
+        auxiliarCamera2.enabled = false;
+    }
+
+
     public void AdjustToCanvas()
     {
         if (!cameraToCanvas && mainCamera != null && canvas != null)
         {
             cameraToCanvas = true;
             mainCamera.cullingMask = -1;
-            auxiliarCamera1.transform.SetParent(null);
-            auxiliarCamera1.enabled = false;
-            auxiliarCamera2.transform.SetParent(null);
-            auxiliarCamera2.enabled = false;
+            PrepareMainForAuxiliars();
+            ResetFirst();
+            ResetSecond();
         }
 
     }
 
-    public void AdjustFirstAuxiliar(UGUIComponent comp, bool orthographic = true)
+    public void AdjustFirstAuxiliar(UGUIComponent comp, bool orthographic = true, bool needPlayerController = false)
     {
         if (auxiliarCamera1 != null)
         {
@@ -48,6 +63,15 @@ public class AdjustCamera : MonoBehaviour
             auxiliarCamera1.enabled = true;
             comp1 = comp;
             AdjustTo(comp, auxiliarCamera1, orthographic);
+            if (needPlayerController)
+            {
+                auxiliarCamera1.transform.SetParent(PlayerController.Instance.transform, false);
+                auxiliarCamera1.transform.position = comp.RectTransform.position;
+                auxiliarCamera1.cullingMask |= 1 << LayerMask.NameToLayer("UI");
+            } else {
+                auxiliarCamera1.cullingMask &= ~(1 << LayerMask.NameToLayer("UI"));
+            }
+            this.needPlayerController = needPlayerController;
             lastAuxiliarSize1 = comp.RectTransform.rect.size;
         }
     }
@@ -70,40 +94,41 @@ public class AdjustCamera : MonoBehaviour
         RectTransform compRect = component.GetComponent<RectTransform>();
         camera.transform.SetParent(compRect.transform, false);
         camera.aspect = compRect.rect.width / compRect.rect.height;
+        camera.transform.localPosition = new Vector3(0, 0, -1200);
+        camera.transform.localRotation = Quaternion.identity;
         if (orthographic)
         {
             camera.orthographicSize = (compRect.rect.height * compRect.lossyScale.y) / 2f;
         }
         else
         {
-            camera.fieldOfView = (compRect.rect.height * compRect.lossyScale.y) / 2f;
+            float distance = Mathf.Abs(camera.transform.position.z - compRect.position.z);
+            camera.fieldOfView = 2f * Mathf.Atan((compRect.rect.height * compRect.lossyScale.y) / (2f * distance)) * Mathf.Rad2Deg;
         }
-        camera.transform.localPosition = new Vector3(0, 0, -1000);
-        camera.transform.localRotation = Quaternion.identity;
     }
 
     void PrepareMainForAuxiliars()
     {
         if (cameraToCanvas)
         {
-            mainCamera.cullingMask &= ~(1 << NO_POST_LAYER);
-            mainCamera.cullingMask &= ~(1 << DEFAULT_LAYER);
+            mainCamera.cullingMask &= ~(1 << AUXILIAR_CAMERA_1_LAYER);
+            mainCamera.cullingMask &= ~(1 << AUXILIAR_CAMERA_2_LAYER);
             cameraToCanvas = false;
         }
     }
 
     private void ValidateLayers()
     {
-        if (NO_POST_LAYER == -1 || DEFAULT_LAYER == -1)
+        if (AUXILIAR_CAMERA_1_LAYER == -1 || AUXILIAR_CAMERA_2_LAYER == -1)
         {
-            Debug.LogError("Las capas 'No Post' o 'Default' no están configuradas en el proyecto.");
+            Debug.LogError("Las capas 'AuxiliarCamera1' o 'AuxiliarCamera2' no están configuradas en el proyecto.");
         }
     }
 
     void Awake()
     {
-        NO_POST_LAYER = LayerMask.NameToLayer("No Post");
-        DEFAULT_LAYER = LayerMask.NameToLayer("Default");
+        AUXILIAR_CAMERA_1_LAYER = LayerMask.NameToLayer("AuxiliarCamera1");
+        AUXILIAR_CAMERA_2_LAYER = LayerMask.NameToLayer("AuxiliarCamera2");
     }
 
     void Start()
@@ -136,7 +161,7 @@ public class AdjustCamera : MonoBehaviour
                 Vector2 currentSize = comp1.RectTransform.rect.size;
                 if (currentSize != lastAuxiliarSize1)
                 {
-                    AdjustFirstAuxiliar(comp1, auxiliarCamera1.orthographic);
+                    AdjustFirstAuxiliar(comp1, auxiliarCamera1.orthographic, needPlayerController);
                     lastAuxiliarSize1 = currentSize;
                 }
             }
