@@ -34,7 +34,11 @@
         "email": "Envíanos un email"
       }
     },
-    "navigation": "Menú principal"
+    "navigation": "Menú principal",
+    "visualization": {
+      "maximize": "Maximizar",
+      "minimize": "Minimizar"
+    }
   },
   "pages": {
     "subtitle": "Descubre el universo cercano",

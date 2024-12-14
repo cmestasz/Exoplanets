@@ -34,7 +34,11 @@
         "email": "Send us an email"
       }
     },
-    "navigation": "Home"
+    "navigation": "Home",
+    "visualization": {
+      "maximize": "Maximize",
+      "minimize": "Minimize"
+    }
   },
   "pages": {
     "subtitle": "Discover the universe nearby",

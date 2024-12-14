@@ -4,7 +4,9 @@ import Scroll from '@components/ui/Scroll';
 import { Text } from '@components/ui/Text';
 import { useModal } from '@lib/hooks';
 import { Exoplanet } from '@mytypes/astros';
-import { useContext, useState } from 'react';
+import { SpaceController } from '@mytypes/unity';
+import { UnityEngine, useGlobals } from '@reactunity/renderer';
+import { useContext, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 interface ExoDataProps {
@@ -17,6 +19,8 @@ export default function ExoData({
   const { t } = useTranslation();
   const showAlert = useContext(AlertContext);
   const [nameConst, setNameConst] = useState<string>();
+  const spaceControllerComp = useGlobals().SpaceController as UnityEngine.GameObject;
+  const spaceController = useRef(spaceControllerComp.GetComponent('SpaceController') as unknown as SpaceController);
 
   const {
     open, accept, cancel, content, modalVisible,
@@ -32,12 +36,14 @@ export default function ExoData({
       console.log('Vacío');
       return;
     }
-    accept();
-    setNameConst('');
-    showAlert({
-      message: t('pages.see-exoplanet.create-const.success'),
-    });
-    console.log('Accepted content: ', nameConst);
+    if (spaceController.current) {
+      spaceController.current.SaveConstellation(nameConst);
+      accept();
+      setNameConst('');
+      showAlert({
+        message: t('pages.see-exoplanet.create-const.success'),
+      });
+    }
   };
   if (!exo) {
     return (
