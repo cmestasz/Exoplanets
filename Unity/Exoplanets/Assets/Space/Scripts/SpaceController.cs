@@ -104,7 +104,7 @@ public class SpaceController : MonoBehaviour
         yield return WarpFadeIn(ColorAdjustments);
 
         Star[] stars = null;
-        Constellation[] constellations = null;
+        Constellation[] constellations  = null;
         string name = null;
         float ra = 0, dec = 0, dist = 0;
 

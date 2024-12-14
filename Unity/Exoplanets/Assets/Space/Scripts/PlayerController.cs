@@ -46,6 +46,7 @@ public class PlayerController : MonoBehaviour
     {
         ConnectionLine = transform.Find("ConnectionLine").GetComponent<LineRenderer>();
         unselectedTolerance = BASE_UNSELECTED_TOLERANCE;
+        cursorPos = UIInteractor.Instance.GetRectCrosshairPosition();
     }
 
     private void InitConfig()
@@ -198,7 +199,7 @@ public class PlayerController : MonoBehaviour
         {
             ConnectionLine.SetPosition(0, CurrentStar.transform.position);
             Ray ray = GetCrosshairRay();
-            ConnectionLine.SetPosition(1, transform.position + ray.direction * 100);
+            ConnectionLine.SetPosition(1, ray.origin + ray.direction * 100);
         }
     }
 
@@ -235,33 +236,24 @@ public class PlayerController : MonoBehaviour
     private void RaycastCheckType<ToCheck>(System.Action<ToCheck> isType, System.Action isntType = null)
     {
         Ray ray = GetCrosshairRay();
-        Debug.DrawRay(transform.position, ray.direction * 100, Color.red, 5);
+        Debug.DrawRay(ray.origin, ray.direction * 100, Color.red, 10);
         if (Physics.Raycast(ray, out RaycastHit hit) && hit.collider.TryGetComponent<ToCheck>(out var obj))
             isType(obj);
         else
             isntType?.Invoke();
     }
-
     private Ray GetCrosshairRay()
     {
-        Vector2 pos = UIInteractor.Instance.GetCrosshairPosition();
-        Vector2 canvasSize = UIInteractor.Instance.GetCanvasSize();
-
-        RectTransform canvasRect = UIInteractor.Instance.GetCanvasRectTransform();
-
-        Vector3[] worldCorners = new Vector3[4];
-        canvasRect.GetWorldCorners(worldCorners);
-
-        Vector3 bottomLeft = worldCorners[0];
-        Vector3 topRight = worldCorners[2];
-
-        float x = Mathf.Lerp(bottomLeft.x, topRight.x, pos.x / canvasSize.x);
-        float y = Mathf.Lerp(bottomLeft.y, topRight.y, pos.y / canvasSize.y);
-        Vector2 screenPos = new(x, y);
-
+        RectTransform crossRect = UIInteractor.Instance.GetRectCrosshair();
+        Vector3 worldPosition = crossRect.position;
         Camera cam = transform.Find("AuxiliarCamera").GetComponent<Camera>();
-        return cam.ScreenPointToRay(screenPos);
+        Vector2 screenPoint =  RectTransformUtility.WorldToScreenPoint(cam, worldPosition);
+
+
+        return cam.ScreenPointToRay(screenPoint);
     }
+
+
 
 
     private void ToggleInput()

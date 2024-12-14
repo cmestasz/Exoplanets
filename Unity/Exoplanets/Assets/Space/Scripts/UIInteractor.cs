@@ -34,7 +34,7 @@ public class UIInteractor : MonoBehaviour
 
     public void AdjustCrosshair()
     {
-        crosshair.GetComponent<RectTransform>().anchoredPosition = new Vector2(
+        crosshair.rectTransform.anchoredPosition = new Vector2(
             rt.rect.width / 2f,
             rt.rect.height / 2f
         );
@@ -55,6 +55,14 @@ public class UIInteractor : MonoBehaviour
     public Vector2 GetCrosshairPosition()
     {
         return crosshair.rectTransform.anchoredPosition;
+    }
+    public Vector2 GetRectCrosshairPosition()
+    {
+        return crosshair.rectTransform.localPosition;
+    }
+    public RectTransform GetRectCrosshair()
+    {
+        return crosshair.rectTransform;
     }
 
     public float GetScaleFactor()
