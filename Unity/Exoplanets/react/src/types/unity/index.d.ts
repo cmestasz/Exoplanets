@@ -1,6 +1,6 @@
 //
 // Types in assemblies: Assembly-CSharp, SimpleFileBrowser.Runtime
-// Generated 12/12/2024 11:57:14
+// Generated 18/12/2024 20:25:17
 //
 /* eslint-disable */
 
@@ -180,6 +180,9 @@ export declare class AdjustCamera {
   canvas: UnityEngine.Canvas;
   auxiliarCamera1: UnityEngine.Camera;
   auxiliarCamera2: UnityEngine.Camera;
+  SetLayerRecursively(obj: UnityEngine.GameObject, newLayer: number): void;
+  MaximizedExoplanets(component: ReactUnity.UGUI.UGUIComponent): void;
+  ResetMain(component: ReactUnity.UGUI.UGUIComponent): void;
   ResetFirst(): void;
   ResetSecond(): void;
   AdjustToCanvas(): void;
@@ -334,78 +337,6 @@ export declare class AstroPrefabBuilder {
   instances: UnityEngine.GameObject[];
   Build(Component: ReactUnity.UGUI.PrefabComponent, selectedMaterial: number, firstCamera?: boolean): number;
   Destroy(index: number): void;
-  IsInvoking(): boolean;
-  CancelInvoke(): void;
-  Invoke(methodName: string, time: number): void;
-  InvokeRepeating(methodName: string, time: number, repeatRate: number): void;
-  CancelInvoke(methodName: string): void;
-  IsInvoking(methodName: string): boolean;
-  StartCoroutine(methodName: string): UnityEngine.Coroutine;
-  StartCoroutine(methodName: string, value: any): UnityEngine.Coroutine;
-  StartCoroutine(routine: System.Collections.IEnumerator): UnityEngine.Coroutine;
-  StartCoroutine_Auto(routine: System.Collections.IEnumerator): UnityEngine.Coroutine;
-  StopCoroutine(routine: System.Collections.IEnumerator): void;
-  StopCoroutine(routine: UnityEngine.Coroutine): void;
-  StopCoroutine(methodName: string): void;
-  StopAllCoroutines(): void;
-  GetComponent(type: System.Type): UnityEngine.Component;
-  GetComponent(type: string): UnityEngine.Component;
-  GetComponentInChildren(t: System.Type, includeInactive: boolean): UnityEngine.Component;
-  GetComponentInChildren(t: System.Type): UnityEngine.Component;
-  GetComponentsInChildren(t: System.Type, includeInactive: boolean): UnityEngine.Component[];
-  GetComponentsInChildren(t: System.Type): UnityEngine.Component[];
-  GetComponentInParent(t: System.Type, includeInactive: boolean): UnityEngine.Component;
-  GetComponentInParent(t: System.Type): UnityEngine.Component;
-  GetComponentsInParent(t: System.Type, includeInactive: boolean): UnityEngine.Component[];
-  GetComponentsInParent(t: System.Type): UnityEngine.Component[];
-  GetComponents(type: System.Type): UnityEngine.Component[];
-  GetComponents(type: System.Type, results: UnityEngine.Component[]): void;
-  GetComponentIndex(): number;
-  CompareTag(tag: string): boolean;
-  SendMessageUpwards(methodName: string, value: any, options: UnityEngine.SendMessageOptions): void;
-  SendMessageUpwards(methodName: string, value: any): void;
-  SendMessageUpwards(methodName: string): void;
-  SendMessageUpwards(methodName: string, options: UnityEngine.SendMessageOptions): void;
-  SendMessage(methodName: string, value: any): void;
-  SendMessage(methodName: string): void;
-  SendMessage(methodName: string, value: any, options: UnityEngine.SendMessageOptions): void;
-  SendMessage(methodName: string, options: UnityEngine.SendMessageOptions): void;
-  BroadcastMessage(methodName: string, parameter: any, options: UnityEngine.SendMessageOptions): void;
-  BroadcastMessage(methodName: string, parameter: any): void;
-  BroadcastMessage(methodName: string): void;
-  BroadcastMessage(methodName: string, options: UnityEngine.SendMessageOptions): void;
-  GetInstanceID(): number;
-  GetHashCode(): number;
-  Equals(other: any): boolean;
-  ToString(): string;
-  GetType(): System.Type;
-}
-export declare class CrossHairController {
-  constructor();
-  destroyCancellationToken: System.Threading.CancellationToken;
-  useGUILayout: boolean;
-  runInEditMode: boolean;
-  enabled: boolean;
-  isActiveAndEnabled: boolean;
-  transform: UnityEngine.Transform;
-  gameObject: UnityEngine.GameObject;
-  tag: string;
-  rigidbody: UnityEngine.Component;
-  rigidbody2D: UnityEngine.Component;
-  camera: UnityEngine.Component;
-  light: UnityEngine.Component;
-  animation: UnityEngine.Component;
-  constantForce: UnityEngine.Component;
-  renderer: UnityEngine.Component;
-  audio: UnityEngine.Component;
-  networkView: UnityEngine.Component;
-  collider: UnityEngine.Component;
-  collider2D: UnityEngine.Component;
-  hingeJoint: UnityEngine.Component;
-  particleSystem: UnityEngine.Component;
-  name: string;
-  hideFlags: UnityEngine.HideFlags;
-  Parent(component: ReactUnity.UGUI.PrefabComponent): void;
   IsInvoking(): boolean;
   CancelInvoke(): void;
   Invoke(methodName: string, time: number): void;
@@ -1588,11 +1519,14 @@ export declare class UIInteractor {
   particleSystem: UnityEngine.Component;
   name: string;
   hideFlags: UnityEngine.HideFlags;
-  crosshair: UnityEngine.UI.Image;
+  AdjustCrosshair(): void;
   MoveCrosshair(position: UnityEngine.Vector2): void;
+  GetCanvasRectTransform(): UnityEngine.RectTransform;
   GetCrosshairPosition(): UnityEngine.Vector2;
+  GetRectCrosshairPosition(): UnityEngine.Vector2;
+  GetRectCrosshair(): UnityEngine.RectTransform;
   GetScaleFactor(): number;
-  GetContainerSize(): UnityEngine.Vector2;
+  GetCanvasSize(): UnityEngine.Vector2;
   IsInvoking(): boolean;
   CancelInvoke(): void;
   Invoke(methodName: string, time: number): void;

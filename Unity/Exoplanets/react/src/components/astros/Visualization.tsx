@@ -39,6 +39,15 @@ export default function Visualization({
       spaceController.current.WarpToCoord(coords.ra, coords.dec, coords.dist);
     }
   }, [spaceController, coords]);
+  useEffect(() => {
+    if (containerRef.current) {
+      if (maximized) {
+        adjustCamera.MaximizedExoplanets(containerRef.current);
+      } else {
+        adjustCamera.ResetMain(containerRef.current);
+      }
+    }
+  }, [maximized, adjustCamera, containerRef]);
   return (
     <Comp
       className={clsx('flex items-center justify-center', {

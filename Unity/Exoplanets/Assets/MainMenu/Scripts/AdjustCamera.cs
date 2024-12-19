@@ -5,9 +5,13 @@ using UnityEngine;
 public class AdjustCamera : MonoBehaviour
 {
 
-    private int AUXILIAR_CAMERA_1_LAYER;
+    private static int AUXILIAR_CAMERA_1_LAYER;
 
-    private int AUXILIAR_CAMERA_2_LAYER;
+    private static int AUXILIAR_CAMERA_2_LAYER;
+
+    private static int UI_LAYER;
+
+    private static int MAXIMIZED_LAYER;
 
     private bool cameraToCanvas;
 
@@ -28,6 +32,31 @@ public class AdjustCamera : MonoBehaviour
     private Vector2 lastAuxiliarSize1;
 
     private Vector2 lastAuxiliarSize2;
+
+    public void SetLayerRecursively(GameObject obj, int newLayer)
+    {
+        obj.layer = newLayer;
+        foreach (Transform child in obj.transform)
+        {
+            SetLayerRecursively(child.gameObject, newLayer);
+        }
+    }
+
+    public void MaximizedExoplanets(UGUIComponent component)
+    {
+        SetLayerRecursively(component.GameObject, MAXIMIZED_LAYER);
+        mainCamera.cullingMask &= ~(1 << UI_LAYER);
+        mainCamera.cullingMask |= 1 << MAXIMIZED_LAYER;
+        AdjustFirstAuxiliar(component, false, true);
+    }
+
+    public void ResetMain(UGUIComponent component)
+    {
+        SetLayerRecursively(component.GameObject, UI_LAYER);
+        mainCamera.cullingMask &= ~(1 << MAXIMIZED_LAYER);
+        mainCamera.cullingMask |= 1 << UI_LAYER;
+        AdjustFirstAuxiliar(component, false, true);
+    }
 
     public void ResetFirst()
     {
@@ -67,9 +96,9 @@ public class AdjustCamera : MonoBehaviour
             {
                 auxiliarCamera1.transform.SetParent(PlayerController.Instance.transform, false);
                 auxiliarCamera1.transform.position = comp.RectTransform.position;
-                auxiliarCamera1.cullingMask |= 1 << LayerMask.NameToLayer("UI");
+                auxiliarCamera1.cullingMask |= 1 << UI_LAYER;
             } else {
-                auxiliarCamera1.cullingMask &= ~(1 << LayerMask.NameToLayer("UI"));
+                auxiliarCamera1.cullingMask &= ~(1 << UI_LAYER);
             }
             this.needPlayerController = needPlayerController;
             lastAuxiliarSize1 = comp.RectTransform.rect.size;
@@ -129,6 +158,9 @@ public class AdjustCamera : MonoBehaviour
     {
         AUXILIAR_CAMERA_1_LAYER = LayerMask.NameToLayer("AuxiliarCamera1");
         AUXILIAR_CAMERA_2_LAYER = LayerMask.NameToLayer("AuxiliarCamera2");
+        UI_LAYER = LayerMask.NameToLayer("UI");
+        MAXIMIZED_LAYER = LayerMask.NameToLayer("Maximized");
+
     }
 
     void Start()
