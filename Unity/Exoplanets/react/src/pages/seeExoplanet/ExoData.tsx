@@ -45,6 +45,7 @@ export default function ExoData({
       });
     }
   };
+
   if (!exo) {
     return (
       <view className="size-7 animate-spin" />

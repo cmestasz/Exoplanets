@@ -1,6 +1,6 @@
 //
 // Types in assemblies: Assembly-CSharp, SimpleFileBrowser.Runtime
-// Generated 18/12/2024 20:25:17
+// Generated 18/12/2024 21:06:29
 //
 /* eslint-disable */
 
@@ -181,8 +181,8 @@ export declare class AdjustCamera {
   auxiliarCamera1: UnityEngine.Camera;
   auxiliarCamera2: UnityEngine.Camera;
   SetLayerRecursively(obj: UnityEngine.GameObject, newLayer: number): void;
-  MaximizedExoplanets(component: ReactUnity.UGUI.UGUIComponent): void;
-  ResetMain(component: ReactUnity.UGUI.UGUIComponent): void;
+  MaximizedExoplanets(component: ReactUnity.UGUI.UGUIComponent, extras?: ReactUnity.UGUI.UGUIComponent[]): void;
+  ResetMain(component: ReactUnity.UGUI.UGUIComponent, extras?: ReactUnity.UGUI.UGUIComponent[]): void;
   ResetFirst(): void;
   ResetSecond(): void;
   AdjustToCanvas(): void;

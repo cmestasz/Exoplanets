@@ -1,22 +1,24 @@
 import { Text } from '@components/ui/Text';
+import { ReactUnity } from '@reactunity/renderer';
+import React from 'react';
 import { useTranslation } from 'react-i18next';
 
-interface ModalProps {
+type ModalProps = {
   title: string;
   onAccept: () => void;
   onCancel: () => void;
   disabledButtons?: boolean;
   children?: React.ReactNode;
-}
-
-export default function Modal({
+};
+const Modal = React.forwardRef<ReactUnity.UGUI.PortalComponent, ModalProps>(({
   title, onAccept, onCancel, disabledButtons, children,
-}: ModalProps) {
+}: ModalProps, ref) => {
   const { t } = useTranslation();
   console.log('modal rendered');
   return (
     <portal
       className="absolute inset-0 z-50 flex flex-col items-center justify-center bg-black bg-opacity-80 max-h-screen"
+      ref={ref}
     >
       <article
         className="flex flex-col bg-tertiary rounded-xl py-6 px-12 gap-12"
@@ -47,4 +49,8 @@ export default function Modal({
       </article>
     </portal>
   );
-}
+});
+
+Modal.displayName = 'Modal';
+
+export default Modal;

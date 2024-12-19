@@ -42,20 +42,35 @@ public class AdjustCamera : MonoBehaviour
         }
     }
 
-    public void MaximizedExoplanets(UGUIComponent component)
+    public void MaximizedExoplanets(UGUIComponent component, UGUIComponent[] extras = null)
     {
         SetLayerRecursively(component.GameObject, MAXIMIZED_LAYER);
         mainCamera.cullingMask &= ~(1 << UI_LAYER);
         mainCamera.cullingMask |= 1 << MAXIMIZED_LAYER;
         AdjustFirstAuxiliar(component, false, true);
+        if (extras != null)
+        {
+            foreach (UGUIComponent extra in extras)
+            {
+                SetLayerRecursively(extra.GameObject, MAXIMIZED_LAYER);
+            }
+        }
     }
 
-    public void ResetMain(UGUIComponent component)
+    public void ResetMain(UGUIComponent component, UGUIComponent[] extras = null)
     {
         SetLayerRecursively(component.GameObject, UI_LAYER);
         mainCamera.cullingMask &= ~(1 << MAXIMIZED_LAYER);
         mainCamera.cullingMask |= 1 << UI_LAYER;
         AdjustFirstAuxiliar(component, false, true);
+        if (extras != null)
+        {
+            foreach (UGUIComponent extra in extras)
+            {
+                SetLayerRecursively(extra.GameObject, UI_LAYER);
+            }
+
+        }
     }
 
     public void ResetFirst()
@@ -97,7 +112,9 @@ public class AdjustCamera : MonoBehaviour
                 auxiliarCamera1.transform.SetParent(PlayerController.Instance.transform, false);
                 auxiliarCamera1.transform.position = comp.RectTransform.position;
                 auxiliarCamera1.cullingMask |= 1 << UI_LAYER;
-            } else {
+            }
+            else
+            {
                 auxiliarCamera1.cullingMask &= ~(1 << UI_LAYER);
             }
             this.needPlayerController = needPlayerController;
